@@ -12,10 +12,10 @@ export default function Welcome({ route, navigation }: WelcomeProps) {
       </View>
       <View style={{flex: 1, justifyContent: 'space-around', alignItems: 'stretch'}}>
         <TouchableHighlight style={styles.buttonFacebook} onPress={() => navigation.navigate('Home')}>
-          <Text> Log in with Facebook </Text>
+          <Text style={styles.buttonText}> Log in with Facebook </Text>
         </TouchableHighlight>
         <TouchableHighlight style={styles.buttonOther} onPress={() => navigation.navigate('Home')}>
-          <Text> Play as a Guest </Text>
+          <Text style={styles.buttonText}> Play as a Guest </Text>
         </TouchableHighlight>
       </View>
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-end'}}>

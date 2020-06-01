@@ -9,6 +9,13 @@ export const styles = StyleSheet.create({
     alignItems: 'center', 
     justifyContent: 'center'
   },
+  button: {
+    alignItems: "center",
+    backgroundColor: "white",
+    padding: 15,
+    borderWidth: 1,
+    borderRadius: 10
+  },
   buttonFacebook: {
     alignItems: "center",
     backgroundColor: "dodgerblue",
@@ -22,6 +29,9 @@ export const styles = StyleSheet.create({
     padding: 15,
     borderWidth: 1,
     borderRadius: 10
+  },
+  buttonText: {
+    fontSize: 20
   },
   developmentModeText: {
     marginBottom: 20,
