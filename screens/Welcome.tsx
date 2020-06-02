@@ -2,21 +2,31 @@ import * as React from 'react';
 import {View, Text, Image, Button, TouchableHighlight} from "react-native";
 import {WelcomeProps} from "../config/types";
 import { styles } from '../config/styles';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 
 export default function Welcome({ route, navigation }: WelcomeProps) {
   return (
     <View style={styles.container}>
       <View style={{flex: 2, alignItems: 'center', justifyContent: 'flex-start'}}>
-        <Text>Tic Tac Toe !!</Text>
+        <Text>!! Tic Tac Toe !!</Text>
         <Image source={require('./../assets/img/Tic_tac_toe_welcome.png')} style={styles.welcomeImage}></Image>
       </View>
       <View style={{flex: 1, justifyContent: 'space-around', alignItems: 'stretch'}}>
-        <TouchableHighlight style={styles.buttonFacebook} onPress={() => navigation.navigate('Home')}>
-          <Text style={styles.buttonText}> Log in with Facebook </Text>
-        </TouchableHighlight>
-        <TouchableHighlight style={styles.buttonOther} onPress={() => navigation.navigate('Home')}>
-          <Text style={styles.buttonText}> Play as a Guest </Text>
-        </TouchableHighlight>
+        <Icon.Button
+          name="logo-facebook"
+          backgroundColor="#3b5998"
+          size={30}
+          onPress={()=>navigation.navigate('Home')}>
+        Login with facebook
+        </Icon.Button>
+        <Icon.Button
+          name="ios-person"
+          backgroundColor="black"
+          size={30}
+          onPress={()=>navigation.navigate('Home')}>
+        Play as Guest
+        </Icon.Button>
       </View>
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-end'}}>
         <Text style={{paddingBottom: 15}}>@ Copyright 2020</Text>
