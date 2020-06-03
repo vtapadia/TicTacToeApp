@@ -2,9 +2,9 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Welcome from "./screens/Welcome";
-import Home from "./screens/Home";
-import {RootStackParamList} from "./config/types";
+import Welcome from "./app/screens/Welcome";
+import Home from "./app/screens/Home";
+import {RootStackParamList} from "./app/config/types";
 
 const Stack = createStackNavigator<RootStackParamList>();
 

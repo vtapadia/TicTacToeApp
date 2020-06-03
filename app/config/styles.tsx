@@ -33,6 +33,11 @@ export const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20
   },
+  square: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderStyle: "solid"
+  },
   developmentModeText: {
     marginBottom: 20,
     color: 'rgba(0,0,0,0.4)',
