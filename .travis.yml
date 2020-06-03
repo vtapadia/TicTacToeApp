@@ -6,3 +6,11 @@ before_script:
 script:
   - npm ci
   - npx jest --ci --passWithNoTests
+jobs:
+  include:
+    - stage: deploy
+      node_js: 14
+      script:
+        - npm ci
+        - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+        - npx expo publish --non-interactive
