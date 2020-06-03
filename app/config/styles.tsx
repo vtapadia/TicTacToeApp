@@ -36,7 +36,22 @@ export const styles = StyleSheet.create({
   square: {
     backgroundColor: '#fff',
     borderWidth: 1,
-    borderStyle: "solid"
+    borderStyle: "solid",
+    alignContent: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    width: 100,
+    height: 100
+  },
+  boardRow: {
+    alignItems: 'stretch', 
+    alignContent: 'center',
+    flexDirection: 'row'
+  },
+  board: {
+    flexDirection: 'column',
+    alignContent: 'center',
+    alignItems: 'stretch'
   },
   developmentModeText: {
     marginBottom: 20,

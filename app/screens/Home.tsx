@@ -8,14 +8,14 @@ export default function Home({ route, navigation }: HomeProps) {
     <View style={styles.container}>
       <View style={{flex: 2}}></View>
       <View style={{flex: 2, justifyContent: 'space-around', alignItems: 'stretch'}}>
-        <TouchableHighlight style={styles.button} onPress={() => navigation.navigate('Home')}>
+        <TouchableHighlight style={styles.button} onPress={() => navigation.navigate('Game')}>
           <Text style={styles.buttonText}> Invite Friend </Text>
         </TouchableHighlight>
-        <TouchableHighlight style={styles.button} onPress={() => navigation.navigate('Home')}>
-        <Text style={styles.buttonText}> Join Board </Text>
+        <TouchableHighlight style={styles.button} onPress={() => navigation.navigate('Game')}>
+          <Text style={styles.buttonText}> Join Board </Text>
         </TouchableHighlight>
-        <TouchableHighlight style={styles.buttonOther} onPress={() => navigation.navigate('Home')}>
-        <Text style={styles.buttonText}> Single Player </Text>
+        <TouchableHighlight style={styles.buttonOther} onPress={() => navigation.navigate('Game')}>
+          <Text style={styles.buttonText}> Single Player </Text>
         </TouchableHighlight>
       </View>
       <View style={{flex: 2}}></View>
