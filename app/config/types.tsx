@@ -4,7 +4,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 export type RootStackParamList = {
   Welcome: undefined;
   Home: { userId: string } | undefined;
-  Game: { sort: 'latest' | 'top' } | undefined;
+  Game: { mode: 'offline' | 'network' } | undefined;
 };
 
 export type WelcomeProps = StackScreenProps<RootStackParamList, 'Welcome'>;

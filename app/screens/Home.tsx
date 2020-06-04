@@ -14,7 +14,8 @@ export default function Home({ route, navigation }: HomeProps) {
         <TouchableHighlight style={styles.button} onPress={() => navigation.navigate('Game')}>
           <Text style={styles.buttonText}> Join Board </Text>
         </TouchableHighlight>
-        <TouchableHighlight style={styles.buttonOther} onPress={() => navigation.navigate('Game')}>
+        <TouchableHighlight style={styles.buttonOther} 
+          onPress={() => navigation.navigate('Game', {mode: 'offline'})}>
           <Text style={styles.buttonText}> Single Player </Text>
         </TouchableHighlight>
       </View>
