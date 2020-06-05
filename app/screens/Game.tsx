@@ -59,7 +59,7 @@ export function Square(props: SquareProp) {
   }
 
   return (
-    <TouchableHighlight style={styles.square} 
+    <TouchableHighlight style={styles.square} disabled={(value)?true:false}
      onPress={selected}>
       <Text style={{textAlign: 'center'}}>
         {value=="X" ? <Icon name="close" size={50} ></Icon> : null}
