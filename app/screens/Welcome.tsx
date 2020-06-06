@@ -6,6 +6,13 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 
 export default function Welcome({ route, navigation }: WelcomeProps) {
+
+  function randomName():string {
+    let name = "Guest" + Math.floor(Math.random()*10000000);
+    console.log("Plyer name assigned as %s", name);
+    return name;
+  }
+
   return (
     <View style={styles.container}>
       <View style={{flex: 2, alignItems: 'center', justifyContent: 'flex-start'}}>
@@ -17,14 +24,14 @@ export default function Welcome({ route, navigation }: WelcomeProps) {
           name="logo-facebook"
           backgroundColor="#3b5998"
           size={30}
-          onPress={()=>navigation.navigate('Home')}>
+          onPress={()=>navigation.navigate('Home', {playerName: "Varesh"})}>
         Login with facebook
         </Icon.Button>
         <Icon.Button
           name="ios-person"
           backgroundColor="black"
           size={30}
-          onPress={()=>navigation.navigate('Home')}>
+          onPress={()=>navigation.navigate('Home', {playerName: randomName()})}>
         Play as Guest
         </Icon.Button>
       </View>
