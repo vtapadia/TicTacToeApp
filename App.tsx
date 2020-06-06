@@ -1,23 +1,27 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet} from 'react-native';
+import { Provider } from 'react-redux'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Welcome from "./app/screens/Welcome";
-import Home from "./app/screens/Home";
-import Game from "./app/screens/Game";
+import HomeContainer from "./app/screens/Home";
+import GameContainer from "./app/screens/Game";
 import {RootStackParamList} from "./app/config/types";
+import appStore from './app/store/store';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Welcome">
-        <Stack.Screen name="Welcome" component={Welcome} />
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Game" component={Game} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={appStore}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Welcome">
+          <Stack.Screen name="Welcome" component={Welcome} />
+          <Stack.Screen name="Home" component={HomeContainer} />
+          <Stack.Screen name="Game" component={GameContainer} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 
