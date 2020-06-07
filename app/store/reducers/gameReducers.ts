@@ -42,8 +42,9 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
             game.message = "Wait for other player turn";
           }
         }
-        // console.log(newState);
         return newState;
+      } else {
+        return state;
       }
     case MOVE:
       let moveAction = action as MoveAction;
@@ -57,12 +58,30 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
         if (game.winner) {
           game.status = Status.FINISHED;
           game.message = "We have a winner !!"
+        } else {
+          if (game.myMark == game.turn) {
+            game.message = "Your Turn.."
+          } else {
+            game.message = "Wait for other player turn";
+          }
         }
-        // console.log(newState);
         return newState;
+      } else {
+        console.log("Game is in state %s", state.game.status);
+        return state;
       }
     case RESET:
-      return initialState;
+      let nState = {
+        ...initialState
+      };
+      nState.game.status = Status.INITIAL;
+      nState.game.players.O = undefined;
+      nState.game.players.X = undefined;
+      nState.game.board = [...Array(3)].map(x=>Array(3).fill(undefined));
+      nState.game.turn = Mark.X
+      nState.game.winner = undefined;
+      console.log(nState);
+      return nState;
     default:
       return state;
   }
