@@ -15,6 +15,11 @@ export enum Status {
   FINISHED
 }
 
+export interface Point {
+  row: number,
+  col: number  
+}
+
 export interface GameState {
   game: {
     status: Status,
@@ -34,10 +39,7 @@ export interface PlayerJoinAction {
 
 export interface MoveAction {
   type: typeof MOVE
-  move: {
-    row: number
-    col: number
-  }
+  move: Point
 }
 
 export interface ResetAction {

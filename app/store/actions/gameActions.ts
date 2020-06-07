@@ -1,5 +1,4 @@
-import {MOVE, PLAYER_JOIN, GameActionTypes, RESET} from "../types/gameTypes";
-import {Mark} from "../types/gameTypes";
+import {MOVE, PLAYER_JOIN, GameActionTypes, RESET, Point} from "../types/gameTypes";
 import { Player } from "../../config/types";
 
 export function addPlayerWithDetail(name:string, self:boolean):GameActionTypes {
@@ -16,13 +15,10 @@ export function addPlayer(player:Player):GameActionTypes {
   };
 }
 
-export function move(row:number, col:number):GameActionTypes {
+export function move(point: Point):GameActionTypes {
   return {
     type: MOVE,
-    move: {
-      row: row,
-      col: col
-    }
+    move: point
   };
 }
 

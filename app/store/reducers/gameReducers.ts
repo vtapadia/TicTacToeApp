@@ -1,4 +1,4 @@
-import { Status, GameState, GameActionTypes, PlayerJoinAction, PLAYER_JOIN, MOVE, Mark, MoveAction, RESET } from '../types/gameTypes'
+import { Status, GameState, GameActionTypes, PlayerJoinAction, PLAYER_JOIN, MOVE, Mark, MoveAction, RESET, Point } from '../types/gameTypes'
 
 const initialState:GameState = {
   game: {
@@ -54,10 +54,18 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
         let game = newState.game;
         game.board[row][col] = state.game.turn;
         game.turn = (state.game.turn==Mark.X) ? Mark.O : Mark.X;
-        game.winner = possibleWinner(newState);
-        if (game.winner) {
+        let [finished, winner] = hasEnded(newState.game.board);
+
+        if (finished) {
           game.status = Status.FINISHED;
-          game.message = "We have a winner !!"
+          if (winner) {
+            game.winner = winner;
+            if (winner == state.game.myMark) {
+              game.message = "Congratulations !!!";
+            } else {
+              game.message = "You Lost... Better luck next time."
+            }
+          }
         } else {
           if (game.myMark == game.turn) {
             game.message = "Your Turn.."
@@ -87,28 +95,43 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
   }
 }
 
-function possibleWinner(state:GameState):Mark | undefined {
+function hasEnded(board: Mark[][]):[boolean, Mark | undefined] {
   for (let i=0; i < 3; i++) {
-    if (state.game.board[i][0] == state.game.board[i][1] && 
-      state.game.board[i][1] == state.game.board[i][2] &&
-      state.game.board[i][0]) {
-        return state.game.board[i][0];
+    if (board[i][0] == board[i][1] && 
+      board[i][1] == board[i][2] &&
+      board[i][0]) {
+        return [true, board[i][0]];
       }
-      if (state.game.board[0][i] == state.game.board[1][i] && 
-        state.game.board[1][i] == state.game.board[2][i] &&
-        state.game.board[0][i]) {
-          return state.game.board[0][i];
+      if (board[0][i] == board[1][i] && 
+        board[1][i] == board[2][i] &&
+        board[0][i]) {
+          return [true, board[0][i]];
       }
   }
-  if (state.game.board[0][0] == state.game.board[1][1] && 
-    state.game.board[1][1] == state.game.board[2][2] &&
-    state.game.board[0][0]) {
-      return state.game.board[0][0];
+  if (board[0][0] == board[1][1] && 
+    board[1][1] == board[2][2] &&
+    board[0][0]) {
+      return [true,board[0][0]];
   }
-  if (state.game.board[2][0] == state.game.board[1][1] && 
-    state.game.board[1][1] == state.game.board[0][2] &&
-    state.game.board[2][0]) {
-      return state.game.board[2][0];
+  if (board[2][0] == board[1][1] && 
+    board[1][1] == board[0][2] &&
+    board[2][0]) {
+      return [true, board[2][0]];
   }
-  return undefined;
+  if (getEmptyPlaces(board).length == 0) {
+    return [true, undefined];
+  }
+  return [false, undefined];
+}
+
+function getEmptyPlaces(board: Mark[][]):Point[] {
+  let empty:Point[] = Array.of();
+  for (let i=0; i < 3; i++) {
+    for (let j=0; j<3; j++) {
+      if (board[i][j] == undefined) {
+        empty.push({row: i, col: j});
+      }
+    }
+  }
+  return empty;
 }
