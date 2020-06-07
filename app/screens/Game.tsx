@@ -1,4 +1,4 @@
-import React, { useState, Component } from 'react';
+import React, { Component } from 'react';
 import {View, Text, TouchableHighlight} from "react-native";
 import {styles} from "../config/styles";
 import {GameProps, GameMode} from "../config/types";
@@ -26,31 +26,6 @@ type DispatchProps = typeof mapDispatch
 
 type Props = StateProps & DispatchProps & GameProps
 
-function Game(props: Props) {
-  return (
-    <View style={styles.container}>
-      <Board props={props}></Board>
-    </View>
-  );
-}
-
-const GameContainer = connect(mapState, mapDispatch)(Game)
-
-export default GameContainer
-
-function playComputer(props: Props) {
-  //Find a random number between 0 and 8
-  let random = Math.floor(Math.random() * 9);
-  let row:number = Math.floor(random/3);
-  let col:number = random%3;
-  if (props.game.board[row][col]) {
-    playComputer(props);
-  } else {
-    console.log("Playing the computer move at [%d, %d]", row, col);
-    props.move({row:row, col:col});
-  }
-}
-
 declare type BoardProp = {
   props: Props
 }
@@ -64,6 +39,20 @@ class Board extends Component<BoardProp, BoardState> {
     this.state = {count: 0};
     this.handleSelected = this.handleSelected.bind(this);
     this.resetGame = this.resetGame.bind(this);
+    this.playComputer = this.playComputer.bind(this);
+  }
+
+  playComputer(props: Props) {
+    //Find a random number between 0 and 8
+    let random = Math.floor(Math.random() * 9);
+    let row:number = Math.floor(random/3);
+    let col:number = random%3;
+    if (props.game.board[row][col]) {
+      this.playComputer(props);
+    } else {
+      console.log("Playing the computer move at [%d, %d]", row, col);
+      props.move({row:row, col:col});
+    }
   }
 
   handleSelected(point: Point) {
@@ -72,7 +61,7 @@ class Board extends Component<BoardProp, BoardState> {
     nextCount++;
     if (this.props.props.route.params?.mode == GameMode.OFFLINE) {
       if (nextCount<9) {
-        playComputer(this.props.props);
+        this.playComputer(this.props.props);
         nextCount++;
       }
     }
@@ -89,7 +78,7 @@ class Board extends Component<BoardProp, BoardState> {
     if (playerX) {props.addPlayer(playerX)};
     if (props.route.params?.mode==GameMode.OFFLINE) {
       if (props.game.turn != props.game.myMark) {
-        playComputer(props);
+        this.playComputer(props);
         this.setState({ count: 1});
       }
     }
@@ -162,3 +151,15 @@ export function Square(squareProps: SquareProp) {
     </TouchableHighlight>
   );
 };
+
+function Game(props: Props) {
+  return (
+    <View style={styles.container}>
+      <Board props={props}></Board>
+    </View>
+  );
+}
+
+const GameContainer = connect(mapState, mapDispatch)(Game)
+
+export default GameContainer;
