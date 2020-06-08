@@ -70,12 +70,8 @@ class Board extends Component<BoardProp, BoardState> {
   }
 
   resetGame(props: Props) {
-    let playerO = props.game.players.O;
-    let playerX = props.game.players.X;
     props.reset();
     this.setState({ count: 0});
-    if (playerO) {props.addPlayer(playerO)};
-    if (playerX) {props.addPlayer(playerX)};
     if (props.route.params?.mode==GameMode.OFFLINE) {
       if (props.game.turn != props.game.myMark) {
         this.playComputer(props);

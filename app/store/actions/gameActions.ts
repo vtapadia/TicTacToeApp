@@ -1,17 +1,11 @@
-import {MOVE, PLAYER_JOIN, GameActionTypes, RESET, Point} from "../types/gameTypes";
+import {MOVE, PLAYER_JOIN, GameActionTypes, RESET, Point, Mark} from "../types/gameTypes";
 import { Player } from "../../config/types";
 
-export function addPlayerWithDetail(name:string, self:boolean):GameActionTypes {
-  return addPlayer({
-    name: name,
-    self: self
-  });
-}
-
-export function addPlayer(player:Player):GameActionTypes {
+export function addPlayer(player:Player, piece: Mark):GameActionTypes {
   return {
     type: PLAYER_JOIN,
-    player: player
+    player: player,
+    piece: piece
   };
 }
 

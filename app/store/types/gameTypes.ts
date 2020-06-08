@@ -24,10 +24,11 @@ export interface GameState {
   game: {
     status: Status,
     message: string,
-    turn: Mark,
-    myMark: Mark | undefined,
     board: Mark[][],
     players: { [key in Mark]: Player | undefined},
+    startedBy: Mark,
+    turn: Mark,
+    myMark: Mark | undefined,
     winner: Mark | undefined
   }
 }
@@ -35,6 +36,7 @@ export interface GameState {
 export interface PlayerJoinAction {
   type: typeof PLAYER_JOIN
   player: Player
+  piece: Mark
 }
 
 export interface MoveAction {

@@ -2,16 +2,17 @@ import React from 'react';
 import {View, Text, TouchableHighlight} from "react-native";
 import {styles} from "../config/styles";
 import {HomeProps, GameMode, Player} from "../config/types";
-import { addPlayerWithDetail, addPlayer } from '../store/actions/gameActions';
+import { addPlayer } from '../store/actions/gameActions';
 import { connect } from 'react-redux'
 import { RootState } from '../store/reducers/appReducer';
+import * as gameService from "./../service/gameService";
+import { Mark } from '../store/types/gameTypes';
 
 const mapState = (state: RootState) => ({
   // isReady: state.gameReducer.game.status==Status.READY
 })
 
 const mapDispatch = {
-  addPlayerWithDetail,
   addPlayer
 }
 
@@ -28,11 +29,20 @@ function Home(props: Props) {
 
     if (props.route.params) {
       player = {name: props.route.params.playerName, self: true};
-      props.addPlayer(player);
-      props.addPlayer(computer);
+      props.addPlayer(player, Mark.X);
+      props.addPlayer(computer, Mark.O);
       props.navigation.navigate('Game', {mode: GameMode.OFFLINE, self: player});
     } else {
       throw new Error("Player Name missing");
+    }
+  }
+
+  function inviteFriend() {
+    if (props.route.params) {
+      let player:Player;
+      player = {name: props.route.params.playerName, self: true};
+      gameService.createGame(player);
+      props.navigation.navigate('Game', {mode: GameMode.NETWORK, self: player});
     }
   }
 
@@ -40,7 +50,7 @@ function Home(props: Props) {
     <View style={styles.container}>
       <View style={{flex: 2}}></View>
       <View style={{flex: 2, justifyContent: 'space-around', alignItems: 'stretch'}}>
-        <TouchableHighlight style={styles.button} onPress={() => props.navigation.navigate('Game')}>
+        <TouchableHighlight style={styles.button} onPress={inviteFriend}>
           <Text style={styles.buttonText}> Invite Friend </Text>
         </TouchableHighlight>
         <TouchableHighlight style={styles.button} onPress={() => props.navigation.navigate('Game')}>

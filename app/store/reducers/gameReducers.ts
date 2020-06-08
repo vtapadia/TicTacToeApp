@@ -3,6 +3,7 @@ import { Status, GameState, GameActionTypes, PlayerJoinAction, PLAYER_JOIN, MOVE
 const initialState:GameState = {
   game: {
     status: Status.INITIAL,
+    startedBy: Mark.X,
     turn: Mark.X,
     myMark: undefined,
     message: "Welcome to a Game of TicTacToe",
@@ -23,7 +24,7 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
         let playerJoinAction = action as PlayerJoinAction;
         let newState = {...state};
 
-        let playerMark = (state.game.players.X) ? Mark.O : Mark.X;
+        let playerMark = playerJoinAction.piece;
   
         let game = newState.game;
         game.players[playerMark] = playerJoinAction.player;
@@ -39,7 +40,7 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
           if (game.players[game.turn]?.self) {
             game.message = "Your Turn.."
           } else {
-            game.message = "Wait for other player turn";
+            game.message = "Waiting..."
           }
         }
         return newState;
@@ -53,7 +54,7 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
         let {row, col} = moveAction.move;
         let game = newState.game;
         game.board[row][col] = state.game.turn;
-        game.turn = (state.game.turn==Mark.X) ? Mark.O : Mark.X;
+        game.turn = toggle(state.game.turn);
         let [finished, winner] = hasEnded(newState.game.board);
 
         if (finished) {
@@ -82,17 +83,22 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
       let nState = {
         ...initialState
       };
-      nState.game.status = Status.INITIAL;
-      nState.game.players.O = undefined;
-      nState.game.players.X = undefined;
+      nState.game.status = Status.READY;
+      // nState.game.players.O = undefined;
+      // nState.game.players.X = undefined;
       nState.game.board = [...Array(3)].map(x=>Array(3).fill(undefined));
-      nState.game.turn = Mark.X
+      nState.game.startedBy = toggle(nState.game.startedBy);
+      nState.game.turn = nState.game.startedBy;
       nState.game.winner = undefined;
       console.log(nState);
       return nState;
     default:
       return state;
   }
+}
+
+function toggle(mark: Mark):Mark {
+  return (mark == Mark.X) ? Mark.O : Mark.X;
 }
 
 function hasEnded(board: Mark[][]):[boolean, Mark | undefined] {
