@@ -84,8 +84,6 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
         ...initialState
       };
       nState.game.status = Status.READY;
-      // nState.game.players.O = undefined;
-      // nState.game.players.X = undefined;
       nState.game.board = [...Array(3)].map(x=>Array(3).fill(undefined));
       nState.game.startedBy = toggle(nState.game.startedBy);
       nState.game.turn = nState.game.startedBy;
