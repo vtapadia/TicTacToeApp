@@ -90,7 +90,7 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
       nState.game.startedBy = toggle(nState.game.startedBy);
       nState.game.turn = nState.game.startedBy;
       nState.game.winner = undefined;
-      console.log(nState);
+      // console.log(nState);
       return nState;
     default:
       return state;
