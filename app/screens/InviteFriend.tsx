@@ -1,5 +1,5 @@
-import React from 'react';
-import {View, Text, TouchableHighlight} from "react-native";
+import React, { Component } from 'react';
+import {View, Share, Text, TouchableHighlight, StyleSheet} from "react-native";
 import {styles} from "../config/styles";
 import { RootState } from '../store/reducers/appReducer';
 import { InviteFriendProps } from '../config/types';
@@ -22,10 +22,90 @@ type DispatchProps = typeof mapDispatch
 
 type Props = StateProps & DispatchProps & InviteFriendProps
 
-function InviteFriend(props:Props) {
-  return <View></View>;
+class InviteFriend extends Component<Props> {
+  constructor(props:Props) {
+    super(props);
+  }
+
+  share = async () => {
+    if (this.props.route.params) {
+      let gameId = this.props.route.params.gameId;
+      let message = "Please join me for a Game of Tic Tac Toe with Code " + gameId;
+      const result = await Share.share({message: message});
+      if (result.action == Share.sharedAction) {
+        if (result.activityType) {
+          console.log("Shared activity " + result.activityType);
+        }
+      } else if (result.action == Share.dismissedAction) {
+        console.log("Sharing was dismissed");
+      }
+    }
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <View style={iStyles.viewCode}>
+          <Text style={iStyles.textCode}>Code: </Text>
+          <Text style={iStyles.textCodeNumber}>{this.props.route.params?.gameId}</Text>
+        </View>
+        <View style={iStyles.viewMessage}>
+          <Text style={iStyles.textMessage}>Share this code with your friends and ask them to join</Text>
+        </View>
+        <View style={iStyles.viewShare}>
+          <TouchableHighlight onPress={this.share} style={iStyles.buttonSimple}>
+            <Text style={iStyles.buttonText}> Share with Friends </Text>
+          </TouchableHighlight>
+        </View>
+      </View>
+    );
+  }
 }
 
 const InviteFriendContainer = connect(mapState, mapDispatch)(InviteFriend)
 
 export default InviteFriendContainer;
+
+export const iStyles = StyleSheet.create({
+  viewCode: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-end'
+  },
+  textCode: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  textCodeNumber: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  viewMessage: {
+    flex: 1,
+  },
+  textMessage: {
+    color: 'darkgrey',
+    fontSize: 20,
+    padding: 30
+  },
+  viewShare: {
+    flex: 3,
+    alignItems: 'center',
+    justifyContent: 'space-around'
+  },
+  buttonSimple: {
+    alignItems: "center",
+    backgroundColor: "dodgerblue",
+    padding: 15,
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: "dodgerblue",
+    position: 'relative',
+    width: '60%'
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: "bold"
+  },
+});
