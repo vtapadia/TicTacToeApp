@@ -12,7 +12,6 @@ export function setServerBase(url: string) {
 export async function createGame(player: Player):Promise<string> {
   try {
     let response = await backend.post<GameResponse>("/api/game", {userName: player.name});
-    // let response = await fetch("https://vtapadia-tic-tac-toe.herokuapp.com/api/game");
     let gameResponse = response.parsedBody;
     if (gameResponse) {
       return Promise.resolve(gameResponse?.gameId);

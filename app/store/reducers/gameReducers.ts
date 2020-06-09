@@ -1,6 +1,7 @@
-import { Status, GameState, GameActionTypes, PlayerJoinAction, PLAYER_JOIN, MOVE, Mark, MoveAction, RESET, Point } from '../types/gameTypes'
+import { Status, GameState, GameActionTypes, PlayerJoinAction, PLAYER_JOIN, MOVE, Mark, MoveAction, RESET, Point, APP_USER, AppUserAction, SELECT_DIFFICULTY, SelectDifficultyAction, REPLAY } from '../types/gameTypes'
 
 const initialState:GameState = {
+  appUser: undefined,
   game: {
     status: Status.INITIAL,
     startedBy: Mark.X,
@@ -12,12 +13,31 @@ const initialState:GameState = {
       [Mark.X]: undefined, 
       [Mark.O]: undefined
     },
-    winner: undefined
+    level: undefined,
+    winner: undefined,
+    winCount: {
+      [Mark.X]: 0,
+      [Mark.O]: 0
+    }
   }
 }
 
 export function gameReducer(state = initialState, action: GameActionTypes):GameState {
   switch(action.type) {
+    case APP_USER:
+      let appUserAction = action as AppUserAction;
+      {
+        let newState = {...state};
+        newState.appUser = appUserAction.appUser;
+        return newState;
+      }
+    case SELECT_DIFFICULTY:
+      let selectDifficultyAction = action as SelectDifficultyAction;
+      {
+        let newState = {...state};
+        newState.game.level = selectDifficultyAction.level;
+        return newState;
+      }
     case PLAYER_JOIN:
       if (state.game.status == Status.INITIAL) {
         //Only add players when the game is not ready or finished.
@@ -35,7 +55,9 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
 
         let newStatus = (game.players.O && game.players.X) ? Status.READY : newState.game.status;
         game.status = newStatus;
-        
+        game.winCount.O = 0;
+        game.winCount.X = 0;
+          
         if (newStatus == Status.READY) {
           if (game.players[game.turn]?.self) {
             game.message = "Your Turn.."
@@ -79,6 +101,18 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
         console.log("Game is in state %s", state.game.status);
         return state;
       }
+    case REPLAY:
+      {
+        let nState = {
+          ...initialState
+        };
+        nState.game.status = Status.READY;
+        nState.game.board = [...Array(3)].map(x=>Array(3).fill(undefined));
+        nState.game.startedBy = toggle(nState.game.startedBy);
+        nState.game.turn = nState.game.startedBy;
+        nState.game.winner = undefined;
+        return nState;
+      }
     case RESET:
       let nState = {
         ...initialState
@@ -88,6 +122,8 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
       nState.game.startedBy = toggle(nState.game.startedBy);
       nState.game.turn = nState.game.startedBy;
       nState.game.winner = undefined;
+      nState.game.winCount.O = 0;
+      nState.game.winCount.X = 0;
       // console.log(nState);
       return nState;
     default:

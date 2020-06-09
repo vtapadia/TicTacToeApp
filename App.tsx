@@ -6,8 +6,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Welcome from "./app/screens/Welcome";
 import HomeContainer from "./app/screens/Home";
 import GameContainer from "./app/screens/Game";
+import InviteFriendContainer from "./app/screens/InviteFriend";
 import {RootStackParamList} from "./app/config/types";
 import appStore from './app/store/store';
+import JoinGameContainer from './app/screens/JoinGame';
+import SelectDifficultyContainer from './app/screens/SelectDifficulty';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -18,6 +21,9 @@ export default function App() {
         <Stack.Navigator initialRouteName="Welcome">
           <Stack.Screen name="Welcome" component={Welcome} />
           <Stack.Screen name="Home" component={HomeContainer} />
+          <Stack.Screen name="InviteFriend" component={InviteFriendContainer} />
+          <Stack.Screen name="JoinGame" component={JoinGameContainer} />
+          <Stack.Screen name="SelectDifficulty" component={SelectDifficultyContainer} />
           <Stack.Screen name="Game" component={GameContainer} />
         </Stack.Navigator>
       </NavigationContainer>

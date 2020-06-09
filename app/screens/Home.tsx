@@ -31,7 +31,7 @@ function Home(props: Props) {
       player = {name: props.route.params.playerName, self: true};
       props.addPlayer(player, Mark.X);
       props.addPlayer(computer, Mark.O);
-      props.navigation.navigate('Game', {mode: GameMode.OFFLINE, self: player});
+      props.navigation.navigate('SelectDifficulty', {self: player});
     } else {
       throw new Error("Player Name missing");
     }
@@ -41,8 +41,13 @@ function Home(props: Props) {
     if (props.route.params) {
       let player:Player;
       player = {name: props.route.params.playerName, self: true};
-      gameService.createGame(player);
-      props.navigation.navigate('Game', {mode: GameMode.NETWORK, self: player});
+      gameService.createGame(player)
+        .then((v) => {
+          console.log("Game created with id:%s", v);
+          props.navigation.navigate('InviteFriend', {self: player, gameId: v});
+        }).catch((r) => {
+          console.error(r);
+        });
     }
   }
 

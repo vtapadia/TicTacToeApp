@@ -4,9 +4,10 @@ import {styles} from "../config/styles";
 import {GameProps, GameMode} from "../config/types";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RootState } from '../store/reducers/appReducer';
-import { move, addPlayer, reset } from '../store/actions/gameActions';
+import { move, addPlayer, replay } from '../store/actions/gameActions';
 import { connect } from 'react-redux'
 import { Status, Mark, Point } from '../store/types/gameTypes';
+import { StyleSheet} from 'react-native';
 
 const mapState = (state: RootState) => ({
   isFinished: state.gameReducer.game.status==Status.FINISHED,
@@ -18,7 +19,7 @@ const mapState = (state: RootState) => ({
 const mapDispatch = {
   move,
   addPlayer,
-  reset
+  replay
 }
 
 type StateProps = ReturnType<typeof mapState>
@@ -38,7 +39,7 @@ class Board extends Component<BoardProp, BoardState> {
     super(props);
     this.state = {count: 0};
     this.handleSelected = this.handleSelected.bind(this);
-    this.resetGame = this.resetGame.bind(this);
+    this.replayGame = this.replayGame.bind(this);
     this.playComputer = this.playComputer.bind(this);
   }
 
@@ -69,8 +70,8 @@ class Board extends Component<BoardProp, BoardState> {
     console.log("called handled with %d %d, count set to %d", point.row, point.col, nextCount);
   }
 
-  resetGame(props: Props) {
-    props.reset();
+  replayGame(props: Props) {
+    props.replay();
     this.setState({ count: 0});
     if (props.route.params?.mode==GameMode.OFFLINE) {
       if (props.game.turn != props.game.myMark) {
@@ -114,8 +115,8 @@ class Board extends Component<BoardProp, BoardState> {
               name="replay"
               backgroundColor="#3b5998"
               size={30}
-              onPress={() => this.resetGame(this.props.props)}>
-            <Text>RESET</Text>
+              onPress={() => this.replayGame(this.props.props)}>
+            <Text style={gStyles.buttonText}> REPLAY </Text>
           </Icon.Button> : null}
         </View>
       </View>
@@ -141,8 +142,8 @@ export function Square(squareProps: SquareProp) {
     <TouchableHighlight style={styles.square} disabled={squareProps.props.isFinished || (squareProps.props.game.board[squareProps.row][squareProps.col])?true:false}
      onPress={selected}>
       <Text style={{textAlign: 'center'}}>
-        {squareProps.props.game.board[squareProps.row][squareProps.col]==Mark.X ? <Icon name="close" size={50} ></Icon> : null}
-        {squareProps.props.game.board[squareProps.row][squareProps.col]==Mark.O ? <Icon name="circle-outline" size={40}></Icon> : null}
+        {squareProps.props.game.board[squareProps.row][squareProps.col]==Mark.X ? <Icon name="close" size={50} color="royalblue"></Icon> : null}
+        {squareProps.props.game.board[squareProps.row][squareProps.col]==Mark.O ? <Icon name="circle-outline" size={40} color="magenta"></Icon> : null}
       </Text>
     </TouchableHighlight>
   );
@@ -159,3 +160,10 @@ function Game(props: Props) {
 const GameContainer = connect(mapState, mapDispatch)(Game)
 
 export default GameContainer;
+
+export const gStyles = StyleSheet.create({
+  buttonText: {
+    fontSize: 20,
+    color: 'white'
+  }
+});
