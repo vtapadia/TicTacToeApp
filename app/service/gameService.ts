@@ -1,5 +1,6 @@
 import { Player } from "../config/types";
 import * as backend from "./backendService";
+import { Mark } from "../store/types/gameTypes";
 
 const serverBase:string = "https://vtapadia-tic-tac-toe.herokuapp.com";
 
@@ -22,6 +23,24 @@ export async function createGame(player: Player):Promise<string> {
   return Promise.reject("Fail to create a Game. Please try again");
 }
 
+export async function joinBoard(gameId:string, player: Player): Promise<Mark> {
+  try {
+    let response = await backend.post<JoinBoardResponse>(
+      "/api/game/"+gameId+"/player",
+      {
+        player: player
+      }
+    );
+  } catch (error) {
+    console.error("Failed to connect %s", error);
+  }
+  return Promise.reject("Fail to create a Game. Please try again");
+}
+
 interface GameResponse {
   gameId: string
+}
+
+interface JoinBoardResponse {
+  mark: Mark
 }

@@ -9,7 +9,7 @@ export default function Welcome({ route, navigation }: WelcomeProps) {
 
   function randomName():string {
     let name = "Guest" + Math.floor(Math.random()*10000000);
-    console.log("Plyer name assigned as %s", name);
+    console.log("Player name assigned as %s", name);
     return name;
   }
 

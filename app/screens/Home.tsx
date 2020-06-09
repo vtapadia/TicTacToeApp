@@ -51,6 +51,14 @@ function Home(props: Props) {
     }
   }
 
+  function joinGame() {
+    if (props.route.params) {
+      let player:Player;
+      player = {name: props.route.params.playerName, self: true};
+      props.navigation.navigate('JoinGame', {self: player});
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View style={{flex: 2}}></View>
@@ -58,8 +66,8 @@ function Home(props: Props) {
         <TouchableHighlight style={styles.button} onPress={inviteFriend}>
           <Text style={styles.buttonText}> Invite Friend </Text>
         </TouchableHighlight>
-        <TouchableHighlight style={styles.button} onPress={() => props.navigation.navigate('Game')}>
-          <Text style={styles.buttonText}> Join Board </Text>
+        <TouchableHighlight style={styles.button} onPress={joinGame}>
+          <Text style={styles.buttonText}> Join Game </Text>
         </TouchableHighlight>
         <TouchableHighlight style={styles.buttonOther} 
           onPress={singlePlayer}>

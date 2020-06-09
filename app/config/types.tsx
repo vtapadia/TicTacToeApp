@@ -21,7 +21,7 @@ export type RootStackParamList = {
   Home: { playerName: string } | undefined;
   SelectDifficulty: {self: Player, gameId?: string} | undefined;
   InviteFriend: {self: Player, gameId?: string} | undefined;
-  JoinGame: {self: Player, gameId?: string} | undefined;
+  JoinGame: {self: Player} | undefined;
   Game: { mode: GameMode, self: Player, gameId?: string, difficulty?: DifficultyLevel } | undefined;
 };
 

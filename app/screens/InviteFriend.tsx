@@ -31,7 +31,7 @@ class InviteFriend extends Component<Props> {
     if (this.props.route.params) {
       let gameId = this.props.route.params.gameId;
       let message = "Please join me for a Game of Tic Tac Toe with Code " + gameId;
-      const result = await Share.share({message: message});
+      const result = await Share.share({title:"Share Tic Tac Toe", message: message});
       if (result.action == Share.sharedAction) {
         if (result.activityType) {
           console.log("Shared activity " + result.activityType);
