@@ -83,11 +83,18 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
           game.status = Status.FINISHED;
           if (winner) {
             game.winner = winner;
-            if (winner == state.game.myMark) {
+            if (winner == game.myMark) {
               game.message = "Congratulations !!!";
+              game.winCount[game.myMark]++;
             } else {
               game.message = "You Lost... Better luck next time."
+              if (game.myMark) {
+                let oppositionMark = toggle(game.myMark);
+                game.winCount[oppositionMark]++;
+              }
             }
+          } else {
+            game.message = "It's a DRAW"
           }
         } else {
           if (game.myMark == game.turn) {
