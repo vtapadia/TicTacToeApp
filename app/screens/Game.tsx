@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import {View, Text, TouchableHighlight} from "react-native";
-import {styles} from "../config/styles";
+import {View, Text, TouchableHighlight, Image} from "react-native";
 import {GameProps, GameMode} from "../config/types";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RootState } from '../store/reducers/appReducer';
@@ -27,15 +26,12 @@ type DispatchProps = typeof mapDispatch
 
 type Props = StateProps & DispatchProps & GameProps
 
-declare type BoardProp = {
-  props: Props
-}
-declare type BoardState = {
+declare type GameState = {
   count: number
 }
 
-class Board extends Component<BoardProp, BoardState> {
-  constructor(props:BoardProp) {
+class Game extends Component<Props, GameState> {
+  constructor(props:Props) {
     super(props);
     this.state = {count: 0};
     this.handleSelected = this.handleSelected.bind(this);
@@ -58,11 +54,11 @@ class Board extends Component<BoardProp, BoardState> {
 
   handleSelected(point: Point) {
     let nextCount = this.state.count;
-    this.props.props.move(point);
+    this.props.move(point);
     nextCount++;
-    if (this.props.props.route.params?.mode == GameMode.OFFLINE) {
+    if (this.props.route.params?.mode == GameMode.OFFLINE) {
       if (nextCount<9) {
-        this.playComputer(this.props.props);
+        this.playComputer(this.props);
         nextCount++;
       }
     }
@@ -84,39 +80,51 @@ class Board extends Component<BoardProp, BoardState> {
   render() {
     return (
       <View style={styles.container}>
-        <View style={{flex: 1}}>
-          <Text>{this.props.props.game.message}</Text>
+        <View style={styles.headerContainer}>
+          <View style={styles.playerContainer}>
+            <Image source={require('./../assets/img/robot-1.png')} style={styles.imagePlayer}></Image>
+            <Text style={styles.playerText}>{this.props.game.players.X?.name}</Text>
+            <X></X>
+            <Text style={styles.playerText}>Won: {this.props.game.winCount.X}</Text>
+          </View>
+          <View style={styles.playerContainer}>
+            <Image source={require('./../assets/img/robot-1.png')} style={styles.imagePlayer}></Image>
+            <Text style={styles.playerText}>{this.props.game.players.O?.name}</Text>
+            <O></O>
+            <Text style={styles.playerText}>Won: {this.props.game.winCount.O}</Text>
+          </View>
+          {/* <Text>{this.props.game.message}</Text> */}
         </View>
         <View style={{flex: 3, flexDirection: 'row'}}>
           <View style={{flex: 1}}></View>
           <View style={{flex: 3, alignItems: 'stretch'}}>
             <View style={styles.board}>
               <View style={styles.boardRow}>
-                <Square row={0} col={0} props={this.props.props} onSelect={this.handleSelected}></Square>
-                <Square row={0} col={1} props={this.props.props} onSelect={this.handleSelected}></Square>
-                <Square row={0} col={2} props={this.props.props} onSelect={this.handleSelected}></Square>
+                <Square row={0} col={0} props={this.props} onSelect={this.handleSelected}></Square>
+                <Square row={0} col={1} props={this.props} onSelect={this.handleSelected}></Square>
+                <Square row={0} col={2} props={this.props} onSelect={this.handleSelected}></Square>
               </View>
               <View style={styles.boardRow}>
-                <Square row={1} col={0} props={this.props.props} onSelect={this.handleSelected}></Square>
-                <Square row={1} col={1} props={this.props.props} onSelect={this.handleSelected}></Square>
-                <Square row={1} col={2} props={this.props.props} onSelect={this.handleSelected}></Square>
+                <Square row={1} col={0} props={this.props} onSelect={this.handleSelected}></Square>
+                <Square row={1} col={1} props={this.props} onSelect={this.handleSelected}></Square>
+                <Square row={1} col={2} props={this.props} onSelect={this.handleSelected}></Square>
               </View>
               <View style={styles.boardRow}>
-                <Square row={2} col={0} props={this.props.props} onSelect={this.handleSelected}></Square>
-                <Square row={2} col={1} props={this.props.props} onSelect={this.handleSelected}></Square>
-                <Square row={2} col={2} props={this.props.props} onSelect={this.handleSelected}></Square>
+                <Square row={2} col={0} props={this.props} onSelect={this.handleSelected}></Square>
+                <Square row={2} col={1} props={this.props} onSelect={this.handleSelected}></Square>
+                <Square row={2} col={2} props={this.props} onSelect={this.handleSelected}></Square>
               </View>
             </View>
           </View>
           <View style={{flex: 1}}></View>
         </View>
-        <View style={{flex: 1}}>
-          {this.props.props.isFinished ? <Icon.Button
+        <View style={{flex:1, alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
+          {this.props.isFinished ? <Icon.Button
               name="replay"
               backgroundColor="#3b5998"
               size={30}
-              onPress={() => this.replayGame(this.props.props)}>
-            <Text style={gStyles.buttonText}> REPLAY </Text>
+              onPress={() => this.replayGame(this.props)}>
+            <Text style={styles.buttonText}> REPLAY </Text>
           </Icon.Button> : null}
         </View>
       </View>
@@ -142,26 +150,79 @@ export function Square(squareProps: SquareProp) {
     <TouchableHighlight style={styles.square} disabled={squareProps.props.isFinished || (squareProps.props.game.board[squareProps.row][squareProps.col])?true:false}
      onPress={selected}>
       <Text style={{textAlign: 'center'}}>
-        {squareProps.props.game.board[squareProps.row][squareProps.col]==Mark.X ? <Icon name="close" size={50} color="royalblue"></Icon> : null}
-        {squareProps.props.game.board[squareProps.row][squareProps.col]==Mark.O ? <Icon name="circle-outline" size={40} color="magenta"></Icon> : null}
+        {squareProps.props.game.board[squareProps.row][squareProps.col]==Mark.X ? <X /> : null}
+        {squareProps.props.game.board[squareProps.row][squareProps.col]==Mark.O ? <O /> : null}
       </Text>
     </TouchableHighlight>
   );
 };
 
-function Game(props: Props) {
-  return (
-    <View style={styles.container}>
-      <Board props={props}></Board>
-    </View>
-  );
+function X() {
+  return <Icon name="close" size={50} color="yellow"></Icon>;
+}
+function O() {
+  return <Icon name="circle-outline" size={50} color="magenta"></Icon>;
 }
 
 const GameContainer = connect(mapState, mapDispatch)(Game)
 
 export default GameContainer;
 
-export const gStyles = StyleSheet.create({
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'stretch'
+  },
+  headerContainer: {
+    flex: 2, 
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    alignContent: 'center'
+  },
+  playerContainer: {
+    backgroundColor: 'skyblue',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    alignContent: 'space-around',
+    padding: 10,
+    borderColor: 'royalblue',
+    borderWidth: 2,
+    borderRadius: 10
+  },
+  imagePlayer: {
+    width: 60,
+    height: 60,
+    backgroundColor: 'pink',
+    borderRadius: 30,
+    resizeMode: 'contain',
+  },
+  playerText: {
+    fontSize: 15
+  },
+  boardRow: {
+    alignItems: 'stretch', 
+    alignContent: 'center',
+    flexDirection: 'row'
+  },
+  board: {
+    flexDirection: 'column',
+    alignContent: 'center',
+    alignItems: 'stretch',
+    backgroundColor: 'skyblue',
+    borderRadius: 15,
+    padding: 4
+  },
+  square: {
+    backgroundColor: 'royalblue',
+    borderRadius: 15,
+    margin: 4,
+    alignContent: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    width: 100,
+    height: 100
+  },
   buttonText: {
     fontSize: 20,
     color: 'white'
