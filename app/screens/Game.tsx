@@ -171,20 +171,22 @@ export default GameContainer;
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
+    paddingTop: 30,
     alignItems: 'stretch'
   },
   headerContainer: {
     flex: 2, 
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
     alignContent: 'center'
   },
   playerContainer: {
     backgroundColor: 'skyblue',
     alignItems: 'center',
-    justifyContent: 'space-around',
-    alignContent: 'space-around',
+    // justifyContent: 'space-around',
+    // alignContent: 'space-around',
     padding: 10,
     borderColor: 'royalblue',
     borderWidth: 2,
