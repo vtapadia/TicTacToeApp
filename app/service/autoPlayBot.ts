@@ -32,8 +32,8 @@ function playEasy(board: Mark[][]):Point|undefined {
 
 function playMedium(board: Mark[][]):Point|undefined {
   let copy = board.map(a => a.slice(0));
-  // console.log("Searching a Medium move");
-  console.log(copy);
+  console.log("Searching a Medium move");
+  // console.log(copy);
   let emptyPlaces = getEmptyPlaces(copy);
   let chosen = undefined;
   emptyPlaces.forEach(p => {
@@ -53,6 +53,7 @@ function playMedium(board: Mark[][]):Point|undefined {
 function playHard(board: Mark[][]):Point|undefined {
   var copy = board.map(a => a.slice(0));
   let emptyPlaces = getEmptyPlaces(copy);
+  console.log("Searching a Hard move");
   let chosen = undefined;
   emptyPlaces.forEach(p => {
     copy[p.row][p.col] = Mark.O

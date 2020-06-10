@@ -114,6 +114,8 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
           ...initialState
         };
         nState.game.status = Status.READY;
+        nState.botLevel = state.botLevel;
+        nState.appUser = state.appUser;
         nState.game.board = [...Array(3)].map(x=>Array(3).fill(undefined));
         nState.game.startedBy = toggle(nState.game.startedBy);
         nState.game.turn = nState.game.startedBy;
@@ -124,6 +126,7 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
       let nState = {
         ...initialState
       };
+      nState.appUser = state.appUser;
       nState.game.status = Status.READY;
       nState.game.board = [...Array(3)].map(x=>Array(3).fill(undefined));
       nState.game.startedBy = Mark.X;
