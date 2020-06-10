@@ -1,13 +1,14 @@
 {
   "expo": {
     "name": "TicTacToeApp",
+    "description": "Simple Tic-Tac-Toe App with multi player support",
     "slug": "TicTacToeApp",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
     "version": "1.0.0",
+    "githubUrl": "https://github.com/vtapadia/TicTacToeApp",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
     "splash": {
