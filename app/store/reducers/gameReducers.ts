@@ -2,6 +2,7 @@ import { Status, GameState, GameActionTypes, PlayerJoinAction, PLAYER_JOIN, MOVE
 
 const initialState:GameState = {
   appUser: undefined,
+  botLevel: undefined,
   game: {
     status: Status.INITIAL,
     startedBy: Mark.X,
@@ -13,7 +14,6 @@ const initialState:GameState = {
       [Mark.X]: undefined, 
       [Mark.O]: undefined
     },
-    level: undefined,
     winner: undefined,
     winCount: {
       [Mark.X]: 0,
@@ -35,7 +35,7 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
       let selectDifficultyAction = action as SelectDifficultyAction;
       {
         let newState = {...state};
-        newState.game.level = selectDifficultyAction.level;
+        newState.botLevel = selectDifficultyAction.level;
         return newState;
       }
     case PLAYER_JOIN:

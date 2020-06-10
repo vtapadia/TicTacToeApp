@@ -25,6 +25,7 @@ export interface Point {
 
 export interface GameState {
   appUser: Player | undefined,
+  botLevel: DifficultyLevel | undefined,
   game: {
     status: Status,
     message: string,
@@ -33,7 +34,6 @@ export interface GameState {
     startedBy: Mark,
     turn: Mark,
     myMark: Mark | undefined,
-    level: DifficultyLevel | undefined,
     winner: Mark | undefined,
     winCount: { [key in Mark]: number}
   }
