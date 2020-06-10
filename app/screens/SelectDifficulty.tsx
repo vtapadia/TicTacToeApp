@@ -42,17 +42,18 @@ class SelectDifficulty extends Component<Props> {
     } else {
       throw new Error("Player Name missing");
     }
-    switch(level) {
-      case DifficultyLevel.EASY:
-        props.navigation.navigate('Game', {mode: GameMode.OFFLINE, self: props.route.params.self});
-        break;
-      case DifficultyLevel.MEDIUM:
-        alert("Seems, your friendly bot is not charged");
-        break;
-      case DifficultyLevel.HARD:
-        alert("Sherlock is busy with a case right now");
-        break;
-    }
+    props.navigation.navigate('Game', {mode: GameMode.OFFLINE, self: props.route.params.self});
+    // switch(level) {
+    //   case DifficultyLevel.EASY:
+    //     props.navigation.navigate('Game', {mode: GameMode.OFFLINE, self: props.route.params.self});
+    //     break;
+    //   case DifficultyLevel.MEDIUM:
+    //     alert("Seems, your friendly bot is not charged");
+    //     break;
+    //   case DifficultyLevel.HARD:
+    //     alert("Sherlock is busy with a case right now");
+    //     break;
+    // }
   }
 
   render() {

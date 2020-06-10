@@ -7,12 +7,14 @@ import { move, addPlayer, replay } from '../store/actions/gameActions';
 import { connect } from 'react-redux'
 import { Status, Mark, Point } from '../store/types/gameTypes';
 import { StyleSheet} from 'react-native';
+import * as bot from "../service/autoPlayBot";
 
 const mapState = (state: RootState) => ({
   isFinished: state.gameReducer.game.status==Status.FINISHED,
   game: state.gameReducer.game,
   turn: state.gameReducer.game.turn,
-  winner: state.gameReducer.game.winner
+  winner: state.gameReducer.game.winner,
+  level: state.gameReducer.botLevel
 })
 
 const mapDispatch = {
@@ -40,15 +42,10 @@ class Game extends Component<Props, GameState> {
   }
 
   playComputer(props: Props) {
-    //Find a random number between 0 and 8
-    let random = Math.floor(Math.random() * 9);
-    let row:number = Math.floor(random/3);
-    let col:number = random%3;
-    if (props.game.board[row][col]) {
-      this.playComputer(props);
-    } else {
-      console.log("Playing the computer move at [%d, %d]", row, col);
-      props.move({row:row, col:col});
+    let point = bot.playComputer(props.game.board, props.level)
+    if (point) {
+      console.log("Playing the computer move at [%d, %d]", point.row, point.col);
+      props.move(point);
     }
   }
 
