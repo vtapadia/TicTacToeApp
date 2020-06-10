@@ -5,18 +5,20 @@ import { RootState } from '../store/reducers/appReducer';
 import { SelectDifficultyProps, DifficultyLevel, Player, GameMode } from '../config/types';
 import { connect } from 'react-redux';
 import { StyleSheet} from 'react-native';
-import {addPlayer, setDifficultyLevel} from "../store/actions/gameActions";
+import {addPlayer, setDifficultyLevel, reset} from "../store/actions/gameActions";
 import { Mark } from '../store/types/gameTypes';
 
 const mapState = (state: RootState) => ({
   game: state.gameReducer.game,
   turn: state.gameReducer.game.turn,
-  winner: state.gameReducer.game.winner
+  winner: state.gameReducer.game.winner,
+  level: state.gameReducer.botLevel
 })
 
 const mapDispatch = {
   addPlayer,
-  setDifficultyLevel
+  setDifficultyLevel,
+  reset
 }
 
 type StateProps = ReturnType<typeof mapState>
@@ -34,6 +36,11 @@ class SelectDifficulty extends Component<Props> {
   }
 
   selected(level: DifficultyLevel, props: Props) {
+    if (props.level) {
+      if (props.level != level) {
+        props.reset();
+      }
+    }
     props.setDifficultyLevel(level);
     if (props.route.params) {
       let computer:Player = {name: "Computer", self: false};
