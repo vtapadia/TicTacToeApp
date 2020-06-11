@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableHighlight} from "react-native";
+import {View, Text, TouchableHighlight, ActivityIndicator} from "react-native";
 import {styles} from "../config/styles";
 import {HomeProps, GameMode, Player} from "../config/types";
 import { setGameMode } from '../store/actions/gameActions';
@@ -23,6 +23,8 @@ type Props = StateProps & DispatchProps & HomeProps
 
 function Home(props: Props) {
   
+  const [progress, setProgress] = React.useState(false);
+
   function singlePlayer() {
     
     props.setGameMode(GameMode.OFFLINE);
@@ -30,15 +32,18 @@ function Home(props: Props) {
   }
 
   function inviteFriend() {
-    if (props.route.params) {
+    if (props.appUser) {
       let player:Player;
-      player = {name: props.route.params.playerName, self: true};
+      player = props.appUser;
+      setProgress(true);
       gameService.createGame(player)
         .then((v) => {
           console.log("Game created with id:%s", v);
+          setProgress(false);
           props.setGameMode(GameMode.NETWORK);
           props.navigation.navigate('InviteFriend', {self: player, gameId: v});
         }).catch((r) => {
+          setProgress(false);
           console.error(r);
         });
     }
@@ -57,13 +62,14 @@ function Home(props: Props) {
     <View style={styles.container}>
       <View style={{flex: 2}}></View>
       <View style={{flex: 2, justifyContent: 'space-around', alignItems: 'stretch'}}>
-        <TouchableHighlight style={styles.button} onPress={inviteFriend}>
+        <ActivityIndicator animating={progress} size="large" color="#0000ff" />
+        <TouchableHighlight disabled={progress} style={styles.button} onPress={inviteFriend}>
           <Text style={styles.buttonText}> Invite Friend </Text>
         </TouchableHighlight>
-        <TouchableHighlight style={styles.button} onPress={joinGame}>
+        <TouchableHighlight disabled={progress} style={styles.button} onPress={joinGame}>
           <Text style={styles.buttonText}> Join Game </Text>
         </TouchableHighlight>
-        <TouchableHighlight style={styles.buttonOther} 
+        <TouchableHighlight disabled={progress} style={styles.buttonOther} 
           onPress={singlePlayer}>
           <Text style={styles.buttonText}> Single Player </Text>
         </TouchableHighlight>
