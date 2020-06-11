@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, TouchableHighlight} from "react-native";
 import {styles} from "../config/styles";
 import {HomeProps, GameMode, Player} from "../config/types";
-import { addPlayer } from '../store/actions/gameActions';
+import { addPlayer, setGameMode } from '../store/actions/gameActions';
 import { connect } from 'react-redux'
 import { RootState } from '../store/reducers/appReducer';
 import * as gameService from "./../service/gameService";
@@ -14,7 +14,8 @@ const mapState = (state: RootState) => ({
 })
 
 const mapDispatch = {
-  addPlayer
+  addPlayer,
+  setGameMode
 }
 
 type StateProps = ReturnType<typeof mapState>
@@ -31,6 +32,7 @@ function Home(props: Props) {
       // player = {name: props.route.params.playerName, self: true};
       props.addPlayer(props.appUser, Mark.X);
       props.addPlayer(computer, Mark.O);
+      props.setGameMode(GameMode.OFFLINE);
       props.navigation.navigate('SelectDifficulty', {self: props.appUser});
     } else {
       throw new Error("Player Name missing");
@@ -44,6 +46,7 @@ function Home(props: Props) {
       gameService.createGame(player)
         .then((v) => {
           console.log("Game created with id:%s", v);
+          props.setGameMode(GameMode.NETWORK);
           props.navigation.navigate('InviteFriend', {self: player, gameId: v});
         }).catch((r) => {
           console.error(r);
@@ -55,6 +58,7 @@ function Home(props: Props) {
     if (props.route.params) {
       let player:Player;
       player = {name: props.route.params.playerName, self: true};
+      props.setGameMode(GameMode.NETWORK);
       props.navigation.navigate('JoinGame', {self: player});
     }
   }

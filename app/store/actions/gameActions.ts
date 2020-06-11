@@ -1,5 +1,5 @@
-import {MOVE, PLAYER_JOIN, GameActionTypes, RESET, Point, Mark, APP_USER, AppUserAction, SelectDifficultyAction, SELECT_DIFFICULTY, REPLAY} from "../types/gameTypes";
-import { Player, DifficultyLevel } from "../../config/types";
+import {MOVE, PLAYER_JOIN, GameActionTypes, RESET, Point, Mark, APP_USER, AppUserAction, SelectDifficultyAction, SELECT_DIFFICULTY, REPLAY, SetGameModeAction, SET_GAMEMODE} from "../types/gameTypes";
+import { Player, DifficultyLevel, GameMode } from "../../config/types";
 
 export function addAppUser(player: Player):AppUserAction {
   return {
@@ -14,6 +14,14 @@ export function setDifficultyLevel(level: DifficultyLevel):SelectDifficultyActio
     level: level
   };
 }
+
+export function setGameMode(mode: GameMode):SetGameModeAction {
+  return {
+    type: SET_GAMEMODE,
+    mode: mode
+  };
+}
+
 export function addPlayer(player:Player, piece: Mark):GameActionTypes {
   return {
     type: PLAYER_JOIN,

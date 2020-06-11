@@ -23,7 +23,7 @@ export type RootStackParamList = {
   SelectDifficulty: {self: Player, gameId?: string} | undefined;
   InviteFriend: {self: Player, gameId?: string} | undefined;
   JoinGame: {self: Player} | undefined;
-  Game: { mode: GameMode, self: Player, gameId?: string, difficulty?: DifficultyLevel } | undefined;
+  Game: { mode: GameMode, gameId?: string, difficulty?: DifficultyLevel } | undefined;
 };
 
 export type WelcomeProps = StackScreenProps<RootStackParamList, 'Welcome'>;

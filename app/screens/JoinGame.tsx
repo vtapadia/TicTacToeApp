@@ -28,7 +28,7 @@ function JoinGame(props:Props) {
   const joinGame = () => {
     if (props.route.params) {
       gameService.joinBoard(value, props.route.params.self);
-      props.navigation.navigate("Game", {mode: GameMode.NETWORK, self: props.route.params.self});
+      props.navigation.navigate("Game");
     }
   }
 

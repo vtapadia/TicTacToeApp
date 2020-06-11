@@ -3,7 +3,7 @@ import {View, Text, TouchableHighlight, Image} from "react-native";
 import {GameProps, GameMode} from "../config/types";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RootState } from '../store/reducers/appReducer';
-import { move, addPlayer, replay } from '../store/actions/gameActions';
+import { move, replay } from '../store/actions/gameActions';
 import { connect } from 'react-redux'
 import { Status, Mark, Point } from '../store/types/gameTypes';
 import { StyleSheet} from 'react-native';
@@ -11,6 +11,7 @@ import * as bot from "../service/autoPlayBot";
 
 const mapState = (state: RootState) => ({
   isFinished: state.gameReducer.game.status==Status.FINISHED,
+  mode: state.gameReducer.mode,
   game: state.gameReducer.game,
   turn: state.gameReducer.game.turn,
   winner: state.gameReducer.game.winner,
@@ -19,7 +20,6 @@ const mapState = (state: RootState) => ({
 
 const mapDispatch = {
   move,
-  addPlayer,
   replay
 }
 
@@ -53,7 +53,7 @@ class Game extends Component<Props, GameState> {
     let nextCount = this.state.count;
     this.props.move(point);
     nextCount++;
-    if (this.props.route.params?.mode == GameMode.OFFLINE) {
+    if (this.props.mode == GameMode.OFFLINE) {
       if (nextCount<9) {
         this.playComputer(this.props);
         nextCount++;
@@ -66,7 +66,7 @@ class Game extends Component<Props, GameState> {
   replayGame(props: Props) {
     props.replay();
     this.setState({ count: 0});
-    if (props.route.params?.mode==GameMode.OFFLINE) {
+    if (props.mode==GameMode.OFFLINE) {
       if (props.game.turn != props.game.myMark) {
         this.playComputer(props);
         this.setState({ count: 1});

@@ -1,8 +1,9 @@
-import { Status, GameState, GameActionTypes, PlayerJoinAction, PLAYER_JOIN, MOVE, Mark, MoveAction, RESET, Point, APP_USER, AppUserAction, SELECT_DIFFICULTY, SelectDifficultyAction, REPLAY } from '../types/gameTypes'
+import { Status, GameState, GameActionTypes, PlayerJoinAction, PLAYER_JOIN, MOVE, Mark, MoveAction, RESET, Point, APP_USER, AppUserAction, SELECT_DIFFICULTY, SelectDifficultyAction, REPLAY, SET_GAMEMODE, SetGameModeAction } from '../types/gameTypes'
 
 const initialState:GameState = {
   appUser: undefined,
   botLevel: undefined,
+  mode: undefined,
   game: {
     status: Status.INITIAL,
     startedBy: Mark.X,
@@ -36,6 +37,13 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
       {
         let newState = {...state};
         newState.botLevel = selectDifficultyAction.level;
+        return newState;
+      }
+    case SET_GAMEMODE:
+      let gameModeAction = action as SetGameModeAction;
+      {
+        let newState = {...state};
+        newState.mode = gameModeAction.mode;
         return newState;
       }
     case PLAYER_JOIN:

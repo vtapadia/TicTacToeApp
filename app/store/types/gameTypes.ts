@@ -1,4 +1,4 @@
-import { Player, DifficultyLevel } from "../../config/types";
+import { Player, DifficultyLevel, GameMode } from "../../config/types";
 
 export const PLAYER_JOIN = "PLAYER_JOIN";
 export const MOVE = "MOVE";
@@ -6,6 +6,7 @@ export const RESET = "RESET";
 export const REPLAY = "REPLAY";
 export const APP_USER = "APP_USER";
 export const SELECT_DIFFICULTY = "SELECT_DIFFICULTY";
+export const SET_GAMEMODE = "SET_GAMEMODE";
 
 export enum Mark {
   X="X",
@@ -26,6 +27,7 @@ export interface Point {
 export interface GameState {
   appUser: Player | undefined,
   botLevel: DifficultyLevel | undefined,
+  mode: GameMode | undefined,
   game: {
     status: Status,
     message: string,
@@ -67,4 +69,9 @@ export interface SelectDifficultyAction {
   level: DifficultyLevel
 }
 
-export type GameActionTypes = AppUserAction | SelectDifficultyAction | PlayerJoinAction | MoveAction | ResetAction | ReplayAction;
+export interface SetGameModeAction {
+  type: typeof SET_GAMEMODE
+  mode: GameMode
+}
+
+export type GameActionTypes = AppUserAction | SetGameModeAction | SelectDifficultyAction | PlayerJoinAction | MoveAction | ResetAction | ReplayAction;

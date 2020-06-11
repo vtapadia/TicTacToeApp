@@ -9,6 +9,7 @@ import {addPlayer, setDifficultyLevel, reset} from "../store/actions/gameActions
 import { Mark } from '../store/types/gameTypes';
 
 const mapState = (state: RootState) => ({
+  appUser: state.gameReducer.appUser,
   game: state.gameReducer.game,
   turn: state.gameReducer.game.turn,
   winner: state.gameReducer.game.winner,
@@ -33,6 +34,9 @@ class SelectDifficulty extends Component<Props> {
   constructor(props: Props) {
     super(props);
     this.selected = this.selected.bind(this);
+    if (props.appUser) {
+      props.addPlayer(props.appUser, Mark.X);
+    }
   }
 
   selected(level: DifficultyLevel, props: Props) {
@@ -41,15 +45,11 @@ class SelectDifficulty extends Component<Props> {
         props.reset();
       }
     }
+    let displayName = (level == DifficultyLevel.EASY) ? "Dumb" : (level == DifficultyLevel.MEDIUM) ? "Friendly" : "Sherlock";
     props.setDifficultyLevel(level);
-    if (props.route.params) {
-      let computer:Player = {name: "Computer", self: false};
-      props.addPlayer(props.route.params.self, Mark.X);
-      props.addPlayer(computer, Mark.O);
-    } else {
-      throw new Error("Player Name missing");
-    }
-    props.navigation.navigate('Game', {mode: GameMode.OFFLINE, self: props.route.params.self});
+    let computer:Player = {name: "Computer", displayName: displayName, self: false};
+    props.addPlayer(computer, Mark.O);
+    props.navigation.navigate('Game', {mode: GameMode.OFFLINE});
   }
 
   render() {
