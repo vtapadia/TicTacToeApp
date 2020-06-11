@@ -24,7 +24,7 @@ function playEasy(board: Mark[][]):Point|undefined {
   let emptyPlaces = getEmptyPlaces(copy);
   if (emptyPlaces.length >0) {
     let random = Math.floor(Math.random() * emptyPlaces.length);
-    console.log("Playing an easy move");
+    // console.log("Playing an easy move");
     return emptyPlaces[random];
   }
   return undefined;
@@ -32,7 +32,7 @@ function playEasy(board: Mark[][]):Point|undefined {
 
 function playMedium(board: Mark[][]):Point|undefined {
   let copy = board.map(a => a.slice(0));
-  console.log("Searching a Medium move");
+  // console.log("Searching a Medium move");
   // console.log(copy);
   let emptyPlaces = getEmptyPlaces(copy);
   let chosen = undefined;
@@ -53,8 +53,12 @@ function playMedium(board: Mark[][]):Point|undefined {
 function playHard(board: Mark[][]):Point|undefined {
   var copy = board.map(a => a.slice(0));
   let emptyPlaces = getEmptyPlaces(copy);
-  console.log("Searching a Hard move");
+  // console.log("Searching a Hard move");
   let chosen = undefined;
+  //Always try to fill the middle one first.
+  if (copy[1][1] == undefined) {
+    return {row: 1, col: 1};
+  }
   emptyPlaces.forEach(p => {
     copy[p.row][p.col] = Mark.O
     let [finished, winner] = hasEnded(copy);

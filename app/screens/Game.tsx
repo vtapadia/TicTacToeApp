@@ -13,8 +13,13 @@ const mapState = (state: RootState) => ({
   isFinished: state.gameReducer.game.status==Status.FINISHED,
   mode: state.gameReducer.mode,
   game: state.gameReducer.game,
+  startedBy: state.gameReducer.game.startedBy,
   turn: state.gameReducer.game.turn,
   winner: state.gameReducer.game.winner,
+  playerNameX: state.gameReducer.game.players.X?.displayName || state.gameReducer.game.players.X?.name,
+  playerNameO: state.gameReducer.game.players.O?.displayName || state.gameReducer.game.players.O?.name,
+  winCountX: state.gameReducer.game.winCount.X,
+  winCountO: state.gameReducer.game.winCount.O,
   level: state.gameReducer.botLevel
 })
 
@@ -35,6 +40,7 @@ declare type GameState = {
 class Game extends Component<Props, GameState> {
   constructor(props:Props) {
     super(props);
+    // console.log("Game state at start", props.game);
     this.state = {count: 0};
     this.handleSelected = this.handleSelected.bind(this);
     this.replayGame = this.replayGame.bind(this);
@@ -44,30 +50,32 @@ class Game extends Component<Props, GameState> {
   playComputer(props: Props) {
     let point = bot.playComputer(props.game.board, props.level)
     if (point) {
-      console.log("Playing the computer move at [%d, %d]", point.row, point.col);
+      // console.log("Playing the computer move at [%d, %d]", point.row, point.col);
       props.move(point);
     }
   }
 
-  handleSelected(point: Point) {
+  handleSelected(props: Props, point: Point) {
     let nextCount = this.state.count;
-    this.props.move(point);
+    props.move(point);
     nextCount++;
-    if (this.props.mode == GameMode.OFFLINE) {
+    if (props.mode == GameMode.OFFLINE) {
       if (nextCount<9) {
-        this.playComputer(this.props);
+        this.playComputer(props);
         nextCount++;
       }
     }
     this.setState({ count: nextCount});
-    console.log("called handled with %d %d, count set to %d", point.row, point.col, nextCount);
+    // console.log("called handled with %d %d, count set to %d", point.row, point.col, nextCount);
   }
 
   replayGame(props: Props) {
+    let startedBy = props.startedBy;
     props.replay();
     this.setState({ count: 0});
     if (props.mode==GameMode.OFFLINE) {
-      if (props.game.turn != props.game.myMark) {
+      if (startedBy == Mark.X) {
+        //Last time it was X who started the game, so this time, it is computer
         this.playComputer(props);
         this.setState({ count: 1});
       }
@@ -80,15 +88,15 @@ class Game extends Component<Props, GameState> {
         <View style={styles.headerContainer}>
           <View style={styles.playerContainer}>
             <Image source={require('./../assets/img/robot-1.png')} style={styles.imagePlayer}></Image>
-            <Text style={styles.playerText}>{this.props.game.players.X?.name}</Text>
+            <Text style={styles.playerText}>{this.props.playerNameX}</Text>
             <X></X>
-            <Text style={styles.playerText}>Won: {this.props.game.winCount.X}</Text>
+            <Text style={styles.playerText}>Won: {this.props.winCountX}</Text>
           </View>
           <View style={styles.playerContainer}>
             <Image source={require('./../assets/img/robot-1.png')} style={styles.imagePlayer}></Image>
-            <Text style={styles.playerText}>{this.props.game.players.O?.name}</Text>
+            <Text style={styles.playerText}>{this.props.playerNameO}</Text>
             <O></O>
-            <Text style={styles.playerText}>Won: {this.props.game.winCount.O}</Text>
+            <Text style={styles.playerText}>Won: {this.props.winCountO}</Text>
           </View>
           {/* <Text>{this.props.game.message}</Text> */}
         </View>
@@ -133,14 +141,14 @@ declare type SquareProp = {
   row: number,
   col: number,
   props: Props,
-  onSelect: (point: Point) => void
+  onSelect: (props: Props, point: Point) => void
 };
 
 export function Square(squareProps: SquareProp) {
 
   function selected() {
     let point:Point= {row: squareProps.row, col: squareProps.col};
-    squareProps.onSelect(point);
+    squareProps.onSelect(squareProps.props, point);
   }
 
   return (

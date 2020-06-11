@@ -2,11 +2,10 @@ import React from 'react';
 import {View, Text, TouchableHighlight} from "react-native";
 import {styles} from "../config/styles";
 import {HomeProps, GameMode, Player} from "../config/types";
-import { addPlayer, setGameMode } from '../store/actions/gameActions';
+import { setGameMode } from '../store/actions/gameActions';
 import { connect } from 'react-redux'
 import { RootState } from '../store/reducers/appReducer';
 import * as gameService from "./../service/gameService";
-import { Mark } from '../store/types/gameTypes';
 
 const mapState = (state: RootState) => ({
   // isReady: state.gameReducer.game.status==Status.READY
@@ -14,7 +13,6 @@ const mapState = (state: RootState) => ({
 })
 
 const mapDispatch = {
-  addPlayer,
   setGameMode
 }
 
@@ -26,17 +24,9 @@ type Props = StateProps & DispatchProps & HomeProps
 function Home(props: Props) {
   
   function singlePlayer() {
-    let computer:Player = {name: "Computer", self: false};
     
-    if (props.appUser) {
-      // player = {name: props.route.params.playerName, self: true};
-      props.addPlayer(props.appUser, Mark.X);
-      props.addPlayer(computer, Mark.O);
-      props.setGameMode(GameMode.OFFLINE);
-      props.navigation.navigate('SelectDifficulty', {self: props.appUser});
-    } else {
-      throw new Error("Player Name missing");
-    }
+    props.setGameMode(GameMode.OFFLINE);
+    props.navigation.navigate('SelectDifficulty');
   }
 
   function inviteFriend() {

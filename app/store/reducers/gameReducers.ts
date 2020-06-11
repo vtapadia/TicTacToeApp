@@ -119,11 +119,9 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
     case REPLAY:
       {
         let nState = {
-          ...initialState
+          ...state
         };
         nState.game.status = Status.READY;
-        nState.botLevel = state.botLevel;
-        nState.appUser = state.appUser;
         nState.game.board = [...Array(3)].map(x=>Array(3).fill(undefined));
         nState.game.startedBy = toggle(nState.game.startedBy);
         nState.game.turn = nState.game.startedBy;
@@ -132,17 +130,15 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
       }
     case RESET:
       let nState = {
-        ...initialState
+        ...state
       };
-      nState.appUser = state.appUser;
-      nState.game.status = Status.READY;
+      nState.game.status = Status.INITIAL;
       nState.game.board = [...Array(3)].map(x=>Array(3).fill(undefined));
       nState.game.startedBy = Mark.X;
       nState.game.turn = nState.game.startedBy;
       nState.game.winner = undefined;
       nState.game.winCount.O = 0;
       nState.game.winCount.X = 0;
-      // console.log(nState);
       return nState;
     default:
       return state;

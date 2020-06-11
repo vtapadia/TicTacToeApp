@@ -26,9 +26,6 @@ type StateProps = ReturnType<typeof mapState>
 type DispatchProps = typeof mapDispatch
 
 type Props = StateProps & DispatchProps & SelectDifficultyProps
-declare type ComponentProp = {
-  props: Props
-}
 
 class SelectDifficulty extends Component<Props> {
   constructor(props: Props) {
@@ -36,6 +33,8 @@ class SelectDifficulty extends Component<Props> {
     this.selected = this.selected.bind(this);
     if (props.appUser) {
       props.addPlayer(props.appUser, Mark.X);
+    } else {
+      console.error("app User should be set before this.");
     }
   }
 
@@ -45,11 +44,12 @@ class SelectDifficulty extends Component<Props> {
         props.reset();
       }
     }
-    let displayName = (level == DifficultyLevel.EASY) ? "Dumb" : (level == DifficultyLevel.MEDIUM) ? "Friendly" : "Sherlock";
     props.setDifficultyLevel(level);
+    let displayName = (level == DifficultyLevel.EASY) ? "Dumb" : (level == DifficultyLevel.MEDIUM) ? "Friendly" : "Sherlock";
     let computer:Player = {name: "Computer", displayName: displayName, self: false};
+    console.log("Computer set to ", computer);
     props.addPlayer(computer, Mark.O);
-    props.navigation.navigate('Game', {mode: GameMode.OFFLINE});
+    props.navigation.navigate('Game');
   }
 
   render() {
