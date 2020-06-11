@@ -10,6 +10,7 @@ import { Mark } from '../store/types/gameTypes';
 
 const mapState = (state: RootState) => ({
   // isReady: state.gameReducer.game.status==Status.READY
+  appUser: state.gameReducer.appUser
 })
 
 const mapDispatch = {
@@ -24,14 +25,13 @@ type Props = StateProps & DispatchProps & HomeProps
 function Home(props: Props) {
   
   function singlePlayer() {
-    let player:Player;
     let computer:Player = {name: "Computer", self: false};
-
-    if (props.route.params) {
-      player = {name: props.route.params.playerName, self: true};
-      props.addPlayer(player, Mark.X);
+    
+    if (props.appUser) {
+      // player = {name: props.route.params.playerName, self: true};
+      props.addPlayer(props.appUser, Mark.X);
       props.addPlayer(computer, Mark.O);
-      props.navigation.navigate('SelectDifficulty', {self: player});
+      props.navigation.navigate('SelectDifficulty', {self: props.appUser});
     } else {
       throw new Error("Player Name missing");
     }

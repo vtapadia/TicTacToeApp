@@ -3,6 +3,7 @@ import {View, Text, TextInput, TouchableHighlight, Platform, KeyboardAvoidingVie
 import { RootState } from '../store/reducers/appReducer';
 import { JoinGameProps, GameMode } from '../config/types';
 import { connect } from 'react-redux';
+import * as gameService from "./../service/gameService";
 
 const mapState = (state: RootState) => ({
   game: state.gameReducer.game,
@@ -22,8 +23,11 @@ type DispatchProps = typeof mapDispatch
 type Props = StateProps & DispatchProps & JoinGameProps
 
 function JoinGame(props:Props) {
-  function joinGame() {
+  const [value, onChangeText] = React.useState("");
+
+  const joinGame = () => {
     if (props.route.params) {
+      gameService.joinBoard(value, props.route.params.self);
       props.navigation.navigate("Game", {mode: GameMode.NETWORK, self: props.route.params.self});
     }
   }
@@ -35,7 +39,9 @@ function JoinGame(props:Props) {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={styles.outer}>
           <View style={styles.inner}>
             <Text style={styles.header}> Enter Game Code : </Text>
-            <TextInput placeholder="Game Code" keyboardType='numeric'  style={styles.textInput} />
+            <TextInput placeholder="Game Code" keyboardType='numeric' 
+              maxLength={6} style={styles.textInput} 
+              onChangeText={text => onChangeText(text)} />
             <View style={styles.btnContainer}>
               <TouchableHighlight onPress={joinGame} style={styles.buttonSimple}>
                 <Text style={styles.buttonText}> Join Game </Text>

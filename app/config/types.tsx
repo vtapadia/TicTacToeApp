@@ -2,6 +2,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 
 export interface Player {
   name: string
+  displayName?: string
   self: boolean
 }
 
