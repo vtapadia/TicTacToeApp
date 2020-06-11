@@ -19,3 +19,5 @@ The App use travis-ci for continuous build and deploy to expo server.
 [react-native-vector-icons examples](https://oblador.github.io/react-native-vector-icons/)
 Code: https://github.com/oblador/react-native-vector-icons
 
+WebSocket Server protocol used : NES
+https://github.com/hapijs/nes/blob/master/PROTOCOL.md
