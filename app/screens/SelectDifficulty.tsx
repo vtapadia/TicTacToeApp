@@ -56,7 +56,7 @@ class SelectDifficulty extends Component<Props> {
     return (
       <View style={styles.container}>
         <View style={{flex: 2, justifyContent: 'center'}}>
-          <Text style={cStyles.header}>Select Difficulty !!</Text>
+          <Text style={cStyles.header}>!! Select Level !!</Text>
         </View>
         <View style={{flex: 3, justifyContent: 'space-evenly', paddingBottom: 100}}>
           <View style={cStyles.viewRow}>

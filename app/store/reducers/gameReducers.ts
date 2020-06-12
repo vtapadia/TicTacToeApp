@@ -47,36 +47,32 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
         return newState;
       }
     case PLAYER_JOIN:
-      if (state.game.status == Status.INITIAL) {
-        //Only add players when the game is not ready or finished.
-        let playerJoinAction = action as PlayerJoinAction;
-        let newState = {...state};
+      //Only add players when the game is not ready or finished.
+      let playerJoinAction = action as PlayerJoinAction;
+      let newState = {...state};
 
-        let playerMark = playerJoinAction.piece;
-  
-        let game = newState.game;
-        game.players[playerMark] = playerJoinAction.player;
-  
-        if (playerJoinAction.player.self) {
-          newState.game.myMark = playerMark;
-        }
+      let playerMark = playerJoinAction.piece;
 
-        let newStatus = (game.players.O && game.players.X) ? Status.READY : newState.game.status;
-        game.status = newStatus;
-        game.winCount.O = 0;
-        game.winCount.X = 0;
-          
-        if (newStatus == Status.READY) {
-          if (game.players[game.turn]?.self) {
-            game.message = "Your Turn.."
-          } else {
-            game.message = "Waiting..."
-          }
-        }
-        return newState;
-      } else {
-        return state;
+      let game = newState.game;
+      game.players[playerMark] = playerJoinAction.player;
+
+      if (playerJoinAction.player.self) {
+        newState.game.myMark = playerMark;
       }
+
+      let newStatus = (game.players.O && game.players.X) ? Status.READY : newState.game.status;
+      game.status = newStatus;
+      game.winCount.O = 0;
+      game.winCount.X = 0;
+        
+      if (newStatus == Status.READY) {
+        if (game.players[game.turn]?.self) {
+          game.message = "Your Turn.."
+        } else {
+          game.message = "Waiting..."
+        }
+      }
+      return newState;
     case MOVE:
       let moveAction = action as MoveAction;
       if (state.game.status == Status.READY) {
