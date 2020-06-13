@@ -12,8 +12,6 @@ const mapState = (state: RootState) => ({
 })
 
 const mapDispatch = {
-  // move,
-  // addPlayer,
   reset,
   addAppUser
 }
@@ -32,10 +30,13 @@ function Welcome(props: Props) {
   }
 
   function loginSuccess(name:string, displayName?:string) {
-    props.reset();
     props.addAppUser({name: name, displayName: displayName, self: true});
     props.navigation.navigate('Home');
   }
+
+  React.useEffect(()=>{
+    props.reset(); //Reset game
+  })
 
   return (
     <View style={styles.container}>

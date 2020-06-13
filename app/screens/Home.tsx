@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, TouchableHighlight, ActivityIndicator} from "react-native";
 import {styles} from "../config/styles";
 import {HomeProps, GameMode, Player} from "../config/types";
-import { setGameMode } from '../store/actions/gameActions';
+import { setGameMode, reset } from '../store/actions/gameActions';
 import { connect } from 'react-redux'
 import { RootState } from '../store/reducers/appReducer';
 import * as gameService from "./../service/gameService";
@@ -13,7 +13,8 @@ const mapState = (state: RootState) => ({
 })
 
 const mapDispatch = {
-  setGameMode
+  setGameMode,
+  reset
 }
 
 type StateProps = ReturnType<typeof mapState>
@@ -24,14 +25,15 @@ type Props = StateProps & DispatchProps & HomeProps
 function Home(props: Props) {
   
   const [progress, setProgress] = React.useState(false);
-
+  
   function singlePlayer() {
-    
+    props.reset();
     props.setGameMode(GameMode.OFFLINE);
     props.navigation.navigate('SelectDifficulty');
   }
 
   function inviteFriend() {
+    props.reset();
     if (props.appUser) {
       let player:Player;
       player = props.appUser;
@@ -50,12 +52,9 @@ function Home(props: Props) {
   }
 
   function joinGame() {
-    if (props.route.params) {
-      let player:Player;
-      player = {name: props.route.params.playerName, self: true};
-      props.setGameMode(GameMode.NETWORK);
-      props.navigation.navigate('JoinGame', {self: player});
-    }
+    props.reset();
+    props.setGameMode(GameMode.NETWORK);
+    props.navigation.navigate('JoinGame');
   }
 
   return (

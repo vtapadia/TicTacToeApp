@@ -7,6 +7,8 @@ import * as gameService from "./../service/gameService";
 
 const mapState = (state: RootState) => ({
   game: state.gameReducer.game,
+  appUser: state.gameReducer.appUser,
+  isReady: state.gameReducer.game.status==Status.READY,
   turn: state.gameReducer.game.turn,
   winner: state.gameReducer.game.winner
 })
@@ -26,10 +28,13 @@ function JoinGame(props:Props) {
   const [value, onChangeText] = React.useState("");
 
   const joinGame = () => {
-    if (props.route.params) {
-      gameService.joinBoard(value, props.route.params.self);
-      props.navigation.navigate("Game");
+    if (props.appUser) {
+      gameService.joinBoard(value, props.appUser);
     }
+  }
+
+  const playGame = () => {
+    props.navigation.navigate("Game");
   }
 
   return (
@@ -43,9 +48,15 @@ function JoinGame(props:Props) {
               maxLength={6} style={styles.textInput} 
               onChangeText={text => onChangeText(text)} />
             <View style={styles.btnContainer}>
-              <TouchableHighlight onPress={joinGame} style={styles.buttonSimple}>
-                <Text style={styles.buttonText}> Join Game </Text>
-              </TouchableHighlight>
+              {props.isReady ? 
+                <TouchableHighlight onPress={playGame} style={styles.buttonSimple}>
+                  <Text style={styles.buttonText}> Lets Play </Text>
+                </TouchableHighlight>
+              : <TouchableHighlight onPress={joinGame} style={styles.buttonSimple}>
+                  <Text style={styles.buttonText}> Join Game </Text>
+                </TouchableHighlight>
+              }
+              
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -58,6 +69,7 @@ const JoinGameContainer = connect(mapState, mapDispatch)(JoinGame)
 export default JoinGameContainer;
 
 import { StyleSheet} from 'react-native';
+import { Status } from '../store/types/gameTypes';
 
 export const styles = StyleSheet.create({
   container: {
@@ -81,6 +93,7 @@ export const styles = StyleSheet.create({
   textInput: {
     fontSize: 24,
     height: 40,
+    width: 80,
     borderColor: "#000000",
     borderBottomWidth: 1,
     marginBottom: 36

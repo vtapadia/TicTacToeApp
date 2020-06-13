@@ -3,10 +3,12 @@ import { Player, DifficultyLevel, GameMode } from "../../config/types";
 export const PLAYER_JOIN = "PLAYER_JOIN";
 export const MOVE = "MOVE";
 export const RESET = "RESET";
+export const OFFLINE_RESET = "OFFLINE_RESET";
 export const REPLAY = "REPLAY";
 export const APP_USER = "APP_USER";
 export const SELECT_DIFFICULTY = "SELECT_DIFFICULTY";
 export const SET_GAMEMODE = "SET_GAMEMODE";
+export const GAME_STATE = "GAME_STATE";
 
 export enum Mark {
   X="X",
@@ -55,6 +57,9 @@ export interface MoveAction {
 export interface ResetAction {
   type: typeof RESET
 }
+export interface OfflineResetAction {
+  type: typeof OFFLINE_RESET
+}
 export interface ReplayAction {
   type: typeof REPLAY
 }
@@ -74,4 +79,9 @@ export interface SetGameModeAction {
   mode: GameMode
 }
 
-export type GameActionTypes = AppUserAction | SetGameModeAction | SelectDifficultyAction | PlayerJoinAction | MoveAction | ResetAction | ReplayAction;
+export interface GameStateAction {
+  type: typeof GAME_STATE
+  status: Status
+}
+
+export type GameActionTypes = AppUserAction | SetGameModeAction | SelectDifficultyAction | PlayerJoinAction | MoveAction | ResetAction | ReplayAction | OfflineResetAction | GameStateAction;

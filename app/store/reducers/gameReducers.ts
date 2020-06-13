@@ -1,4 +1,4 @@
-import { Status, GameState, GameActionTypes, PlayerJoinAction, PLAYER_JOIN, MOVE, Mark, MoveAction, RESET, Point, APP_USER, AppUserAction, SELECT_DIFFICULTY, SelectDifficultyAction, REPLAY, SET_GAMEMODE, SetGameModeAction } from '../types/gameTypes'
+import { Status, GameState, GameActionTypes, PlayerJoinAction, PLAYER_JOIN, MOVE, Mark, MoveAction, RESET, Point, APP_USER, AppUserAction, SELECT_DIFFICULTY, SelectDifficultyAction, REPLAY, SET_GAMEMODE, SetGameModeAction, OFFLINE_RESET, GAME_STATE, GameStateAction } from '../types/gameTypes'
 
 const initialState:GameState = {
   appUser: undefined,
@@ -48,6 +48,7 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
       }
     case PLAYER_JOIN:
       //Only add players when the game is not ready or finished.
+      console.log("Player Join Action triggered");
       let playerJoinAction = action as PlayerJoinAction;
       let newState = {...state};
 
@@ -60,18 +61,9 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
         newState.game.myMark = playerMark;
       }
 
-      let newStatus = (game.players.O && game.players.X) ? Status.READY : newState.game.status;
-      game.status = newStatus;
       game.winCount.O = 0;
       game.winCount.X = 0;
         
-      if (newStatus == Status.READY) {
-        if (game.players[game.turn]?.self) {
-          game.message = "Your Turn.."
-        } else {
-          game.message = "Waiting..."
-        }
-      }
       return newState;
     case MOVE:
       let moveAction = action as MoveAction;
@@ -112,8 +104,18 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
         console.log("Game is in state %s", state.game.status);
         return state;
       }
+    case GAME_STATE:
+      let gameStateAction = action as GameStateAction;
+      {
+        let nState = {
+          ...state
+        };
+        nState.game.status = gameStateAction.status;
+        return nState;
+      }
     case REPLAY:
       {
+        console.log("Replay Action triggered");
         let nState = {
           ...state
         };
@@ -124,7 +126,8 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
         nState.game.winner = undefined;
         return nState;
       }
-    case RESET:
+    case OFFLINE_RESET:
+      console.log("Offline Reset Action triggered");
       let nState = {
         ...state
       };
@@ -136,8 +139,18 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
       nState.game.winCount.O = 0;
       nState.game.winCount.X = 0;
       return nState;
-    default:
-      return state;
+    case RESET:
+      {
+        console.log("Reset Action triggered");
+        let nState = {
+          ...initialState
+        };
+        nState.game.board = [...Array(3)].map(x=>Array(3).fill(undefined));
+        nState.appUser = state.appUser;
+        return nState;
+      }
+      default:
+        return state;
   }
 }
 
