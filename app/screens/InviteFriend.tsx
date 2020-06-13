@@ -61,12 +61,13 @@ class InviteFriend extends Component<Props> {
         </View>
         <View style={iStyles.viewShare}>
           {this.props.isReady ?
-            <TouchableHighlight onPress={this.share} style={iStyles.buttonSimple}>
-              <Text style={iStyles.buttonText}> Share with Friends </Text>
-            </TouchableHighlight> : 
             <TouchableHighlight onPress={this.gameReady} style={iStyles.buttonReady}>
               <Text style={iStyles.buttonText}> Lets Play </Text>
-            </TouchableHighlight>            
+            </TouchableHighlight>
+          :
+            <TouchableHighlight onPress={this.share} style={iStyles.buttonSimple}>
+              <Text style={iStyles.buttonText}> Share with Friends </Text>
+            </TouchableHighlight>
           }
         </View>
       </View>
