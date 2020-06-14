@@ -3,6 +3,7 @@ import {View, Share, Text, TouchableHighlight, StyleSheet, ActivityIndicator} fr
 import {styles} from "../config/styles";
 import { RootState } from '../store/reducers/appReducer';
 import { InviteFriendProps } from '../config/types';
+import { setGameId, move, addPlayer, setGameState } from '../store/actions/gameActions';
 import { connect } from 'react-redux';
 import { Status } from '../store/types/gameTypes';
 import * as gameService from "./../service/gameService";
@@ -16,9 +17,10 @@ const mapState = (state: RootState) => ({
 })
 
 const mapDispatch = {
-  // move,
-  // addPlayer,
-  // reset
+  setGameId,
+  move,
+  addPlayer,
+  setGameState
 }
 
 type StateProps = ReturnType<typeof mapState>
@@ -39,15 +41,19 @@ class InviteFriend extends Component<Props, State> {
   componentDidMount() {
     if (this.props.appUser)
     gameService.createGame(this.props.appUser).then((gameId) => {
+      this.props.setGameId(gameId);
       this.setState({gameId: gameId, progress: false});
-      gameService.subscribe(gameId);
-      if (this.props.appUser) {
-        gameService.joinBoard(gameId, this.props.appUser).then(m => {
-          console.log("User joined with mark ", m);
-        }).catch(e => {
-          console.log("Failed to join the game ", e);
-        });
-      }
+      gameService.subscribe(gameId, this.props).then(() => {
+        if (this.props.appUser) {
+          gameService.joinBoard(gameId, this.props.appUser).then(m => {
+            console.log("User joined with mark ", m);
+          }).catch(e => {
+            console.log("Failed to join the game ", e);
+          });
+        }
+      }).catch(e => {
+        console.log("Unable to subscribe");
+      })
     }).catch(r=> {
       alert(r);
       this.setState({gameId: undefined, progress: true});

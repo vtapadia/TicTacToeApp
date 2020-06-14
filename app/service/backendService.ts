@@ -28,7 +28,15 @@ export async function get<T>(
 export async function post<T>(
   path: string,
   body: any,
-  args: RequestInit = { method: "post", body: JSON.stringify(body) }
+  args: RequestInit = { 
+    method: "post", 
+    body: JSON.stringify(body), 
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    redirect: 'follow'
+  }
 ): Promise<HttpResponse<T>>  {
   return await http<T>(new Request(serverBase + path, args));
 };

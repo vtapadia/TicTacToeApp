@@ -9,7 +9,8 @@ import * as gameService from "./../service/gameService";
 
 const mapState = (state: RootState) => ({
   // isReady: state.gameReducer.game.status==Status.READY
-  appUser: state.gameReducer.appUser
+  appUser: state.gameReducer.appUser,
+  gameId: state.gameReducer.gameId
 })
 
 const mapDispatch = {
@@ -26,6 +27,16 @@ function Home(props: Props) {
   
   const [progress, setProgress] = React.useState(false);
   
+  React.useEffect(() => {
+    if(props.gameId) {
+      gameService.unsubscribe(props.gameId).then(() => {
+        console.log("Unsubscription done successfully");
+      }).catch((e) => {
+        console.log("Failed unsubscribing, Error ", e);
+      })
+    }
+  })
+
   function singlePlayer() {
     props.reset();
     props.setGameMode(GameMode.OFFLINE);
