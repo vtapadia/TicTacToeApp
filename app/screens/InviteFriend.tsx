@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import {View, Share, Text, TouchableHighlight, StyleSheet} from "react-native";
+import {View, Share, Text, TouchableHighlight, StyleSheet, ActivityIndicator} from "react-native";
 import {styles} from "../config/styles";
 import { RootState } from '../store/reducers/appReducer';
 import { InviteFriendProps } from '../config/types';
 import { connect } from 'react-redux';
-import { GameState } from '../component/GameState';
 import { Status } from '../store/types/gameTypes';
+import * as gameService from "./../service/gameService";
 
 const mapState = (state: RootState) => ({
   game: state.gameReducer.game,
+  appUser: state.gameReducer.appUser,
   isReady: state.gameReducer.game.status == Status.READY,
   turn: state.gameReducer.game.turn,
   winner: state.gameReducer.game.winner
@@ -24,16 +25,39 @@ type StateProps = ReturnType<typeof mapState>
 type DispatchProps = typeof mapDispatch
 
 type Props = StateProps & DispatchProps & InviteFriendProps
+type State = {
+  gameId: string | undefined,
+  progress: boolean
+}
 
-class InviteFriend extends Component<Props> {
+class InviteFriend extends Component<Props, State> {
   constructor(props:Props) {
     super(props);
+    this.state = {gameId: undefined, progress: true};
+  }
+
+  componentDidMount() {
+    if (this.props.appUser)
+    gameService.createGame(this.props.appUser).then((gameId) => {
+      this.setState({gameId: gameId, progress: false});
+      gameService.subscribe(gameId);
+      if (this.props.appUser) {
+        gameService.joinBoard(gameId, this.props.appUser).then(m => {
+          console.log("User joined with mark ", m);
+        }).catch(e => {
+          console.log("Failed to join the game ", e);
+        });
+      }
+    }).catch(r=> {
+      alert(r);
+      this.setState({gameId: undefined, progress: true});
+      this.props.navigation.navigate("Home");
+    })
   }
 
   share = async () => {
-    if (this.props.route.params) {
-      let gameId = this.props.route.params.gameId;
-      let message = "Please join me for a Game of Tic Tac Toe with Code " + gameId;
+    if (this.state.gameId) {
+      let message = "Join me for a Game of Tic Tac Toe with Code " + this.state.gameId;
       const result = await Share.share({title:"Share Tic Tac Toe", message: message});
       if (result.action == Share.sharedAction) {
         if (result.activityType) {
@@ -54,9 +78,10 @@ class InviteFriend extends Component<Props> {
       <View style={styles.container}>
         <View style={iStyles.viewCode}>
           <Text style={iStyles.textCode}>Code: </Text>
-          <Text style={iStyles.textCodeNumber}>{this.props.route.params?.gameId}</Text>
+          <Text style={iStyles.textCodeNumber}>{this.state.gameId}</Text>
         </View>
         <View style={iStyles.viewMessage}>
+          <ActivityIndicator animating={this.state.progress} size="large" color="#0000ff" />
           <Text style={iStyles.textMessage}>Share this code with your friends and ask them to join</Text>
         </View>
         <View style={iStyles.viewShare}>

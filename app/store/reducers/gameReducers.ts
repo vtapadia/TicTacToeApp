@@ -67,6 +67,7 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
       return newState;
     case MOVE:
       let moveAction = action as MoveAction;
+      console.log("Move Action triggered");
       if (state.game.status == Status.READY) {
         let newState = {...state};
         let {row, col} = moveAction.move;

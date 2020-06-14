@@ -1,11 +1,22 @@
 import { Player } from "../config/types";
 import * as backend from "./backendService";
-import { Mark } from "../store/types/gameTypes";
+import { Mark, Status, Point } from "../store/types/gameTypes";
 import { random } from "../util/appUtils";
+import { processColor } from "react-native";
+import { useStore } from 'react-redux'
+import { StoreType } from "../store/store";
+import { addPlayer, move } from "../store/actions/gameActions";
 
-const serverBase:string    = "https://vtapadia-tic-tac-toe.herokuapp.com";
-const webSocketBase:string = "wss://vtapadia-tic-tac-toe.herokuapp.com";
 
+let serverBase:string    = "https://vtapadia-tic-tac-toe.herokuapp.com";
+let webSocketBase:string = "wss://vtapadia-tic-tac-toe.herokuapp.com";
+
+if (__DEV__) {
+  serverBase=  "http://localhost:3000";
+  webSocketBase = "ws://localhost:3000";
+}
+
+let appUser:Player;
 let ws:WebSocket;
 let clientId:number = random(10);
 
@@ -16,19 +27,36 @@ export function setServerBase(url: string) {
 }
 
 export async function createGame(player: Player):Promise<string> {
+  appUser = player;
+  let message = "Unknown Error. Please try again";
   try {
-    let response = await backend.post<GameResponse>("/api/game", {userName: player.name});
+    let response = await backend.post<CreateGameResponse>("/api/game", {userName: player.name});
     let gameResponse = response.parsedBody;
     if (gameResponse) {
+      console.log("Game created %s", gameResponse.gameId);
       return Promise.resolve(gameResponse.gameId);
     }
   } catch (error) {
-    console.error("Failed to connect %s", error);
+    console.log("Failed to connect: ", error);
+    message = "Error:" + error.message + ". Please try in some time.";
   }
-  return Promise.reject("Fail to create a Game. Please try again");
+  return Promise.reject(message);
 }
 
-function configureWS(gameId:string) {
+export async function getGame(gameId:string):Promise<GameResponse> {
+  try {
+    let response = await backend.get<GameResponse>("/api/game/" + gameId);
+    let gameResponse = response.parsedBody;
+    if (gameResponse) {
+      Promise.resolve(gameResponse);
+    }
+  } catch (error) {
+    console.log("Failed to connect: ", error);
+  }
+  return Promise.reject("Failed to find the message");
+}
+
+export async function subscribe(gameId:string) {
   
   ws = new WebSocket(webSocketBase + "/game/" + gameId);
 
@@ -48,8 +76,7 @@ function configureWS(gameId:string) {
         break;
       case "pub":
         console.log("Published message from server:", msg);
-        var msgFromServer = JSON.parse(data.message);
-        handleMessageFromServer(msgFromServer);
+        handleMessageFromServer(gameId, data.message);
         break;
       default:
         console.log("Something else received", msg);
@@ -63,11 +90,51 @@ function configureWS(gameId:string) {
   }
 }
 
-function handleMessageFromServer(msg:any) {
+function handleMessageFromServer(gameId:string, msg:PublishMessage) {
+  // console.log("Message :::: ", msg);
+  switch (msg.type) {
+    case PubMsgType.PLAYER_JOIN:
+      if (msg.game.status == Status.READY) {
+        getGame(gameId).then((gr) => {
+          let store:StoreType = useStore();
+          let appUser = store.getState().gameReducer.appUser;
+          
+          if (gr.status == Status.READY && gr.players.X && gr.players.O) {
+            let xPl:Player = gr.players.X;
+            let oPl:Player = gr.players.O;
 
+            if (gr.players.X?.name == appUser?.name) {
+              store.dispatch(addPlayer({
+                ...xPl,
+                self: true
+              }, Mark.X));
+              store.dispatch(addPlayer({
+                ...oPl,
+                self: false
+              }, Mark.O));
+            } else {
+              store.dispatch(addPlayer({
+                ...xPl,
+                self: false
+              }, Mark.X));
+              store.dispatch(addPlayer({
+                ...oPl,
+                self: true
+              }, Mark.O));
+            }
+          }
+        })
+      }
+      break;
+    case PubMsgType.MOVE:
+      if (msg.game.point) {
+        let store:StoreType = useStore();
+        store.dispatch(move(msg.game.point))
+      }
+  }
 }
 
-export async function closeGame(gameId:string) {
+export async function unsubscribe(gameId:string) {
   if (ws) {
     ws.send(JSON.stringify({type: "unsub", id: clientId, path: "/game/" + gameId}));
     ws.close();
@@ -80,6 +147,7 @@ export async function joinBoard(gameId:string, player: Player): Promise<Mark> {
       "/api/game/"+gameId+"/player",
       player
     );
+    console.log(response);
     if (response.parsedBody) {
       console.log("User registered with " + response.parsedBody.mark);
       return Promise.resolve(response.parsedBody.mark);
@@ -90,10 +158,31 @@ export async function joinBoard(gameId:string, player: Player): Promise<Mark> {
   return Promise.reject(undefined);
 }
 
-interface GameResponse {
+interface CreateGameResponse {
   gameId: string
 }
 
 interface JoinBoardResponse {
   mark: Mark
+}
+
+interface GameResponse {
+  status: Status,
+  turn: Mark,
+  players: { [key in Mark]: Player | undefined},
+}
+
+declare type PublishMessage = {
+  type: PubMsgType
+  msg?: string
+  game: {
+    status: Status
+    turn: Mark
+    point?: Point
+  }
+}
+
+enum PubMsgType {
+  PLAYER_JOIN="PLAYER_JOIN",
+  MOVE="MOVE"
 }

@@ -15,6 +15,7 @@ const mapState = (state: RootState) => ({
   game: state.gameReducer.game,
   startedBy: state.gameReducer.game.startedBy,
   turn: state.gameReducer.game.turn,
+  myMark: state.gameReducer.game.myMark,
   winner: state.gameReducer.game.winner,
   playerNameX: state.gameReducer.game.players.X?.displayName || state.gameReducer.game.players.X?.name,
   playerNameO: state.gameReducer.game.players.O?.displayName || state.gameReducer.game.players.O?.name,
@@ -151,8 +152,12 @@ export function Square(squareProps: SquareProp) {
     squareProps.onSelect(squareProps.props, point);
   }
 
+  function disabled() {
+    return squareProps.props.isFinished || squareProps.props.myMark != squareProps.props.turn || (squareProps.props.game.board[squareProps.row][squareProps.col])?true:false;
+  }
+
   return (
-    <TouchableHighlight style={styles.square} disabled={squareProps.props.isFinished || (squareProps.props.game.board[squareProps.row][squareProps.col])?true:false}
+    <TouchableHighlight style={styles.square} disabled={disabled()}
      onPress={selected}>
       <Text style={{textAlign: 'center'}}>
         {squareProps.props.game.board[squareProps.row][squareProps.col]==Mark.X ? <X /> : null}

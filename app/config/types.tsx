@@ -3,7 +3,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 export interface Player {
   name: string
   displayName?: string
-  self: boolean
+  self?: boolean
 }
 
 export enum GameMode {
@@ -13,16 +13,16 @@ export enum GameMode {
 
 export enum DifficultyLevel {
   EASY,
-  MEDIUM,
+  MEDIUM, 
   HARD
 }
 
 export type RootStackParamList = {
   Welcome: undefined;
   Home: { playerName: string } | undefined;
-  SelectDifficulty: {self: Player, gameId?: string} | undefined;
-  InviteFriend: {self: Player, gameId?: string} | undefined;
-  JoinGame: {self: Player} | undefined;
+  SelectDifficulty: undefined;
+  InviteFriend: undefined;
+  JoinGame: undefined;
   Game: { mode: GameMode, gameId?: string, difficulty?: DifficultyLevel } | undefined;
 };
 

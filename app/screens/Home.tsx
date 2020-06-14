@@ -34,21 +34,8 @@ function Home(props: Props) {
 
   function inviteFriend() {
     props.reset();
-    if (props.appUser) {
-      let player:Player;
-      player = props.appUser;
-      setProgress(true);
-      gameService.createGame(player)
-        .then((v) => {
-          console.log("Game created with id:%s", v);
-          setProgress(false);
-          props.setGameMode(GameMode.NETWORK);
-          props.navigation.navigate('InviteFriend', {self: player, gameId: v});
-        }).catch((r) => {
-          setProgress(false);
-          console.error(r);
-        });
-    }
+    props.setGameMode(GameMode.NETWORK);
+    props.navigation.navigate('InviteFriend');
   }
 
   function joinGame() {
