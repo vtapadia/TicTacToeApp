@@ -8,6 +8,7 @@ export const REPLAY = "REPLAY";
 export const APP_USER = "APP_USER";
 export const SELECT_DIFFICULTY = "SELECT_DIFFICULTY";
 export const SET_GAMEMODE = "SET_GAMEMODE";
+export const SET_GAMEID = "SET_GAMEID";
 export const GAME_STATE = "GAME_STATE";
 
 export enum Mark {
@@ -30,6 +31,7 @@ export interface GameState {
   appUser: Player | undefined,
   botLevel: DifficultyLevel | undefined,
   mode: GameMode | undefined,
+  gameId?: string,
   game: {
     status: Status,
     message: string,
@@ -79,9 +81,14 @@ export interface SetGameModeAction {
   mode: GameMode
 }
 
+export interface SetGameIDAction {
+  type: typeof SET_GAMEID
+  id: string
+}
+
 export interface GameStateAction {
   type: typeof GAME_STATE
   status: Status
 }
 
-export type GameActionTypes = AppUserAction | SetGameModeAction | SelectDifficultyAction | PlayerJoinAction | MoveAction | ResetAction | ReplayAction | OfflineResetAction | GameStateAction;
+export type GameActionTypes = AppUserAction | SetGameModeAction | SetGameIDAction | SelectDifficultyAction | PlayerJoinAction | MoveAction | ResetAction | ReplayAction | OfflineResetAction | GameStateAction;

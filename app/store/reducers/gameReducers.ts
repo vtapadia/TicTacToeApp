@@ -1,9 +1,10 @@
-import { Status, GameState, GameActionTypes, PlayerJoinAction, PLAYER_JOIN, MOVE, Mark, MoveAction, RESET, Point, APP_USER, AppUserAction, SELECT_DIFFICULTY, SelectDifficultyAction, REPLAY, SET_GAMEMODE, SetGameModeAction, OFFLINE_RESET, GAME_STATE, GameStateAction } from '../types/gameTypes'
+import { Status, GameState, GameActionTypes, PlayerJoinAction, PLAYER_JOIN, MOVE, Mark, MoveAction, RESET, Point, APP_USER, AppUserAction, SELECT_DIFFICULTY, SelectDifficultyAction, REPLAY, SET_GAMEMODE, SetGameModeAction, OFFLINE_RESET, GAME_STATE, GameStateAction, SET_GAMEID, SetGameIDAction } from '../types/gameTypes'
 
 const initialState:GameState = {
   appUser: undefined,
   botLevel: undefined,
   mode: undefined,
+  gameId: undefined,
   game: {
     status: Status.INITIAL,
     startedBy: Mark.X,
@@ -46,7 +47,14 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
         newState.mode = gameModeAction.mode;
         return newState;
       }
-    case PLAYER_JOIN:
+      case SET_GAMEID:
+        let gameIdAction = action as SetGameIDAction;
+        {
+          let newState = {...state};
+          newState.gameId = gameIdAction.id;
+          return newState;
+        }
+      case PLAYER_JOIN:
       //Only add players when the game is not ready or finished.
       console.log("Player Join Action triggered");
       let playerJoinAction = action as PlayerJoinAction;

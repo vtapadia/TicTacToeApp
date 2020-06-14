@@ -1,4 +1,4 @@
-import {MOVE, PLAYER_JOIN, GameActionTypes, RESET, Point, Mark, APP_USER, AppUserAction, SelectDifficultyAction, SELECT_DIFFICULTY, REPLAY, SetGameModeAction, SET_GAMEMODE, OFFLINE_RESET, Status, GameStateAction, GAME_STATE} from "../types/gameTypes";
+import {MOVE, PLAYER_JOIN, GameActionTypes, RESET, Point, Mark, APP_USER, AppUserAction, SelectDifficultyAction, SELECT_DIFFICULTY, REPLAY, SetGameModeAction, SET_GAMEMODE, OFFLINE_RESET, Status, GameStateAction, GAME_STATE, SET_GAMEID, SetGameIDAction} from "../types/gameTypes";
 import { Player, DifficultyLevel, GameMode } from "../../config/types";
 
 export function addAppUser(player: Player):AppUserAction {
@@ -27,6 +27,13 @@ export function setGameState(status: Status):GameStateAction {
     type: GAME_STATE,
     status: status
   };
+}
+
+export function setGameId(gameId: string):SetGameIDAction {
+  return {
+    type: SET_GAMEID,
+    id: gameId
+  }
 }
 
 export function addPlayer(player:Player, piece: Mark):GameActionTypes {
