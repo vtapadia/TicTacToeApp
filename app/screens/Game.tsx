@@ -3,7 +3,7 @@ import {View, Text, TouchableHighlight, Image} from "react-native";
 import {GameProps, GameMode} from "../config/types";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RootState } from '../store/reducers/appReducer';
-import { move, replay } from '../store/actions/gameActions';
+import { move, replay, setGameId } from '../store/actions/gameActions';
 import { connect } from 'react-redux'
 import { Status, Mark, Point } from '../store/types/gameTypes';
 import { StyleSheet} from 'react-native';
@@ -29,6 +29,7 @@ const mapState = (state: RootState) => ({
 
 const mapDispatch = {
   move,
+  setGameId,
   replay
 }
 
@@ -49,6 +50,14 @@ class Game extends Component<Props, GameState> {
     this.handleSelected = this.handleSelected.bind(this);
     this.replayGame = this.replayGame.bind(this);
     this.playComputer = this.playComputer.bind(this);
+  }
+
+  componentWillUnmount() {
+    console.log("Component is unmounting");
+    if (this.props.gameId) {
+      gameService.unsubscribe(this.props.gameId);
+      this.props.setGameId(undefined);
+    }
   }
 
   playComputer(props: Props) {
