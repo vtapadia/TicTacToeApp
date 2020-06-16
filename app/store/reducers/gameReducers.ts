@@ -154,6 +154,7 @@ export function gameReducer(state = initialState, action: GameActionTypes):GameS
         let nState = {
           ...initialState
         };
+        nState.game.status = Status.INITIAL;
         nState.game.board = [...Array(3)].map(x=>Array(3).fill(undefined));
         nState.appUser = state.appUser;
         return nState;

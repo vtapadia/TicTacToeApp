@@ -12,8 +12,10 @@ import * as gameService from "./../service/gameService";
 
 const mapState = (state: RootState) => ({
   isFinished: state.gameReducer.game.status==Status.FINISHED,
+  appUser: state.gameReducer.appUser,
   mode: state.gameReducer.mode,
   game: state.gameReducer.game,
+  gameId: state.gameReducer.gameId,
   startedBy: state.gameReducer.game.startedBy,
   turn: state.gameReducer.game.turn,
   myMark: state.gameReducer.game.myMark,
@@ -59,7 +61,18 @@ class Game extends Component<Props, GameState> {
 
   handleSelected(props: Props, point: Point) {
     if (props.mode == GameMode.NETWORK) {
-      gameService.createGame
+      if (props.gameId && props.myMark && props.appUser) {
+        gameService.moveByPlayer(props.gameId, 
+          {
+            mark: props.myMark, 
+            player: props.appUser, 
+            point: point
+          }).then((r) => {
+            console.log("All good", r);
+          }).catch((e) => {
+            console.log("Something went wrong with the move", e);
+          });
+      }
     } else {
       let nextCount = this.state.count;
       props.move(point);

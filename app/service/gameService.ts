@@ -146,6 +146,7 @@ function handleMessageFromServer(gameId:string, dispatcher: DispatchType, msg:Pu
       break;
     case PubMsgType.MOVE:
       if (msg.game.point) {
+        dispatcher.move(msg.game.point);
         // let store:StoreType = useStore();
         // store.dispatch(move(msg.game.point))
       }
