@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import { Status, Mark, Point } from '../store/types/gameTypes';
 import { StyleSheet} from 'react-native';
 import * as bot from "../service/autoPlayBot";
+import * as gameService from "./../service/gameService";
 
 const mapState = (state: RootState) => ({
   isFinished: state.gameReducer.game.status==Status.FINISHED,
@@ -57,16 +58,20 @@ class Game extends Component<Props, GameState> {
   }
 
   handleSelected(props: Props, point: Point) {
-    let nextCount = this.state.count;
-    props.move(point);
-    nextCount++;
-    if (props.mode == GameMode.OFFLINE) {
-      if (nextCount<9) {
-        this.playComputer(props);
-        nextCount++;
+    if (props.mode == GameMode.NETWORK) {
+      gameService.createGame
+    } else {
+      let nextCount = this.state.count;
+      props.move(point);
+      nextCount++;
+      if (props.mode == GameMode.OFFLINE) {
+        if (nextCount<9) {
+          this.playComputer(props);
+          nextCount++;
+        }
       }
+      this.setState({ count: nextCount});
     }
-    this.setState({ count: nextCount});
     // console.log("called handled with %d %d, count set to %d", point.row, point.col, nextCount);
   }
 

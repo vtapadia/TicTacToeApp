@@ -62,13 +62,15 @@ export async function getGame(gameId:string):Promise<GameResponse> {
   return Promise.reject("Failed to find the message");
 }
 
-export async function subscribe(gameId:string, dispatcher: Readonly<DispatchType>) {
+export async function subscribe(gameId:string, dispatcher: Readonly<DispatchType>,
+  callback?: (() => void)) {
   
   ws = new WebSocket(webSocketBase + "/game/" + gameId);
 
   ws.onopen =() => {
     ws.send(JSON.stringify({type:"hello", id: clientId, version: '2', subs: ['/game/'+gameId]}));
     console.log("Web Socket connection created");
+    if (callback) {callback();}
   }
   ws.onmessage = (msg)=> {
     var data = JSON.parse(msg.data);

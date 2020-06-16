@@ -3,6 +3,7 @@ import {View, Text, TextInput, TouchableHighlight, Platform, KeyboardAvoidingVie
 import { RootState } from '../store/reducers/appReducer';
 import { JoinGameProps, GameMode } from '../config/types';
 import { connect } from 'react-redux';
+import {move, addPlayer, replay, setGameState} from "../store/actions/gameActions";
 import * as gameService from "./../service/gameService";
 
 const mapState = (state: RootState) => ({
@@ -14,9 +15,10 @@ const mapState = (state: RootState) => ({
 })
 
 const mapDispatch = {
-  // move,
-  // addPlayer,
-  // reset
+  move,
+  addPlayer,
+  setGameState,
+  replay
 }
 
 type StateProps = ReturnType<typeof mapState>
@@ -28,6 +30,17 @@ function JoinGame(props:Props) {
   const [value, onChangeText] = React.useState("");
 
   const joinGame = () => {
+    gameService.subscribe(value, props, subscribedSuccess).then(() => {
+      console.log("Game join request submitted");
+    }).catch((e) => {
+      console.log("Fail to subscribe." + e);
+      alert("Please try again");
+    })
+    
+  }
+
+  const subscribedSuccess = () => {
+    console.log("Game join confirmed");
     if (props.appUser) {
       gameService.joinBoard(value, props.appUser);
     }
@@ -93,7 +106,7 @@ export const styles = StyleSheet.create({
   textInput: {
     fontSize: 24,
     height: 40,
-    width: 80,
+    width: 100,
     borderColor: "#000000",
     borderBottomWidth: 1,
     marginBottom: 36
