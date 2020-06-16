@@ -63,14 +63,13 @@ export async function getGame(gameId:string):Promise<GameResponse> {
 }
 
 export async function subscribe(gameId:string, dispatcher: Readonly<DispatchType>,
-  callback?: (() => void)) {
+  callbackSuccess?: (() => void), callbackClose?: ((e:CloseEvent) => void)) {
   
   ws = new WebSocket(webSocketBase + "/game/" + gameId);
 
   ws.onopen =() => {
     ws.send(JSON.stringify({type:"hello", id: clientId, version: '2', subs: ['/game/'+gameId]}));
     console.log("Web Socket connection created");
-    if (callback) {callback();}
   }
   ws.onmessage = (msg)=> {
     var data = JSON.parse(msg.data);
@@ -78,6 +77,10 @@ export async function subscribe(gameId:string, dispatcher: Readonly<DispatchType
       case "ping": 
         console.log("Received ping, sending it back");
         ws.send(JSON.stringify({type: "ping", id: clientId}));
+        break;
+      case "hello":
+        console.log("Connection and initialization done.");
+        if (callbackSuccess) {callbackSuccess();}
         break;
       case "message":
         console.log("Message received from server:", msg);
@@ -95,6 +98,9 @@ export async function subscribe(gameId:string, dispatcher: Readonly<DispatchType
   }
   ws.onclose = (e) => {
     console.log("Closing connection ",e);
+    if (callbackClose) {
+      callbackClose(e);
+    }
   }
 }
 
@@ -160,14 +166,46 @@ export async function joinBoard(gameId:string, player: Player): Promise<Mark> {
       "/api/game/"+gameId+"/player",
       player
     );
-    if (response.parsedBody) {
+    if (response.status == 200 && response.parsedBody) {
       console.log("User registered with ", response.parsedBody);
       return Promise.resolve(response.parsedBody.mark);
+    } else {
+      console.log("User joining failed with reason ", response.parsedBody);
+      return Promise.reject("Response failed for user joining");
     }
   } catch (error) {
     console.error("Failed to connect %s", error);
   }
-  return Promise.reject(undefined);
+  return Promise.reject("Something else went wrong");
+}
+
+export async function moveByPlayer(gameId: string, moveInput: MoveInput): Promise<SimpleResponse> {
+  try {
+    let response = await backend.post<SimpleResponse>(
+      "/api/game/"+gameId+"/move",
+      moveInput
+    );
+    if (response.status == 200 && response.parsedBody) {
+      console.log("Move success ", response.parsedBody);
+      return Promise.resolve(response.parsedBody);
+    } else {
+      console.log("Move failed with reason ", response.parsedBody);
+      return Promise.reject("Response failed for move");
+    }
+  } catch (error) {
+    console.error("Failed to connect %s", error);
+  }
+  return Promise.reject("Failed");
+}
+
+interface MoveInput {
+  mark: Mark
+  point: Point
+  player: Player
+}
+interface SimpleResponse {
+  code: string
+  msg: string
 }
 
 interface CreateGameResponse {
