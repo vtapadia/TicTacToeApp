@@ -89,14 +89,19 @@ class Game extends Component<Props, GameState> {
   }
 
   replayGame(props: Props) {
-    let startedBy = props.startedBy;
-    props.replay();
-    this.setState({ count: 0});
     if (props.mode==GameMode.OFFLINE) {
-      if (startedBy == Mark.X) {
+      let startedBy = props.startedBy;
+      props.replay();
+      this.setState({ count: 0});
+        if (startedBy == Mark.X) {
         //Last time it was X who started the game, so this time, it is computer
         this.playComputer(props);
         this.setState({ count: 1});
+      }
+    } else {
+      //Network mode, submit replay request to server.
+      if (props.gameId && props.appUser) {
+        gameService.replayBoard(props.gameId, props.appUser);
       }
     }
   }

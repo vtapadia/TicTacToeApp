@@ -2,7 +2,7 @@ import { Player } from "../config/types";
 import * as backend from "./backendService";
 import { Mark, Status, Point } from "../store/types/gameTypes";
 import { random } from "../util/appUtils";
-import { addPlayer, move, setGameState } from "../store/actions/gameActions";
+import { addPlayer, move, setGameState, replay } from "../store/actions/gameActions";
 
 
 let serverBase:string    = "https://vtapadia-tic-tac-toe.herokuapp.com";
@@ -16,7 +16,8 @@ if (__DEV__) {
 const storeDispatch = {
   addPlayer,
   move,
-  setGameState
+  setGameState,
+  replay
 }
 type DispatchType = typeof storeDispatch
 
@@ -150,6 +151,10 @@ function handleMessageFromServer(gameId:string, dispatcher: DispatchType, msg:Pu
         // let store:StoreType = useStore();
         // store.dispatch(move(msg.game.point))
       }
+      break;
+    case PubMsgType.REPLAY:
+      dispatcher.replay();
+      break;
   }
 }
 
@@ -173,6 +178,28 @@ export async function joinBoard(gameId:string, player: Player): Promise<Mark> {
     } else {
       console.log("User joining failed with reason ", response.parsedBody);
       return Promise.reject("Response failed for user joining");
+    }
+  } catch (error) {
+    console.error("Failed to connect %s", error);
+  }
+  return Promise.reject("Something else went wrong");
+}
+
+export async function replayBoard(gameId:string, player: Player): Promise<SimpleResponse> {
+  try {
+    console.log("Replaying the game with player ", player);
+    let response = await backend.post<SimpleResponse>(
+      "/api/game/"+gameId+"/replay",
+      player
+    );
+    if (response.status == 200 && response.parsedBody) {
+      if (response.parsedBody.code=="M0000") {
+        console.log("Replay requested successfully ", response.parsedBody);
+      }
+      return Promise.resolve(response.parsedBody);
+    } else {
+      console.log("Replay failed with reason ", response.parsedBody);
+      return Promise.reject("Response failed for replay action");
     }
   } catch (error) {
     console.error("Failed to connect %s", error);
@@ -235,5 +262,6 @@ declare type PublishMessage = {
 
 enum PubMsgType {
   PLAYER_JOIN="PLAYER_JOIN",
-  MOVE="MOVE"
+  MOVE="MOVE",
+  REPLAY="REPLAY"
 }

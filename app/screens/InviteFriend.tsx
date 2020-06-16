@@ -3,7 +3,7 @@ import {View, Share, Text, TouchableHighlight, StyleSheet, ActivityIndicator} fr
 import {styles} from "../config/styles";
 import { RootState } from '../store/reducers/appReducer';
 import { InviteFriendProps } from '../config/types';
-import { setGameId, move, addPlayer, setGameState } from '../store/actions/gameActions';
+import { setGameId, move, addPlayer, setGameState, replay} from '../store/actions/gameActions';
 import { connect } from 'react-redux';
 import { Status } from '../store/types/gameTypes';
 import * as gameService from "./../service/gameService";
@@ -20,6 +20,7 @@ const mapDispatch = {
   setGameId,
   move,
   addPlayer,
+  replay,
   setGameState
 }
 
