@@ -3,7 +3,7 @@ import {View, Text, TextInput, TouchableHighlight, Platform, KeyboardAvoidingVie
 import { RootState } from '../store/reducers/appReducer';
 import { JoinGameProps, GameMode } from '../config/types';
 import { connect } from 'react-redux';
-import {move, addPlayer, replay, setGameState} from "../store/actions/gameActions";
+import {move, addPlayer, replay, setGameState, setGameId} from "../store/actions/gameActions";
 import * as gameService from "./../service/gameService";
 
 const mapState = (state: RootState) => ({
@@ -18,6 +18,7 @@ const mapDispatch = {
   move,
   addPlayer,
   setGameState,
+  setGameId,
   replay
 }
 
@@ -40,6 +41,7 @@ function JoinGame(props:Props) {
   }
 
   const subscribedSuccess = () => {
+    props.setGameId(value);
     console.log("Game join confirmed");
     if (props.appUser) {
       gameService.joinBoard(value, props.appUser);
