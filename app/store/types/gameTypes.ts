@@ -83,7 +83,7 @@ export interface SetGameModeAction {
 
 export interface SetGameIDAction {
   type: typeof SET_GAMEID
-  id: string
+  id?: string
 }
 
 export interface GameStateAction {

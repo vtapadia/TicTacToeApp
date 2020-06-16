@@ -29,7 +29,7 @@ export function setGameState(status: Status):GameStateAction {
   };
 }
 
-export function setGameId(gameId: string):SetGameIDAction {
+export function setGameId(gameId?: string):SetGameIDAction {
   return {
     type: SET_GAMEID,
     id: gameId

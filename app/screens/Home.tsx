@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, TouchableHighlight, ActivityIndicator} from "react-native";
 import {styles} from "../config/styles";
 import {HomeProps, GameMode, Player} from "../config/types";
-import { setGameMode, reset } from '../store/actions/gameActions';
+import { setGameMode, setGameId, reset } from '../store/actions/gameActions';
 import { connect } from 'react-redux'
 import { RootState } from '../store/reducers/appReducer';
 import * as gameService from "./../service/gameService";
@@ -15,6 +15,7 @@ const mapState = (state: RootState) => ({
 
 const mapDispatch = {
   setGameMode,
+  setGameId,
   reset
 }
 
@@ -31,6 +32,7 @@ function Home(props: Props) {
     if(props.gameId) {
       gameService.unsubscribe(props.gameId).then(() => {
         console.log("Unsubscription done successfully");
+        props.setGameId(undefined);
       }).catch((e) => {
         console.log("Failed unsubscribing, Error ", e);
       })
