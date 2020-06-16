@@ -28,7 +28,7 @@ function Home(props: Props) {
   
   const [progress, setProgress] = React.useState(false);
   
-  React.useEffect(() => {
+  function unsubscribe() {
     if(props.gameId) {
       gameService.unsubscribe(props.gameId).then(() => {
         console.log("Unsubscription done successfully");
@@ -37,22 +37,23 @@ function Home(props: Props) {
         console.log("Failed unsubscribing, Error ", e);
       })
     }
-  })
+    props.reset();
+  }
 
   function singlePlayer() {
-    props.reset();
+    unsubscribe();
     props.setGameMode(GameMode.OFFLINE);
     props.navigation.navigate('SelectDifficulty');
   }
 
   function inviteFriend() {
-    props.reset();
+    unsubscribe();
     props.setGameMode(GameMode.NETWORK);
     props.navigation.navigate('InviteFriend');
   }
 
   function joinGame() {
-    props.reset();
+    unsubscribe();
     props.setGameMode(GameMode.NETWORK);
     props.navigation.navigate('JoinGame');
   }
