@@ -6,6 +6,7 @@ import { styles } from '../config/styles';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {addAppUser, reset} from "../store/actions/gameActions";
+import * as Application from "expo-application";
 
 const mapState = (state: RootState) => ({
   appUser: state.gameReducer.appUser
@@ -30,8 +31,9 @@ function Welcome(props: Props) {
   }
 
   function loginSuccess(name:string, displayName?:string) {
-    props.addAppUser({name: name, displayName: displayName, self: true});
-    props.navigation.navigate('Home');
+    alert("Feature currently not supported");
+    // props.addAppUser({name: name, displayName: displayName, self: true});
+    // props.navigation.navigate('Home');
   }
 
   React.useEffect(()=>{
@@ -61,6 +63,7 @@ function Welcome(props: Props) {
         </Icon.Button>
       </View>
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-end'}}>
+        <Text>{Application.nativeBuildVersion}</Text>
         <Text style={{paddingBottom: 15}}>@ Copyright 2020</Text>
       </View>
     </View>
