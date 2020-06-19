@@ -1,12 +1,13 @@
 import * as React from 'react';
-import {View, Text, Image, Button, TouchableHighlight} from "react-native";
+import {View, Text, Image, Button, TouchableHighlight, SafeAreaView, StyleSheet, StatusBar} from "react-native";
 import {WelcomeProps} from "../config/types";
 import { RootState } from '../store/reducers/appReducer';
-import { styles } from '../config/styles';
+import { appStyles } from '../config/styles';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {addAppUser, reset} from "../store/actions/gameActions";
 import * as Application from "expo-application";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const mapState = (state: RootState) => ({
   appUser: state.gameReducer.appUser
@@ -44,8 +45,9 @@ function Welcome(props: Props) {
   })
 
   return (
-    <View style={styles.container}>
-      <View style={{flex: 2, alignItems: 'center', justifyContent: 'flex-start'}}>
+    <View style={appStyles.container}>
+      <LinearGradient style={{flex: 1}} colors={['rgba(241,225,153,1)', 'rgba(241,152,99,1)']}>
+      <View style={{flex: 2, alignItems: 'center', justifyContent: 'flex-start', paddingTop: 10}}>
         <Text>!! Tic Tac Toe !!</Text>
         <Image source={require('./../assets/img/Tic_tac_toe_welcome.png')} style={styles.welcomeImage}></Image>
       </View>
@@ -69,6 +71,7 @@ function Welcome(props: Props) {
         <Text>{Application.nativeBuildVersion}</Text>
         <Text style={{paddingBottom: 15}}>@ Copyright 2020</Text>
       </View>
+      </LinearGradient>
     </View>
   );
 }
@@ -76,3 +79,13 @@ function Welcome(props: Props) {
 const WelcomeContainer = connect(mapState, mapDispatch)(Welcome)
 
 export default WelcomeContainer;
+
+const styles = StyleSheet.create({
+  welcomeImage: {
+    width: 240,
+    height: 240,
+    resizeMode: 'contain',
+    marginTop: 3,
+    marginLeft: -10,
+  },
+})

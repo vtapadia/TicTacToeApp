@@ -1,13 +1,20 @@
 import React from 'react';
 import { Platform, StyleSheet} from 'react-native';
 
+export const appStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 50,
+    alignItems: 'stretch' ,
+    backgroundColor: 'rgba(241,225,153,1)'
+  },
+});
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    paddingTop: 30,
-    alignItems: 'center', 
-    justifyContent: 'center'
+    paddingTop: 50,
+    alignItems: 'stretch' 
   },
   button: {
     alignItems: "center",
