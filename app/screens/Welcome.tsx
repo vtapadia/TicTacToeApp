@@ -30,10 +30,13 @@ function Welcome(props: Props) {
     return name;
   }
 
-  function loginSuccess(name:string, displayName?:string) {
+  function loginFacebook(name:string, displayName?:string) {
     alert("Feature currently not supported");
-    // props.addAppUser({name: name, displayName: displayName, self: true});
-    // props.navigation.navigate('Home');
+  }
+
+  function loginSuccess(name:string, displayName?:string) {
+    props.addAppUser({name: name, displayName: displayName, self: true});
+    props.navigation.navigate('Home');
   }
 
   React.useEffect(()=>{
@@ -51,7 +54,7 @@ function Welcome(props: Props) {
           name="logo-facebook"
           backgroundColor="#3b5998"
           size={30}
-          onPress={() => loginSuccess("AppDev")}>
+          onPress={() => loginFacebook("AppDev")}>
         Login with facebook
         </Icon.Button>
         <Icon.Button
