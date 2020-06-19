@@ -133,28 +133,24 @@ class Game extends Component<Props, GameState> {
           </View>
           {/* <Text>{this.props.game.message}</Text> */}
         </View>
-        <View style={{flex: 3, flexDirection: 'row'}}>
-          <View style={{flex: 1}}></View>
-          <View style={{flex: 3, alignItems: 'center'}}>
-            <View style={styles.board}>
-              <View style={styles.boardRow}>
-                <Square row={0} col={0} props={this.props} onSelect={this.handleSelected}></Square>
-                <Square row={0} col={1} props={this.props} onSelect={this.handleSelected}></Square>
-                <Square row={0} col={2} props={this.props} onSelect={this.handleSelected}></Square>
-              </View>
-              <View style={styles.boardRow}>
-                <Square row={1} col={0} props={this.props} onSelect={this.handleSelected}></Square>
-                <Square row={1} col={1} props={this.props} onSelect={this.handleSelected}></Square>
-                <Square row={1} col={2} props={this.props} onSelect={this.handleSelected}></Square>
-              </View>
-              <View style={styles.boardRow}>
-                <Square row={2} col={0} props={this.props} onSelect={this.handleSelected}></Square>
-                <Square row={2} col={1} props={this.props} onSelect={this.handleSelected}></Square>
-                <Square row={2} col={2} props={this.props} onSelect={this.handleSelected}></Square>
-              </View>
+        <View style={{flex: 3, alignItems: 'center'}}>
+          <View style={styles.board}>
+            <View style={styles.boardRow}>
+              <Square row={0} col={0} props={this.props} onSelect={this.handleSelected}></Square>
+              <Square row={0} col={1} props={this.props} onSelect={this.handleSelected}></Square>
+              <Square row={0} col={2} props={this.props} onSelect={this.handleSelected}></Square>
+            </View>
+            <View style={styles.boardRow}>
+              <Square row={1} col={0} props={this.props} onSelect={this.handleSelected}></Square>
+              <Square row={1} col={1} props={this.props} onSelect={this.handleSelected}></Square>
+              <Square row={1} col={2} props={this.props} onSelect={this.handleSelected}></Square>
+            </View>
+            <View style={styles.boardRow}>
+              <Square row={2} col={0} props={this.props} onSelect={this.handleSelected}></Square>
+              <Square row={2} col={1} props={this.props} onSelect={this.handleSelected}></Square>
+              <Square row={2} col={2} props={this.props} onSelect={this.handleSelected}></Square>
             </View>
           </View>
-          <View style={{flex: 1}}></View>
         </View>
         <View style={{flex:1, alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
           {this.props.isFinished ? <Icon.Button
@@ -191,19 +187,28 @@ export function Square(squareProps: SquareProp) {
   return (
     <TouchableHighlight style={styles.square} disabled={disabled()}
      onPress={selected}>
-      <Text style={{textAlign: 'center'}}>
+      <View style={{padding: 10, flex: 1}}>
         {squareProps.props.game.board[squareProps.row][squareProps.col]==Mark.X ? <X /> : null}
         {squareProps.props.game.board[squareProps.row][squareProps.col]==Mark.O ? <O /> : null}
-      </Text>
+      </View>
     </TouchableHighlight>
   );
 };
 
 function X() {
-  return <Icon name="close" size={50} color="yellow"></Icon>;
+  return <View style={styles.cropped}>
+          <Image
+            style={styles.imageX}
+            source={require("../assets/img/xo.png")} />
+        </View>;
 }
+
 function O() {
-  return <Icon name="circle-outline" size={50} color="magenta"></Icon>;
+  return <View style={styles.cropped}>
+          <Image
+            style={styles.imageO}
+            source={require("../assets/img/xo.png")} />
+        </View>;
 }
 
 const GameContainer = connect(mapState, mapDispatch)(Game)
@@ -230,9 +235,24 @@ export const styles = StyleSheet.create({
     // justifyContent: 'space-around',
     // alignContent: 'space-around',
     padding: 10,
+    margin: 10,
     borderColor: 'royalblue',
     borderWidth: 2,
     borderRadius: 10
+  },
+  cropped: {
+    overflow: 'hidden',
+    flex: 1,
+    aspectRatio: 1,
+  },
+  imageX: {
+    height: "100%",
+    width: "200%",
+  },
+  imageO: {
+    height: "100%",
+    width: "200%",
+    marginLeft: "-100%",
   },
   imagePlayer: {
     width: 60,
@@ -247,7 +267,8 @@ export const styles = StyleSheet.create({
   boardRow: {
     alignItems: 'stretch', 
     alignContent: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    flex: 1
   },
   board: {
     flexDirection: 'column',
@@ -257,6 +278,7 @@ export const styles = StyleSheet.create({
     borderRadius: 15,
     aspectRatio: 1,
     flex:1,
+    margin: 10,
     padding: 4
   },
   square: {
