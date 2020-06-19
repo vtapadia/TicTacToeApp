@@ -135,7 +135,7 @@ class Game extends Component<Props, GameState> {
         </View>
         <View style={{flex: 3, flexDirection: 'row'}}>
           <View style={{flex: 1}}></View>
-          <View style={{flex: 3, alignItems: 'stretch'}}>
+          <View style={{flex: 3, alignItems: 'center'}}>
             <View style={styles.board}>
               <View style={styles.boardRow}>
                 <Square row={0} col={0} props={this.props} onSelect={this.handleSelected}></Square>
@@ -255,6 +255,8 @@ export const styles = StyleSheet.create({
     alignItems: 'stretch',
     backgroundColor: 'skyblue',
     borderRadius: 15,
+    aspectRatio: 1,
+    flex:1,
     padding: 4
   },
   square: {
@@ -264,8 +266,7 @@ export const styles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
     flex: 1,
-    width: 100,
-    height: 100
+    aspectRatio: 1
   },
   buttonText: {
     fontSize: 20,
