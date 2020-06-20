@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import { RootState } from '../store/reducers/appReducer';
 import * as gameService from "./../service/gameService";
 import { LinearGradient } from 'expo-linear-gradient';
+import { MyAwesomeButton, ButtonTypes, SizeTypes } from '../component/MyAwesomeButtons';
 
 const mapState = (state: RootState) => ({
   // isReady: state.gameReducer.game.status==Status.READY
@@ -63,18 +64,17 @@ function Home(props: Props) {
     <View style={appStyles.container}>
       <LinearGradient style={{flex: 1}} colors={['rgba(241,225,153,1)', 'rgba(241,152,99,1)']}>
         <View style={{flex: 2}}></View>
-        <View style={{flex: 2, justifyContent: 'space-around', alignItems: 'stretch'}}>
+        <View style={{flex: 2, justifyContent: 'space-around', alignItems: 'center'}}>
           <ActivityIndicator animating={progress} size="large" color="#0000ff" />
-          <TouchableHighlight disabled={progress} style={styles.button} onPress={inviteFriend}>
-            <Text style={styles.buttonText}> Invite Friend </Text>
-          </TouchableHighlight>
-          <TouchableHighlight disabled={progress} style={styles.button} onPress={joinGame}>
-            <Text style={styles.buttonText}> Join Game </Text>
-          </TouchableHighlight>
-          <TouchableHighlight disabled={progress} style={styles.buttonOther} 
-            onPress={singlePlayer}>
-            <Text style={styles.buttonText}> Single Player </Text>
-          </TouchableHighlight>
+          <MyAwesomeButton disabled={progress} onPress={inviteFriend} type={ButtonTypes.primary} size={SizeTypes.large}>
+            Invite Friend
+          </MyAwesomeButton>
+          <MyAwesomeButton disabled={progress} onPress={joinGame} type={ButtonTypes.primary} size={SizeTypes.large}>
+            Join Game
+          </MyAwesomeButton>
+          <MyAwesomeButton disabled={progress} onPress={singlePlayer} type={ButtonTypes.secondary} size={SizeTypes.large}>
+            Single Player
+          </MyAwesomeButton>
         </View>
         <View style={{flex: 2}}></View>
       </LinearGradient>

@@ -8,6 +8,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {addAppUser, reset} from "../store/actions/gameActions";
 import * as Application from "expo-application";
 import { LinearGradient } from 'expo-linear-gradient';
+import AwesomeButton from "react-native-really-awesome-button";
+import { MyAwesomeButton, ButtonTypes, SizeTypes } from '../component/MyAwesomeButtons';
 
 const mapState = (state: RootState) => ({
   appUser: state.gameReducer.appUser
@@ -47,30 +49,18 @@ function Welcome(props: Props) {
   return (
     <View style={appStyles.container}>
       <LinearGradient style={{flex: 1}} colors={['rgba(241,225,153,1)', 'rgba(241,152,99,1)']}>
-      <View style={{flex: 2, alignItems: 'center', justifyContent: 'flex-start', paddingTop: 10}}>
-        <Text>!! Tic Tac Toe !!</Text>
-        <Image source={require('./../assets/img/Tic_tac_toe_welcome.png')} style={styles.welcomeImage}></Image>
-      </View>
-      <View style={{flex: 1, justifyContent: 'space-around', alignItems: 'stretch'}}>
-        <Icon.Button
-          name="logo-facebook"
-          backgroundColor="#3b5998"
-          size={30}
-          onPress={() => loginFacebook("AppDev")}>
-        Login with facebook
-        </Icon.Button>
-        <Icon.Button
-          name="ios-person"
-          backgroundColor="black"
-          size={30}
-          onPress={() => loginSuccess(randomName(), "Guest")}>
-        Play as Guest
-        </Icon.Button>
-      </View>
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-end'}}>
-        <Text>{Application.nativeBuildVersion}</Text>
-        <Text style={{paddingBottom: 15}}>@ Copyright 2020</Text>
-      </View>
+        <View style={{flex: 2, alignItems: 'center', justifyContent: 'flex-start', paddingTop: 10}}>
+          <Text style={styles.header}>!! Tic Tac Toe !!</Text>
+          <Image source={require('./../assets/img/Tic_tac_toe_welcome.png')} style={styles.welcomeImage}></Image>
+        </View>
+        <View style={{flex: 1, justifyContent: 'space-around', alignItems: 'center'}}>
+          <MyAwesomeButton onPress={() => loginFacebook("AppDev")} type={ButtonTypes.facebook} size={SizeTypes.large}>Login with Facebook</MyAwesomeButton>
+          <MyAwesomeButton onPress={() => loginSuccess(randomName(), "Guest")} type={ButtonTypes.secondary} size={SizeTypes.large}>Play as Guest</MyAwesomeButton>
+        </View>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-end'}}>
+          <Text>{Application.nativeBuildVersion}</Text>
+          <Text style={{paddingBottom: 15}}>@ Copyright 2020</Text>
+        </View>
       </LinearGradient>
     </View>
   );
@@ -81,11 +71,16 @@ const WelcomeContainer = connect(mapState, mapDispatch)(Welcome)
 export default WelcomeContainer;
 
 const styles = StyleSheet.create({
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'rgb(140,26,17)',
+  },
   welcomeImage: {
     width: 240,
     height: 240,
     resizeMode: 'contain',
     marginTop: 3,
     marginLeft: -10,
-  },
+  }
 })

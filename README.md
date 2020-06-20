@@ -18,6 +18,12 @@ The App use travis-ci for continuous build and deploy to expo server.
 ### References
 [react-native-vector-icons examples](https://oblador.github.io/react-native-vector-icons/)
 Code: https://github.com/oblador/react-native-vector-icons
+To see all the icons: https://oblador.github.io/react-native-vector-icons/
 
 WebSocket Server protocol used : NES
 https://github.com/hapijs/nes/blob/master/PROTOCOL.md
+
+Buttons, using react native awesome-buttons
+https://github.com/rcaferati/react-native-really-awesome-button
+Defined my Custom buttons and theme and used that to define global buttons.
+Demo site to test buttons: https://caferati.me/demo/react-awesome-button/morty-theme
