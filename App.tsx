@@ -24,7 +24,7 @@ export default function App() {
           <Stack.Screen name="InviteFriend" component={InviteFriendContainer}  options={{headerShown: true}}/>
           <Stack.Screen name="JoinGame" component={JoinGameContainer}  options={{headerShown: true}}/>
           <Stack.Screen name="SelectDifficulty" component={SelectDifficultyContainer}  options={{headerShown: true}}/>
-          <Stack.Screen name="Game" component={GameContainer}  options={{headerShown: true}}/>
+          <Stack.Screen name="Game" component={GameContainer}  options={{headerShown: true, title: '! Tic Tac Toe !'}}/>
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

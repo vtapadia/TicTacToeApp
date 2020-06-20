@@ -70,6 +70,28 @@ class Game extends Component<Props, GameState> {
     }
   }
 
+  msg() {
+    let msg = "";
+    if (this.props.isFinished) {
+      if (this.props.winner) {
+        if (this.props.winner == this.props.myMark) {
+          msg = "Congratulations !!"
+        } else {
+          msg = "Sorry !!"
+        }
+      } else {
+        msg = "Its a Draw"
+      }
+    } else {
+      if (this.props.turn == this.props.myMark) {
+        msg = "Your Turn"
+      } else {
+        msg = "Waiting..."
+      }
+    }
+    return msg;
+  }
+
   handleSelected(props: Props, point: Point) {
     if (props.mode == GameMode.NETWORK) {
       if (props.gameId && props.myMark && props.appUser) {
@@ -135,6 +157,9 @@ class Game extends Component<Props, GameState> {
               <Text style={styles.playerText}>Won: {this.props.winCountO}</Text>
             </View>
             {/* <Text>{this.props.game.message}</Text> */}
+          </View>
+          <View style={styles.msgView}>
+            <Text style={styles.msgText}>{this.msg()}</Text>
           </View>
           <View style={{flex: 3, alignItems: 'center'}}>
             <View style={styles.board}>
@@ -234,13 +259,15 @@ export const styles = StyleSheet.create({
     alignContent: 'center'
   },
   playerContainer: {
-    backgroundColor: 'skyblue',
+    backgroundColor: 'rgb(171,179,58)',
     alignItems: 'center',
     // justifyContent: 'space-around',
     // alignContent: 'space-around',
     padding: 10,
     margin: 10,
-    borderColor: 'royalblue',
+    // borderColor: 'transparent',
+    // borderColor: 'rgb(140,26,17)',
+    borderColor: 'rgb(142,84,108)',
     borderWidth: 2,
     borderRadius: 10
   },
@@ -257,6 +284,18 @@ export const styles = StyleSheet.create({
     height: "100%",
     width: "200%",
     marginLeft: "-100%",
+  },
+  msgView: {
+    flex: 0.5,
+    alignItems: 'center',
+    alignContent: 'center',
+    justifyContent: 'center'
+  },
+  msgText: {
+    fontWeight: "bold",
+    fontSize: 20,
+    // color: 'rgb(127,105,174)',
+    color: 'purple',
   },
   imagePlayer: {
     width: 60,
@@ -278,7 +317,10 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     alignContent: 'center',
     alignItems: 'stretch',
-    backgroundColor: 'skyblue',
+    // backgroundColor: 'rgb(78,50,30)',
+    backgroundColor: 'rgb(171,159,58)',
+    // backgroundColor: 'rgb(142,84,108)',
+    // backgroundColor: 'rgb(140,26,17)',
     borderRadius: 15,
     aspectRatio: 1,
     flex:1,
@@ -286,7 +328,14 @@ export const styles = StyleSheet.create({
     padding: 4
   },
   square: {
-    backgroundColor: 'royalblue',
+    // backgroundColor: 'rgb(244,195,83)',
+    // backgroundColor: 'rgb(78,50,30)',
+    // backgroundColor: 'rgb(105,48,160)',
+    // backgroundColor: 'rgb(142,84,108)',
+    // backgroundColor: 'rgb(171,179,48)',
+    // backgroundColor: 'rgb(140,26,17)',
+    // backgroundColor: 'rgb(243,165,139)',
+    backgroundColor: 'rgb(142,84,108)',
     borderRadius: 15,
     margin: 4,
     alignContent: 'center',
