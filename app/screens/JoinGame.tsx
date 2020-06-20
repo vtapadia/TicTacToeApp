@@ -5,6 +5,10 @@ import { JoinGameProps, GameMode } from '../config/types';
 import { connect } from 'react-redux';
 import {move, addPlayer, replay, setGameState, setGameId} from "../store/actions/gameActions";
 import * as gameService from "./../service/gameService";
+import { StyleSheet} from 'react-native';
+import { Status } from '../store/types/gameTypes';
+import { LinearGradient } from 'expo-linear-gradient';
+import { appStyles } from '../config/styles';
 
 const mapState = (state: RootState) => ({
   game: state.gameReducer.game,
@@ -53,9 +57,11 @@ function JoinGame(props:Props) {
   }
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS == "ios" ? "padding" : "height"}
-      style={styles.container}>
+    <View style={appStyles.container}>
+    <LinearGradient style={{flex: 1}} colors={['rgba(241,225,153,1)', 'rgba(241,152,99,1)']}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        style={styles.container}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={styles.outer}>
           <View style={styles.inner}>
             <Text style={styles.header}> Enter Game Code : </Text>
@@ -64,7 +70,7 @@ function JoinGame(props:Props) {
               onChangeText={text => onChangeText(text)} />
             <View style={styles.btnContainer}>
               {props.isReady ? 
-                <TouchableHighlight onPress={playGame} style={styles.buttonSimple}>
+                <TouchableHighlight onPress={playGame} style={styles.buttonReady}>
                   <Text style={styles.buttonText}> Lets Play </Text>
                 </TouchableHighlight>
               : <TouchableHighlight onPress={joinGame} style={styles.buttonSimple}>
@@ -75,7 +81,9 @@ function JoinGame(props:Props) {
             </View>
           </View>
         </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </LinearGradient>
+    </View>
   );
 }
 
@@ -83,8 +91,6 @@ const JoinGameContainer = connect(mapState, mapDispatch)(JoinGame)
 
 export default JoinGameContainer;
 
-import { StyleSheet} from 'react-native';
-import { Status } from '../store/types/gameTypes';
 
 export const styles = StyleSheet.create({
   container: {
@@ -100,7 +106,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-around',
     alignItems: 'center',
-    // backgroundColor: 'grey'
   },
   header: {
     fontSize: 24
@@ -126,6 +131,16 @@ export const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 10,
     borderColor: "dodgerblue",
+    position: 'relative',
+    width: '60%'
+  },
+  buttonReady: {
+    alignItems: "center",
+    backgroundColor: "green",
+    padding: 15,
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: "green",
     position: 'relative',
     width: '60%'
   },

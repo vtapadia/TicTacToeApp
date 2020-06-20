@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import {View, Image, Text, TouchableHighlight} from "react-native";
-import {styles} from "../config/styles";
+import {appStyles} from "../config/styles";
 import { RootState } from '../store/reducers/appReducer';
 import { SelectDifficultyProps, DifficultyLevel, Player, GameMode } from '../config/types';
 import { connect } from 'react-redux';
 import { StyleSheet} from 'react-native';
 import {addPlayer, setDifficultyLevel, offlineReset, setGameState} from "../store/actions/gameActions";
 import { Mark, Status } from '../store/types/gameTypes';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const mapState = (state: RootState) => ({
   appUser: state.gameReducer.appUser,
@@ -55,7 +56,8 @@ class SelectDifficulty extends Component<Props> {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={appStyles.container}>
+      <LinearGradient style={{flex: 1}} colors={['rgba(241,225,153,1)', 'rgba(241,152,99,1)']}>
         <View style={{flex: 2, justifyContent: 'center'}}>
           <Text style={cStyles.header}>!! Select Level !!</Text>
         </View>
@@ -79,6 +81,7 @@ class SelectDifficulty extends Component<Props> {
             </TouchableHighlight>
           </View>
         </View>
+        </LinearGradient>
       </View>
     );
   }

@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import {View, Share, Text, TouchableHighlight, StyleSheet, ActivityIndicator} from "react-native";
-import {styles} from "../config/styles";
+import {appStyles} from "../config/styles";
 import { RootState } from '../store/reducers/appReducer';
 import { InviteFriendProps } from '../config/types';
 import { setGameId, move, addPlayer, setGameState, replay} from '../store/actions/gameActions';
 import { connect } from 'react-redux';
 import { Status } from '../store/types/gameTypes';
 import * as gameService from "./../service/gameService";
+import { LinearGradient } from 'expo-linear-gradient';
+
 
 const mapState = (state: RootState) => ({
   game: state.gameReducer.game,
@@ -82,26 +84,28 @@ class InviteFriend extends Component<Props, State> {
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={iStyles.viewCode}>
-          <Text style={iStyles.textCode}>Code: </Text>
-          <Text style={iStyles.textCodeNumber}>{this.state.gameId}</Text>
-        </View>
-        <View style={iStyles.viewMessage}>
-          <ActivityIndicator animating={this.state.progress} size="large" color="#0000ff" />
-          <Text style={iStyles.textMessage}>Share this code with your friends and ask them to join</Text>
-        </View>
-        <View style={iStyles.viewShare}>
-          {this.props.isReady ?
-            <TouchableHighlight onPress={this.gameReady} style={iStyles.buttonReady}>
-              <Text style={iStyles.buttonText}> Lets Play </Text>
-            </TouchableHighlight>
-          :
-            <TouchableHighlight onPress={this.share} style={iStyles.buttonSimple}>
-              <Text style={iStyles.buttonText}> Share with Friends </Text>
-            </TouchableHighlight>
-          }
-        </View>
+      <View style={appStyles.container}>
+        <LinearGradient style={{flex: 1}} colors={['rgba(241,225,153,1)', 'rgba(241,152,99,1)']}>
+          <View style={iStyles.viewCode}>
+            <Text style={iStyles.textCode}>Code: </Text>
+            <Text style={iStyles.textCodeNumber}>{this.state.gameId}</Text>
+          </View>
+          <View style={iStyles.viewMessage}>
+            <ActivityIndicator animating={this.state.progress} size="large" color="#0000ff" />
+            <Text style={iStyles.textMessage}>Share this code with your friends and ask them to join</Text>
+          </View>
+          <View style={iStyles.viewShare}>
+            {this.props.isReady ?
+              <TouchableHighlight onPress={this.gameReady} style={iStyles.buttonReady}>
+                <Text style={iStyles.buttonText}> Lets Play </Text>
+              </TouchableHighlight>
+            :
+              <TouchableHighlight onPress={this.share} style={iStyles.buttonSimple}>
+                <Text style={iStyles.buttonText}> Share with Friends </Text>
+              </TouchableHighlight>
+            }
+          </View>
+        </LinearGradient>
       </View>
     );
   }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {View, Text, TouchableHighlight, Image} from "react-native";
+import {appStyles} from "../config/styles";
 import {GameProps, GameMode} from "../config/types";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RootState } from '../store/reducers/appReducer';
@@ -9,6 +10,7 @@ import { Status, Mark, Point } from '../store/types/gameTypes';
 import { StyleSheet} from 'react-native';
 import * as bot from "../service/autoPlayBot";
 import * as gameService from "./../service/gameService";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const mapState = (state: RootState) => ({
   isFinished: state.gameReducer.game.status==Status.FINISHED,
@@ -117,50 +119,52 @@ class Game extends Component<Props, GameState> {
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.headerContainer}>
-          <View style={styles.playerContainer}>
-            <Image source={require('./../assets/img/robot-1.png')} style={styles.imagePlayer}></Image>
-            <Text style={styles.playerText}>{this.props.playerNameX}</Text>
-            <X></X>
-            <Text style={styles.playerText}>Won: {this.props.winCountX}</Text>
-          </View>
-          <View style={styles.playerContainer}>
-            <Image source={require('./../assets/img/robot-1.png')} style={styles.imagePlayer}></Image>
-            <Text style={styles.playerText}>{this.props.playerNameO}</Text>
-            <O></O>
-            <Text style={styles.playerText}>Won: {this.props.winCountO}</Text>
-          </View>
-          {/* <Text>{this.props.game.message}</Text> */}
-        </View>
-        <View style={{flex: 3, alignItems: 'center'}}>
-          <View style={styles.board}>
-            <View style={styles.boardRow}>
-              <Square row={0} col={0} props={this.props} onSelect={this.handleSelected}></Square>
-              <Square row={0} col={1} props={this.props} onSelect={this.handleSelected}></Square>
-              <Square row={0} col={2} props={this.props} onSelect={this.handleSelected}></Square>
+      <View style={appStyles.container}>
+        <LinearGradient style={{flex: 1}} colors={['rgba(241,225,153,1)', 'rgba(241,152,99,1)']}>
+          <View style={styles.headerContainer}>
+            <View style={styles.playerContainer}>
+              <Image source={require('./../assets/img/robot-1.png')} style={styles.imagePlayer}></Image>
+              <Text style={styles.playerText}>{this.props.playerNameX}</Text>
+              <X></X>
+              <Text style={styles.playerText}>Won: {this.props.winCountX}</Text>
             </View>
-            <View style={styles.boardRow}>
-              <Square row={1} col={0} props={this.props} onSelect={this.handleSelected}></Square>
-              <Square row={1} col={1} props={this.props} onSelect={this.handleSelected}></Square>
-              <Square row={1} col={2} props={this.props} onSelect={this.handleSelected}></Square>
+            <View style={styles.playerContainer}>
+              <Image source={require('./../assets/img/robot-1.png')} style={styles.imagePlayer}></Image>
+              <Text style={styles.playerText}>{this.props.playerNameO}</Text>
+              <O></O>
+              <Text style={styles.playerText}>Won: {this.props.winCountO}</Text>
             </View>
-            <View style={styles.boardRow}>
-              <Square row={2} col={0} props={this.props} onSelect={this.handleSelected}></Square>
-              <Square row={2} col={1} props={this.props} onSelect={this.handleSelected}></Square>
-              <Square row={2} col={2} props={this.props} onSelect={this.handleSelected}></Square>
+            {/* <Text>{this.props.game.message}</Text> */}
+          </View>
+          <View style={{flex: 3, alignItems: 'center'}}>
+            <View style={styles.board}>
+              <View style={styles.boardRow}>
+                <Square row={0} col={0} props={this.props} onSelect={this.handleSelected}></Square>
+                <Square row={0} col={1} props={this.props} onSelect={this.handleSelected}></Square>
+                <Square row={0} col={2} props={this.props} onSelect={this.handleSelected}></Square>
+              </View>
+              <View style={styles.boardRow}>
+                <Square row={1} col={0} props={this.props} onSelect={this.handleSelected}></Square>
+                <Square row={1} col={1} props={this.props} onSelect={this.handleSelected}></Square>
+                <Square row={1} col={2} props={this.props} onSelect={this.handleSelected}></Square>
+              </View>
+              <View style={styles.boardRow}>
+                <Square row={2} col={0} props={this.props} onSelect={this.handleSelected}></Square>
+                <Square row={2} col={1} props={this.props} onSelect={this.handleSelected}></Square>
+                <Square row={2} col={2} props={this.props} onSelect={this.handleSelected}></Square>
+              </View>
             </View>
           </View>
-        </View>
-        <View style={{flex:1, alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
-          {this.props.isFinished ? <Icon.Button
-              name="replay"
-              backgroundColor="#3b5998"
-              size={30}
-              onPress={() => this.replayGame(this.props)}>
-            <Text style={styles.buttonText}> REPLAY </Text>
-          </Icon.Button> : null}
-        </View>
+          <View style={{flex:1, alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
+            {this.props.isFinished ? <Icon.Button
+                name="replay"
+                backgroundColor="#3b5998"
+                size={30}
+                onPress={() => this.replayGame(this.props)}>
+              <Text style={styles.buttonText}> REPLAY </Text>
+            </Icon.Button> : null}
+          </View>
+        </LinearGradient>
       </View>
     );
   };
