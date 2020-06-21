@@ -41,11 +41,7 @@ class SelectDifficulty extends Component<Props> {
   }
 
   selected(level: DifficultyLevel, props: Props) {
-    if (props.level) {
-      if (props.level != level) {
-        props.offlineReset();
-      }
-    }
+    props.offlineReset();
     props.setDifficultyLevel(level);
     let displayName = (level == DifficultyLevel.EASY) ? "Dumb" : (level == DifficultyLevel.MEDIUM) ? "Friendly" : "Sherlock";
     let computer:Player = {name: "Computer", displayName: displayName, self: false};
