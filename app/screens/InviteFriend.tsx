@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { Status } from '../store/types/gameTypes';
 import * as gameService from "./../service/gameService";
 import { LinearGradient } from 'expo-linear-gradient';
-
+import { MyAwesomeButton, ButtonTypes, SizeTypes } from '../component/MyAwesomeButtons';
 
 const mapState = (state: RootState) => ({
   game: state.gameReducer.game,
@@ -96,13 +96,12 @@ class InviteFriend extends Component<Props, State> {
           </View>
           <View style={iStyles.viewShare}>
             {this.props.isReady ?
-              <TouchableHighlight onPress={this.gameReady} style={iStyles.buttonReady}>
-                <Text style={iStyles.buttonText}> Lets Play </Text>
-              </TouchableHighlight>
-            :
-              <TouchableHighlight onPress={this.share} style={iStyles.buttonSimple}>
-                <Text style={iStyles.buttonText}> Share with Friends </Text>
-              </TouchableHighlight>
+              <MyAwesomeButton onPress={this.gameReady} size={SizeTypes.large} type={ButtonTypes.primary}>
+                Lets Play
+              </MyAwesomeButton>
+            : <MyAwesomeButton onPress={this.share} size={SizeTypes.large} type={ButtonTypes.secondary}>
+                Share with Friends
+              </MyAwesomeButton>
             }
           </View>
         </LinearGradient>

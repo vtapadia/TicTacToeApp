@@ -11,6 +11,7 @@ import { StyleSheet} from 'react-native';
 import * as bot from "../service/autoPlayBot";
 import * as gameService from "./../service/gameService";
 import { LinearGradient } from 'expo-linear-gradient';
+import { MyAwesomeButton, ButtonTypes, SizeTypes } from '../component/MyAwesomeButtons';
 
 const mapState = (state: RootState) => ({
   isFinished: state.gameReducer.game.status==Status.FINISHED,
@@ -181,13 +182,18 @@ class Game extends Component<Props, GameState> {
             </View>
           </View>
           <View style={{flex:1, alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
-            {this.props.isFinished ? <Icon.Button
-                name="replay"
-                backgroundColor="#3b5998"
-                size={30}
-                onPress={() => this.replayGame(this.props)}>
-              <Text style={styles.buttonText}> REPLAY </Text>
-            </Icon.Button> : null}
+            {this.props.isFinished ? 
+            <MyAwesomeButton onPress={() => this.replayGame(this.props)} size={SizeTypes.medium} type={ButtonTypes.facebook}>
+              REPLAY
+            </MyAwesomeButton>
+          // <Icon.Button
+          //       name="replay"
+          //       backgroundColor="#3b5998"
+          //       size={30}
+          //       onPress={() => this.replayGame(this.props)}>
+          //     <Text style={styles.buttonText}> REPLAY </Text>
+          //   </Icon.Button> 
+            : null}
           </View>
         </LinearGradient>
       </View>
@@ -294,8 +300,7 @@ export const styles = StyleSheet.create({
   msgText: {
     fontWeight: "bold",
     fontSize: 20,
-    // color: 'rgb(127,105,174)',
-    color: 'purple',
+    color: 'rgb(140,26,17)',
   },
   imagePlayer: {
     width: 60,

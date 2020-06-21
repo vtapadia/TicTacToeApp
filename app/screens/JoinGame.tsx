@@ -9,6 +9,7 @@ import { StyleSheet} from 'react-native';
 import { Status } from '../store/types/gameTypes';
 import { LinearGradient } from 'expo-linear-gradient';
 import { appStyles } from '../config/styles';
+import { MyAwesomeButton, ButtonTypes, SizeTypes } from '../component/MyAwesomeButtons';
 
 const mapState = (state: RootState) => ({
   game: state.gameReducer.game,
@@ -57,11 +58,10 @@ function JoinGame(props:Props) {
   }
 
   return (
-    <View style={appStyles.container}>
-    <LinearGradient style={{flex: 1}} colors={['rgba(241,225,153,1)', 'rgba(241,152,99,1)']}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
-        style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      style={appStyles.container}>
+      <LinearGradient style={{flex: 1}} colors={['rgba(241,225,153,1)', 'rgba(241,152,99,1)']}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={styles.outer}>
           <View style={styles.inner}>
             <Text style={styles.header}> Enter Game Code : </Text>
@@ -70,20 +70,19 @@ function JoinGame(props:Props) {
               onChangeText={text => onChangeText(text)} />
             <View style={styles.btnContainer}>
               {props.isReady ? 
-                <TouchableHighlight onPress={playGame} style={styles.buttonReady}>
-                  <Text style={styles.buttonText}> Lets Play </Text>
-                </TouchableHighlight>
-              : <TouchableHighlight onPress={joinGame} style={styles.buttonSimple}>
-                  <Text style={styles.buttonText}> Join Game </Text>
-                </TouchableHighlight>
+                <MyAwesomeButton onPress={playGame} size={SizeTypes.large} type={ButtonTypes.primary}>
+                  Lets Play
+                </MyAwesomeButton>
+              : <MyAwesomeButton onPress={joinGame} size={SizeTypes.large} type={ButtonTypes.secondary}>
+                Join Game
+                </MyAwesomeButton>
               }
               
             </View>
           </View>
         </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </LinearGradient>
-    </View>
+      </LinearGradient>
+    </KeyboardAvoidingView>
   );
 }
 
