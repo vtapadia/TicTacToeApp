@@ -4,6 +4,7 @@ export interface Player {
   name: string
   displayName?: string
   self?: boolean
+  image?: string
 }
 
 export enum GameMode {
@@ -20,6 +21,7 @@ export enum DifficultyLevel {
 export type RootStackParamList = {
   Welcome: undefined;
   Home: { playerName: string } | undefined;
+  Profile: undefined;
   SelectDifficulty: undefined;
   InviteFriend: undefined;
   JoinGame: undefined;
@@ -27,6 +29,7 @@ export type RootStackParamList = {
 };
 
 export type WelcomeProps = StackScreenProps<RootStackParamList, 'Welcome'>;
+export type ProfileProps = StackScreenProps<RootStackParamList, 'Profile'>;
 export type HomeProps = StackScreenProps<RootStackParamList, 'Home'>;
 export type InviteFriendProps = StackScreenProps<RootStackParamList, 'InviteFriend'>;
 export type JoinGameProps = StackScreenProps<RootStackParamList, 'JoinGame'>;

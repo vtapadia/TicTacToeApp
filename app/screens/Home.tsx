@@ -9,6 +9,7 @@ import * as gameService from "./../service/gameService";
 import { LinearGradient } from 'expo-linear-gradient';
 import { MyAwesomeButton, ButtonTypes, SizeTypes } from '../component/MyAwesomeButtons';
 import NetInfo from "@react-native-community/netinfo";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const mapState = (state: RootState) => ({
   // isReady: state.gameReducer.game.status==Status.READY
@@ -73,6 +74,10 @@ function Home(props: Props) {
   return (
     <View style={appStyles.container}>
       <LinearGradient style={appStyles.backgroundGradient} colors={appColors.gradient}>
+        <View style={{flex: 0.5, flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', alignContent: 'space-between'}}>
+          <Icon.Button name='chevron-left' underlayColor='transparent' onPress={props.navigation.goBack} backgroundColor='transparent' size={40} style={{paddingLeft: 10}} color='#E85F3A'></Icon.Button>
+          <Icon.Button name='user-circle' underlayColor='transparent' onPress={() => props.navigation.navigate("Profile")} backgroundColor='transparent' size={40} color='#E85F3A' style={{paddingRight: 10, alignSelf: 'flex-end'}}></Icon.Button>
+        </View>
         <View style={{flex: 1}}></View>
         <View style={{flex: 2, justifyContent: 'space-evenly', alignItems: 'center'}}>
           <ActivityIndicator animating={progress} size="large" color="#0000ff" />

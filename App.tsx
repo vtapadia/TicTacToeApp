@@ -11,6 +11,7 @@ import {RootStackParamList} from "./app/config/types";
 import appStore from './app/store/store';
 import JoinGameContainer from './app/screens/JoinGame';
 import SelectDifficultyContainer from './app/screens/SelectDifficulty';
+import ProfileContainer from './app/screens/Profile';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -20,7 +21,8 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Welcome" screenOptions={{headerShown: false, headerTintColor: 'rgb(140,26,17)', headerStyle: {backgroundColor: 'rgba(241,225,153,1)'}}}>
           <Stack.Screen name="Welcome" component={Welcome} options={{headerShown: false}}/>
-          <Stack.Screen name="Home" component={HomeContainer} options={{headerShown: true}}/>
+          <Stack.Screen name="Profile" component={ProfileContainer}/>
+          <Stack.Screen name="Home" component={HomeContainer} options={{headerShown: false}}/>
           <Stack.Screen name="InviteFriend" component={InviteFriendContainer}  options={{headerShown: true}}/>
           <Stack.Screen name="JoinGame" component={JoinGameContainer}  options={{headerShown: true}}/>
           <Stack.Screen name="SelectDifficulty" component={SelectDifficultyContainer}  options={{headerShown: true, title: 'Levels'}}/>
