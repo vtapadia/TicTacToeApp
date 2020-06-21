@@ -8,6 +8,7 @@ import { RootState } from '../store/reducers/appReducer';
 import * as gameService from "./../service/gameService";
 import { LinearGradient } from 'expo-linear-gradient';
 import { MyAwesomeButton, ButtonTypes, SizeTypes } from '../component/MyAwesomeButtons';
+import NetInfo from "@react-native-community/netinfo";
 
 const mapState = (state: RootState) => ({
   // isReady: state.gameReducer.game.status==Status.READY
@@ -29,7 +30,16 @@ type Props = StateProps & DispatchProps & HomeProps
 function Home(props: Props) {
   
   const [progress, setProgress] = React.useState(false);
-  
+  const [connected, setConnected] = React.useState(false);
+
+  NetInfo.fetch().then(state => {
+    if (state.isConnected) {
+      setConnected(true);
+    }
+  }).catch(e=>{
+    console.log("Unable to get network connection details.");
+  })
+
   function unsubscribe() {
     if(props.gameId) {
       gameService.unsubscribe(props.gameId).then(() => {
@@ -66,10 +76,10 @@ function Home(props: Props) {
         <View style={{flex: 1}}></View>
         <View style={{flex: 2, justifyContent: 'space-evenly', alignItems: 'center'}}>
           <ActivityIndicator animating={progress} size="large" color="#0000ff" />
-          <MyAwesomeButton disabled={progress} onPress={inviteFriend} type={ButtonTypes.primary} size={SizeTypes.large}>
+          <MyAwesomeButton disabled={!connected || progress} onPress={inviteFriend} type={ButtonTypes.primary} size={SizeTypes.large}>
             Invite Friend
           </MyAwesomeButton>
-          <MyAwesomeButton disabled={progress} onPress={joinGame} type={ButtonTypes.primary} size={SizeTypes.large}>
+          <MyAwesomeButton disabled={!connected || progress} onPress={joinGame} type={ButtonTypes.primary} size={SizeTypes.large}>
             Join Game
           </MyAwesomeButton>
           <MyAwesomeButton disabled={progress} onPress={singlePlayer} type={ButtonTypes.secondary} size={SizeTypes.large}>
