@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {View, Text, TouchableHighlight, Image} from "react-native";
-import {appStyles} from "../config/styles";
+import {appStyles, appColors} from "../config/styles";
 import {GameProps, GameMode} from "../config/types";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RootState } from '../store/reducers/appReducer';
@@ -143,7 +143,7 @@ class Game extends Component<Props, GameState> {
   render() {
     return (
       <View style={appStyles.container}>
-        <LinearGradient style={{flex: 1}} colors={['rgba(241,225,153,1)', 'rgba(241,152,99,1)']}>
+        <LinearGradient style={appStyles.backgroundGradient} colors={appColors.gradient}>
           <View style={styles.headerContainer}>
             <View style={styles.playerContainer}>
               <Image source={require('./../assets/img/robot-1.png')} style={styles.imagePlayer}></Image>

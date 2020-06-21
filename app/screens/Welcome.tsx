@@ -2,7 +2,7 @@ import * as React from 'react';
 import {View, Text, Image, Button, TouchableHighlight, SafeAreaView, StyleSheet, StatusBar} from "react-native";
 import {WelcomeProps} from "../config/types";
 import { RootState } from '../store/reducers/appReducer';
-import { appStyles } from '../config/styles';
+import { appStyles, appColors } from '../config/styles';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {addAppUser, reset} from "../store/actions/gameActions";
@@ -48,7 +48,7 @@ function Welcome(props: Props) {
 
   return (
     <View style={appStyles.container}>
-      <LinearGradient style={{flex: 1}} colors={['rgba(241,225,153,1)', 'rgba(241,152,99,1)']}>
+      <LinearGradient style={appStyles.backgroundGradient} colors={appColors.gradient}>
         <View style={{flex: 2, alignItems: 'center', justifyContent: 'flex-start', paddingTop: 10}}>
           <Text style={styles.header}>!! Tic Tac Toe !!</Text>
           <Image source={require('./../assets/img/Tic_tac_toe_welcome.png')} style={styles.welcomeImage}></Image>

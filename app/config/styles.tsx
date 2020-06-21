@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, StyleSheet} from 'react-native';
+import { Platform, StyleSheet, ColorPropType} from 'react-native';
 
 export const appStyles = StyleSheet.create({
   container: {
@@ -8,7 +8,15 @@ export const appStyles = StyleSheet.create({
     alignItems: 'stretch' ,
     backgroundColor: 'rgba(241,225,153,1)'
   },
+  backgroundGradient: {
+    flex: 1,
+  }
 });
+
+export const appColors = {
+  gradient: ['rgba(241,225,153,1)', 'rgba(241,152,99,1)'],
+
+};
 
 export const styles = StyleSheet.create({
   container: {

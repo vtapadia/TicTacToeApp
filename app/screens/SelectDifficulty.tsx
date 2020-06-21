@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {View, Image, Text, TouchableHighlight} from "react-native";
-import {appStyles} from "../config/styles";
+import {appStyles, appColors} from "../config/styles";
 import { RootState } from '../store/reducers/appReducer';
 import { SelectDifficultyProps, DifficultyLevel, Player, GameMode } from '../config/types';
 import { connect } from 'react-redux';
@@ -57,7 +57,7 @@ class SelectDifficulty extends Component<Props> {
   render() {
     return (
       <View style={appStyles.container}>
-      <LinearGradient style={{flex: 1}} colors={['rgba(241,225,153,1)', 'rgba(241,152,99,1)']}>
+      <LinearGradient style={appStyles.backgroundGradient} colors={appColors.gradient}>
         <View style={{flex: 2, justifyContent: 'center'}}>
           <Text style={cStyles.header}>!! Select Level !!</Text>
         </View>

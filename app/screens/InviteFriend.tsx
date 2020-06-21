@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {View, Share, Text, TouchableHighlight, StyleSheet, ActivityIndicator} from "react-native";
-import {appStyles} from "../config/styles";
+import {appStyles, appColors} from "../config/styles";
 import { RootState } from '../store/reducers/appReducer';
 import { InviteFriendProps } from '../config/types';
 import { setGameId, move, addPlayer, setGameState, replay} from '../store/actions/gameActions';
@@ -85,7 +85,7 @@ class InviteFriend extends Component<Props, State> {
   render() {
     return (
       <View style={appStyles.container}>
-        <LinearGradient style={{flex: 1}} colors={['rgba(241,225,153,1)', 'rgba(241,152,99,1)']}>
+        <LinearGradient style={appStyles.backgroundGradient} colors={appColors.gradient}>
           <View style={iStyles.viewCode}>
             <Text style={iStyles.textCode}>Code: </Text>
             <Text style={iStyles.textCodeNumber}>{this.state.gameId}</Text>

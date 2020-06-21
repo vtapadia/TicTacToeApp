@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, TouchableHighlight, ActivityIndicator, StyleSheet} from "react-native";
-import {appStyles} from "../config/styles";
+import {appStyles, appColors} from "../config/styles";
 import {HomeProps, GameMode, Player} from "../config/types";
 import { setGameMode, setGameId, reset } from '../store/actions/gameActions';
 import { connect } from 'react-redux'
@@ -72,7 +72,7 @@ function Home(props: Props) {
 
   return (
     <View style={appStyles.container}>
-      <LinearGradient style={{flex: 1}} colors={['rgba(241,225,153,1)', 'rgba(241,152,99,1)']}>
+      <LinearGradient style={appStyles.backgroundGradient} colors={appColors.gradient}>
         <View style={{flex: 1}}></View>
         <View style={{flex: 2, justifyContent: 'space-evenly', alignItems: 'center'}}>
           <ActivityIndicator animating={progress} size="large" color="#0000ff" />

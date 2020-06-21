@@ -8,7 +8,7 @@ import * as gameService from "./../service/gameService";
 import { StyleSheet} from 'react-native';
 import { Status } from '../store/types/gameTypes';
 import { LinearGradient } from 'expo-linear-gradient';
-import { appStyles } from '../config/styles';
+import { appStyles, appColors } from '../config/styles';
 import { MyAwesomeButton, ButtonTypes, SizeTypes } from '../component/MyAwesomeButtons';
 
 const mapState = (state: RootState) => ({
@@ -61,7 +61,7 @@ function JoinGame(props:Props) {
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : "height"}
       style={appStyles.container}>
-      <LinearGradient style={{flex: 1}} colors={['rgba(241,225,153,1)', 'rgba(241,152,99,1)']}>
+      <LinearGradient style={appStyles.backgroundGradient} colors={appColors.gradient}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={styles.outer}>
           <View style={styles.inner}>
             <Text style={styles.header}> Enter Game Code : </Text>
