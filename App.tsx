@@ -18,12 +18,12 @@ export default function App() {
   return (
     <Provider store={appStore}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Welcome" screenOptions={{headerShown: false, headerStyle: {backgroundColor: 'rgba(241,225,153,1)'}}}>
+        <Stack.Navigator initialRouteName="Welcome" screenOptions={{headerShown: false, headerTintColor: 'rgb(140,26,17)', headerStyle: {backgroundColor: 'rgba(241,225,153,1)'}}}>
           <Stack.Screen name="Welcome" component={Welcome} options={{headerShown: false}}/>
           <Stack.Screen name="Home" component={HomeContainer} options={{headerShown: true}}/>
           <Stack.Screen name="InviteFriend" component={InviteFriendContainer}  options={{headerShown: true}}/>
           <Stack.Screen name="JoinGame" component={JoinGameContainer}  options={{headerShown: true}}/>
-          <Stack.Screen name="SelectDifficulty" component={SelectDifficultyContainer}  options={{headerShown: true}}/>
+          <Stack.Screen name="SelectDifficulty" component={SelectDifficultyContainer}  options={{headerShown: true, title: 'Levels'}}/>
           <Stack.Screen name="Game" component={GameContainer}  options={{headerShown: true, title: '! Tic Tac Toe !'}}/>
         </Stack.Navigator>
       </NavigationContainer>
