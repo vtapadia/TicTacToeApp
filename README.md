@@ -27,3 +27,9 @@ Buttons, using react native awesome-buttons
 https://github.com/rcaferati/react-native-really-awesome-button
 Defined my Custom buttons and theme and used that to define global buttons.
 Demo site to test buttons: https://caferati.me/demo/react-awesome-button/morty-theme
+
+### NPM Commands
+To Get all the globall listed packages
+```bash
+npm list -g --depth 0
+```
