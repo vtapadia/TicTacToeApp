@@ -63,8 +63,8 @@ function Home(props: Props) {
   return (
     <View style={appStyles.container}>
       <LinearGradient style={{flex: 1}} colors={['rgba(241,225,153,1)', 'rgba(241,152,99,1)']}>
-        <View style={{flex: 2}}></View>
-        <View style={{flex: 2, justifyContent: 'space-around', alignItems: 'center'}}>
+        <View style={{flex: 1}}></View>
+        <View style={{flex: 2, justifyContent: 'space-evenly', alignItems: 'center'}}>
           <ActivityIndicator animating={progress} size="large" color="#0000ff" />
           <MyAwesomeButton disabled={progress} onPress={inviteFriend} type={ButtonTypes.primary} size={SizeTypes.large}>
             Invite Friend
@@ -76,7 +76,7 @@ function Home(props: Props) {
             Single Player
           </MyAwesomeButton>
         </View>
-        <View style={{flex: 2}}></View>
+        <View style={{flex: 1}}></View>
       </LinearGradient>
     </View>
   );
@@ -88,21 +88,5 @@ const HomeContainer = connect(mapState, mapDispatch)(Home)
 export default HomeContainer
 
 export const styles = StyleSheet.create({
-  button: {
-    alignItems: "center",
-    backgroundColor: "white",
-    padding: 15,
-    borderWidth: 1,
-    borderRadius: 10
-  },
-  buttonOther: {
-    alignItems: "center",
-    backgroundColor: "lightgrey",
-    padding: 15,
-    borderWidth: 1,
-    borderRadius: 10
-  },
-  buttonText: {
-    fontSize: 20
-  },
+  
 });
