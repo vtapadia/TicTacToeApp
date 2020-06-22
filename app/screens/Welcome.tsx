@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'rgb(140,26,17)',
+    color: appColors.defaultTextColor,
   },
   welcomeImage: {
     width: 240,

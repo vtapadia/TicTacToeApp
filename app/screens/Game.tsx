@@ -300,7 +300,7 @@ export const styles = StyleSheet.create({
   msgText: {
     fontWeight: "bold",
     fontSize: 20,
-    color: 'rgb(140,26,17)',
+    color: appColors.defaultTextColor,
   },
   imagePlayer: {
     width: 60,

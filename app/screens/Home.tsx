@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableHighlight, ActivityIndicator, StyleSheet} from "react-native";
+import {View, Text, TouchableHighlight, ActivityIndicator, StyleSheet, Image} from "react-native";
 import {appStyles, appColors} from "../config/styles";
 import {HomeProps, GameMode, Player} from "../config/types";
 import { setGameMode, setGameId, reset } from '../store/actions/gameActions';
@@ -75,10 +75,12 @@ function Home(props: Props) {
     <View style={appStyles.container}>
       <LinearGradient style={appStyles.backgroundGradient} colors={appColors.gradient}>
         <View style={{flex: 0.5, flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', alignContent: 'space-between'}}>
-          <Icon.Button name='chevron-left' underlayColor='transparent' onPress={props.navigation.goBack} backgroundColor='transparent' size={40} style={{paddingLeft: 10}} color='#E85F3A'></Icon.Button>
-          <Icon.Button name='user-circle' underlayColor='transparent' onPress={() => props.navigation.navigate("Profile")} backgroundColor='transparent' size={40} color='#E85F3A' style={{paddingRight: 10, alignSelf: 'flex-end'}}></Icon.Button>
+          <Icon.Button name='chevron-left' underlayColor='transparent' onPress={props.navigation.goBack} backgroundColor='transparent' size={40} style={{paddingLeft: 10}} color={appColors.defaultTextColor}></Icon.Button>
+          <Icon.Button name='user-circle' underlayColor='transparent' onPress={() => props.navigation.navigate("Profile")} backgroundColor='transparent' size={40} color={appColors.defaultTextColor} style={{paddingRight: 10, alignSelf: 'flex-end'}}></Icon.Button>
         </View>
-        <View style={{flex: 1}}></View>
+        <View style={{flex: 1, alignItems: 'center'}}>
+          <Image source={require('./../assets/img/tic-tac-toe.png')} style={styles.topImage}></Image>
+        </View>
         <View style={{flex: 2, justifyContent: 'space-evenly', alignItems: 'center'}}>
           <ActivityIndicator animating={progress} size="large" color="#0000ff" />
           <MyAwesomeButton disabled={!connected || progress} onPress={inviteFriend} type={ButtonTypes.primary} size={SizeTypes.large}>
@@ -91,7 +93,7 @@ function Home(props: Props) {
             Single Player
           </MyAwesomeButton>
         </View>
-        <View style={{flex: 1}}></View>
+        {/* <View style={{flex: 1}}></View> */}
       </LinearGradient>
     </View>
   );
@@ -103,5 +105,10 @@ const HomeContainer = connect(mapState, mapDispatch)(Home)
 export default HomeContainer
 
 export const styles = StyleSheet.create({
-  
+  topImage: {
+    width: 240,
+    height: 240,
+    resizeMode: 'contain',
+    paddingBottom: 10
+  },
 });

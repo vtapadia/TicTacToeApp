@@ -15,7 +15,7 @@ export const appStyles = StyleSheet.create({
 
 export const appColors = {
   gradient: ['rgba(241,225,153,1)', 'rgba(241,152,99,1)'],
-
+  defaultTextColor: 'rgb(140,26,17)'
 };
 
 export const styles = StyleSheet.create({

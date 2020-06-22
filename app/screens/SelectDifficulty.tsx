@@ -8,6 +8,8 @@ import { StyleSheet} from 'react-native';
 import {addPlayer, setDifficultyLevel, offlineReset, setGameState} from "../store/actions/gameActions";
 import { Mark, Status } from '../store/types/gameTypes';
 import { LinearGradient } from 'expo-linear-gradient';
+import { MyAwesomeButton, ButtonTypes, SizeTypes } from '../component/MyAwesomeButtons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const mapState = (state: RootState) => ({
   appUser: state.gameReducer.appUser,
@@ -53,30 +55,26 @@ class SelectDifficulty extends Component<Props> {
   render() {
     return (
       <View style={appStyles.container}>
-      <LinearGradient style={appStyles.backgroundGradient} colors={appColors.gradient}>
-        <View style={{flex: 2, justifyContent: 'center'}}>
-          <Text style={cStyles.header}>!! Select Level !!</Text>
-        </View>
-        <View style={{flex: 3, justifyContent: 'space-evenly', paddingBottom: 100}}>
-          <View style={cStyles.viewRow}>
-            <Image source={require('./../assets/img/robot-1.png')} style={cStyles.diSimple}></Image>
-            <TouchableHighlight style={cStyles.buttonSimple} onPress={() => this.selected(DifficultyLevel.EASY, this.props)}>
-              <Text style={cStyles.buttonText}>Dumb Bot</Text>
-            </TouchableHighlight>
+        <LinearGradient style={appStyles.backgroundGradient} colors={appColors.gradient}>
+          <View style={{flex: 0.5, flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', alignContent: 'space-between'}}>
+            <Icon.Button name='chevron-left' underlayColor='transparent' onPress={this.props.navigation.goBack} backgroundColor='transparent' size={40} style={{paddingLeft: 10}} color={appColors.defaultTextColor}></Icon.Button>
+            {/* <Text style={cStyles.header}> Select Level </Text> */}
+            <Icon.Button name='user-circle' underlayColor='transparent' onPress={() => this.props.navigation.navigate("Profile")} backgroundColor='transparent' size={40} color={appColors.defaultTextColor} style={{paddingRight: 10, alignSelf: 'flex-end'}}></Icon.Button>
           </View>
-          <View style={cStyles.viewRow}>
-            <Image source={require('./../assets/img/robot-2.png')} style={cStyles.diMedium}></Image>
-            <TouchableHighlight style={cStyles.buttonMedium} onPress={() => this.selected(DifficultyLevel.MEDIUM, this.props)}>
-              <Text style={cStyles.buttonText}>Friendly Bot</Text>
-            </TouchableHighlight>
+          <View style={{flex: 2, alignItems: 'center', justifyContent: 'flex-start', paddingTop: 10}}>
+            <Image source={require('./../assets/img/questions.png')} style={cStyles.topImage}></Image>
           </View>
-          <View style={cStyles.viewRow}>
-            <Image source={require('./../assets/img/robot-3.png')} style={cStyles.diDifficult}></Image>
-            <TouchableHighlight style={cStyles.buttonDifficult} onPress={() => this.selected(DifficultyLevel.HARD, this.props)}>
-              <Text style={cStyles.buttonText}>Sherlock Bot</Text>
-            </TouchableHighlight>
+          <View style={{flex: 3, justifyContent: 'space-evenly', alignItems: 'center'}}>
+            <MyAwesomeButton onPress={() => this.selected(DifficultyLevel.EASY, this.props)} type={ButtonTypes.primary} size={SizeTypes.large}>
+              Easy
+            </MyAwesomeButton>
+            <MyAwesomeButton onPress={() => this.selected(DifficultyLevel.MEDIUM, this.props)} type={ButtonTypes.primary} size={SizeTypes.large}>
+              Medium
+            </MyAwesomeButton>
+            <MyAwesomeButton onPress={() => this.selected(DifficultyLevel.HARD, this.props)} type={ButtonTypes.secondary} size={SizeTypes.large}>
+              Difficult
+            </MyAwesomeButton>
           </View>
-        </View>
         </LinearGradient>
       </View>
     );
@@ -88,7 +86,18 @@ const SelectDifficultyContainer = connect(mapState, mapDispatch)(SelectDifficult
 export default SelectDifficultyContainer;
 
 export const cStyles = StyleSheet.create({
-  header: {fontSize: 30, fontWeight:'bold', color: 'red'},
+  header: {
+    fontSize: 24, 
+    fontWeight:'bold', 
+    color: appColors.defaultTextColor,
+    alignSelf: 'center'
+  },
+  topImage: {
+    width: 240,
+    height: 240,
+    resizeMode: 'contain',
+    paddingBottom: 10
+  },
   viewRow: {
     flexDirection: 'row', 
     justifyContent: 'center', 
