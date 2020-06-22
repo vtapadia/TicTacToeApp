@@ -77,7 +77,6 @@ function Profile(props: Props) {
   }
 
   const takePhoto = async () => {
-    setModalVisible(!modalVisible);
     if (!cameraPermission) {
       let permissionResult = await ImagePicker.requestCameraPermissionsAsync();
       if (!permissionResult.granted) {
@@ -92,18 +91,18 @@ function Profile(props: Props) {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
-      base64: true
+      base64: false
     });
 
-    // console.log(result);
+    console.log(result);
 
     if (!result.cancelled) {
       setImage(result.uri);
     }
+    setModalVisible(!modalVisible);
   }
 
   const pickImage = async () => {
-    setModalVisible(!modalVisible);
     if (!cameraRollPermission) {
       console.log("Camera Roll permission not granted yet")
       try {
@@ -118,27 +117,22 @@ function Profile(props: Props) {
     }
     console.log("Opening Image picker");
 
-    
-    try {
-      ImagePicker.launchImageLibraryAsync({
+    let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [4, 3],
         quality: 1,
-        base64: true,
-      }).then(result => {
-        console.log(result);
-  
-        if (!result.cancelled) {
-          setImage(result.uri);
-        }
-      }).catch(e => {
-        console.log("Failed launching image picker", e);
-      })
-  
-    } catch (e) {
-      console.log("Exception ", e);
+        base64: false,
+      });
+    
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
     }
+    //Its important to not change state as that would lead to page refresh.
+    //This is primary because it is async method (otherwise method completion would have been done first.)
+    setModalVisible(!modalVisible);
   }
 
   return (
