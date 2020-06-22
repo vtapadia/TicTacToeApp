@@ -10,6 +10,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Avatar, Input, Divider } from 'react-native-elements';
 import { ProfileProps, Player } from '../config/types';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import * as Permissions from 'expo-permissions';
 
 const mapState = (state: RootState) => ({
   appUser: state.gameReducer.appUser,
@@ -104,23 +105,39 @@ function Profile(props: Props) {
   const pickImage = async () => {
     setModalVisible(!modalVisible);
     if (!cameraRollPermission) {
-      let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
-      if (!permissionResult.granted) {
-        Alert.alert("Sorry, we need camera roll permissions to make this work!");
+      console.log("Camera Roll permission not granted yet")
+      try {
+        let permissionResult = await Permissions.askAsync(Permissions.CAMERA_ROLL)
+        console.log("Permission result ", permissionResult);
+        if (!permissionResult.granted) {
+          Alert.alert("Sorry, we need camera roll permissions to make this work!");
+        }
+      } catch (e) {
+        console.log("Failed when asking permission", e)
       }
     }
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-      base64: true
-    });
+    console.log("Opening Image picker");
 
-    // console.log(result);
-
-    if (!result.cancelled) {
-      setImage(result.uri);
+    
+    try {
+      ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+        base64: true,
+      }).then(result => {
+        console.log(result);
+  
+        if (!result.cancelled) {
+          setImage(result.uri);
+        }
+      }).catch(e => {
+        console.log("Failed launching image picker", e);
+      })
+  
+    } catch (e) {
+      console.log("Exception ", e);
     }
   }
 
