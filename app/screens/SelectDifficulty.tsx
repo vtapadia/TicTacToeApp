@@ -82,7 +82,7 @@ class SelectDifficulty extends Component<Props> {
             <MyAwesomeButton onPress={() => this.selected(DifficultyLevel.MEDIUM, this.props)} type={ButtonTypes.primary} size={SizeTypes.large}>
               Medium
             </MyAwesomeButton>
-            <MyAwesomeButton onPress={() => this.selected(DifficultyLevel.HARD, this.props)} type={ButtonTypes.secondary} size={SizeTypes.large}>
+            <MyAwesomeButton onPress={() => this.selected(DifficultyLevel.HARD, this.props)} type={ButtonTypes.primary} size={SizeTypes.large}>
               Difficult
             </MyAwesomeButton>
           </View>
