@@ -35,17 +35,28 @@ class SelectDifficulty extends Component<Props> {
   constructor(props: Props) {
     super(props);
     this.selected = this.selected.bind(this);
+  }
+
+  selected(level: DifficultyLevel, props: Props) {
+    props.offlineReset();
     if (props.appUser) {
       props.addPlayer(props.appUser, Mark.X);
     } else {
       console.error("app User should be set before this.");
     }
-  }
-
-  selected(level: DifficultyLevel, props: Props) {
-    props.offlineReset();
     props.setDifficultyLevel(level);
-    let displayName = (level == DifficultyLevel.EASY) ? "Dumb" : (level == DifficultyLevel.MEDIUM) ? "Friendly" : "Sherlock";
+    let displayName, image;
+    switch(level) {
+      case DifficultyLevel.EASY:
+        displayName = 'Easy';
+        break;
+      case DifficultyLevel.MEDIUM:
+        displayName = 'Medium';
+        break;
+      case DifficultyLevel.HARD:
+        displayName = 'Hard';
+        break;
+    }
     let computer:Player = {name: "Computer", displayName: displayName, self: false};
     props.addPlayer(computer, Mark.O);
     props.setGameState(Status.READY);
