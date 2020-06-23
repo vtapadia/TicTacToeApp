@@ -10,6 +10,8 @@ import * as Application from "expo-application";
 import { LinearGradient } from 'expo-linear-gradient';
 import AwesomeButton from "react-native-really-awesome-button";
 import { MyAwesomeButton, ButtonTypes, SizeTypes } from '../component/MyAwesomeButtons';
+import * as FileSystem from "expo-file-system";
+import * as constants from "../config/constant";
 
 const mapState = (state: RootState) => ({
   appUser: state.gameReducer.appUser
@@ -33,12 +35,19 @@ function Welcome(props: Props) {
     return name;
   }
 
-  function loginFacebook(name:string, displayName?:string) {
+  const loginFacebook = () => {
     alert("Feature currently not supported");
   }
 
-  function loginSuccess(name:string, displayName?:string) {
-    props.addAppUser({name: name, displayName: displayName, self: true});
+  const loginGuest = async () => {
+    let name = randomName();
+    let displayName = "Guest";
+    let result = await FileSystem.getInfoAsync(constants.imageFile);
+    if (result.exists) {
+      props.addAppUser({name: name, displayName: displayName, self: true, image: constants.imageFile});
+    } else {
+      props.addAppUser({name: name, displayName: displayName, self: true});
+    }
     props.navigation.navigate('Home');
   }
 
@@ -54,8 +63,8 @@ function Welcome(props: Props) {
           <Image source={require('./../assets/img/Tic_tac_toe_welcome.png')} style={styles.welcomeImage}></Image>
         </View>
         <View style={{flex: 1, justifyContent: 'space-around', alignItems: 'center'}}>
-          <MyAwesomeButton onPress={() => loginFacebook("AppDev")} type={ButtonTypes.facebook} size={SizeTypes.large}>Login with Facebook</MyAwesomeButton>
-          <MyAwesomeButton onPress={() => loginSuccess(randomName(), "Guest")} type={ButtonTypes.secondary} size={SizeTypes.large}>Play as Guest</MyAwesomeButton>
+          <MyAwesomeButton onPress={loginFacebook} type={ButtonTypes.facebook} size={SizeTypes.large}>Login with Facebook</MyAwesomeButton>
+          <MyAwesomeButton onPress={loginGuest} type={ButtonTypes.secondary} size={SizeTypes.large}>Play as Guest</MyAwesomeButton>
         </View>
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-end'}}>
           <Text>{Application.nativeBuildVersion}</Text>

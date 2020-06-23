@@ -9,8 +9,10 @@ import {addAppUser} from "../store/actions/gameActions";
 import * as ImagePicker from 'expo-image-picker';
 import { Avatar, Input, Divider } from 'react-native-elements';
 import { ProfileProps, Player } from '../config/types';
+import * as constants from "../config/constant";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as Permissions from 'expo-permissions';
+import * as FileSystem from 'expo-file-system';
 
 const mapState = (state: RootState) => ({
   appUser: state.gameReducer.appUser,
@@ -30,7 +32,7 @@ function Profile(props: Props) {
   const [keyboardVisible, setKeyboardVisible] = React.useState(false);
 
   const [value, setValue] = React.useState<string | undefined>(props.appUser?.displayName);
-  const [image, setImage] = React.useState<string | undefined>()
+  const [image, setImage] = React.useState<string | undefined>(props.appUser?.image);
 
   const [cameraPermission, setCameraPermission] = React.useState(false);
   const [cameraRollPermission, setCameraRollPermission] = React.useState(false);
@@ -58,14 +60,27 @@ function Profile(props: Props) {
     }).catch(e=>{console.log(e)})
   },[]);
 
-  const saveProfile = () => {
+  const saveProfile = async () => {
     if (props.appUser) {
       let appPlayer:Player = {...props.appUser};
       if (value) {
         appPlayer.displayName = value;
       }
       if (image) {
-        appPlayer.image = image;
+        
+        console.log("Image File Selected: ", image)
+        let result = await FileSystem.getInfoAsync(constants.imageFolder)
+        if (!result.exists) {
+          console.log("Image Directory missing, so creating it")
+          await FileSystem.makeDirectoryAsync(constants.imageFolder)
+        }
+        await FileSystem.copyAsync({
+          from: image,
+          to: constants.imageFile
+        })
+
+        appPlayer.image = constants.imageFile;
+        console.log("Image Saved at ", constants.imageFile)
       }
       props.addAppUser(appPlayer);
     }
