@@ -11,6 +11,7 @@ import { Avatar, Input, Divider } from 'react-native-elements';
 import { ProfileProps, Player } from '../config/types';
 import * as constants from "../config/constant";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-community/async-storage';
 import * as Permissions from 'expo-permissions';
 import * as FileSystem from 'expo-file-system';
 
@@ -63,11 +64,13 @@ function Profile(props: Props) {
   const saveProfile = async () => {
     if (props.appUser) {
       let appPlayer:Player = {...props.appUser};
-      if (value) {
+      if (value && value.length>0) {
         appPlayer.displayName = value;
+      } else {
+        Alert.alert("Sorry, the name is required");
+        return;
       }
-      if (image) {
-        
+      if (image && image != constants.imageFile) {
         console.log("Image File Selected: ", image)
         let result = await FileSystem.getInfoAsync(constants.imageFolder)
         if (!result.exists) {
@@ -81,6 +84,11 @@ function Profile(props: Props) {
 
         appPlayer.image = constants.imageFile;
         console.log("Image Saved at ", constants.imageFile)
+      }
+      try {
+        await AsyncStorage.setItem(constants.asyncStoreAppUserName, value);
+      } catch (e) {
+        console.log("Saving name locally failed, continue..");
       }
       props.addAppUser(appPlayer);
     }
