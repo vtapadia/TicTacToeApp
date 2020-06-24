@@ -12,7 +12,7 @@
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
     "splash": {
-      "image": "./app/assets/splash.png",
+      "image": "./app/assets/img/Tic_tac_toe_welcome.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
