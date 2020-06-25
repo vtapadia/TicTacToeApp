@@ -185,6 +185,7 @@ function Profile(props: Props) {
                     color='black'
                   />
                 }
+                clearButtonMode='while-editing'
                 onChangeText={(value) => {setValue(value)}}
               >{value}</Input>
               <MyAwesomeButton onPress={saveProfile} size={SizeTypes.large} type={ButtonTypes.primary}>

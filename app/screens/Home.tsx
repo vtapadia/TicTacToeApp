@@ -10,9 +10,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MyAwesomeButton, ButtonTypes, SizeTypes } from '../component/MyAwesomeButtons';
 import NetInfo from "@react-native-community/netinfo";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { Avatar } from 'react-native-elements';
 
 const mapState = (state: RootState) => ({
-  // isReady: state.gameReducer.game.status==Status.READY
   appUser: state.gameReducer.appUser,
   gameId: state.gameReducer.gameId
 })
@@ -75,8 +75,23 @@ function Home(props: Props) {
     <View style={appStyles.container}>
       <LinearGradient style={appStyles.backgroundGradient} colors={appColors.gradient}>
         <View style={styles.header}>
-          <Icon.Button name='user-circle' underlayColor='transparent' onPress={() => props.navigation.navigate("Profile")} backgroundColor='transparent' size={40} color={appColors.defaultTextColor} style={styles.headerProfile}></Icon.Button>
-          {props.navigation.canGoBack() && <Icon.Button name='chevron-left' underlayColor='transparent' onPress={props.navigation.goBack} backgroundColor='transparent' size={40} style={styles.headerBack} color={appColors.defaultTextColor}></Icon.Button>}
+          <View style={styles.headerProfile}>
+            {props.appUser?.image ? 
+            <Avatar size="medium" rounded 
+                source={{ uri: props.appUser?.image }}
+                onPress={() => props.navigation.navigate("Profile")}
+                activeOpacity={0.7}
+                containerStyle={styles.headerAvtar}
+              /> : 
+              <Avatar size="medium" rounded 
+                icon={{name: 'user', type: 'font-awesome'}} 
+                onPress={() => props.navigation.navigate("Profile")}
+                activeOpacity={0.7}
+                containerStyle={styles.headerAvtar}
+              />
+              }
+          </View>
+          {props.navigation.canGoBack() && <Icon.Button name='chevron-left' underlayColor='transparent' onPress={props.navigation.goBack} backgroundColor='transparent' size={38} style={styles.headerBack} color={appColors.defaultTextColor}></Icon.Button>}
         </View>
         <View style={{flex: 1, alignItems: 'center'}}>
           <Image source={require('./../assets/img/tic-tac-toe.png')} style={styles.topImage}></Image>
@@ -114,15 +129,20 @@ export const styles = StyleSheet.create({
     // backgroundColor: 'red'
   },
   headerBack: {
-    flex: 1,
+    // flex: 1,
     paddingLeft: 10, 
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-end',
+    // backgroundColor: 'green'
   },
   headerProfile: {
     flex: 1,
     paddingRight: 10, 
-    alignSelf: 'flex-end', 
+    alignSelf: 'flex-start', 
     // backgroundColor: 'green'
+  },
+  headerAvtar: {
+    alignSelf: 'flex-end', 
+    backgroundColor: appColors.defaultTextColor
   },
   topImage: {
     width: 240,
