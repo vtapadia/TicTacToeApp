@@ -161,7 +161,6 @@ function Profile(props: Props) {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : "height"} style={appStyles.container}>
-    {/* <View style={appStyles.container}> */}
       <LinearGradient style={appStyles.backgroundGradient} colors={appColors.gradient}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={styles.outer}>
           <View style={styles.inner}>

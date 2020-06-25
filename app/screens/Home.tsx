@@ -74,9 +74,9 @@ function Home(props: Props) {
   return (
     <View style={appStyles.container}>
       <LinearGradient style={appStyles.backgroundGradient} colors={appColors.gradient}>
-        <View style={{flex: 0.5, flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', alignContent: 'space-between'}}>
-          <Icon.Button name='chevron-left' underlayColor='transparent' onPress={props.navigation.goBack} backgroundColor='transparent' size={40} style={{paddingLeft: 10}} color={appColors.defaultTextColor}></Icon.Button>
-          <Icon.Button name='user-circle' underlayColor='transparent' onPress={() => props.navigation.navigate("Profile")} backgroundColor='transparent' size={40} color={appColors.defaultTextColor} style={{paddingRight: 10, alignSelf: 'flex-end'}}></Icon.Button>
+        <View style={styles.header}>
+          <Icon.Button name='user-circle' underlayColor='transparent' onPress={() => props.navigation.navigate("Profile")} backgroundColor='transparent' size={40} color={appColors.defaultTextColor} style={styles.headerProfile}></Icon.Button>
+          {props.navigation.canGoBack() && <Icon.Button name='chevron-left' underlayColor='transparent' onPress={props.navigation.goBack} backgroundColor='transparent' size={40} style={styles.headerBack} color={appColors.defaultTextColor}></Icon.Button>}
         </View>
         <View style={{flex: 1, alignItems: 'center'}}>
           <Image source={require('./../assets/img/tic-tac-toe.png')} style={styles.topImage}></Image>
@@ -105,6 +105,25 @@ const HomeContainer = connect(mapState, mapDispatch)(Home)
 export default HomeContainer
 
 export const styles = StyleSheet.create({
+  header: {
+    flex: 0.5, 
+    flexDirection: 'row-reverse', 
+    alignItems: 'flex-start', 
+    justifyContent: 'space-between', 
+    // alignContent: 'space-between', 
+    // backgroundColor: 'red'
+  },
+  headerBack: {
+    flex: 1,
+    paddingLeft: 10, 
+    alignSelf: 'flex-start'
+  },
+  headerProfile: {
+    flex: 1,
+    paddingRight: 10, 
+    alignSelf: 'flex-end', 
+    // backgroundColor: 'green'
+  },
   topImage: {
     width: 240,
     height: 240,

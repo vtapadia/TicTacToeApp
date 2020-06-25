@@ -4,18 +4,13 @@ import {WelcomeProps} from "../config/types";
 import { RootState } from '../store/reducers/appReducer';
 import { appStyles, appColors } from '../config/styles';
 import { connect } from 'react-redux';
-import Icon from 'react-native-vector-icons/Ionicons';
 import {addAppUser, reset} from "../store/actions/gameActions";
 import * as Application from "expo-application";
 import { LinearGradient } from 'expo-linear-gradient';
-import AwesomeButton from "react-native-really-awesome-button";
 import { MyAwesomeButton, ButtonTypes, SizeTypes } from '../component/MyAwesomeButtons';
-import * as FileSystem from "expo-file-system";
-import * as constants from "../config/constant";
+import { randomGuestId } from "../util/appUtils";
 
-const mapState = (state: RootState) => ({
-  appUser: state.gameReducer.appUser
-})
+const mapState = (state: RootState) => ({})
 
 const mapDispatch = {
   reset,
@@ -28,32 +23,17 @@ type DispatchProps = typeof mapDispatch
 type Props = StateProps & DispatchProps & WelcomeProps
 
 function Welcome(props: Props) {
-
-  function randomName():string {
-    let name = "Guest" + Math.floor(Math.random()*10000000);
-    console.log("Player name assigned as %s", name);
-    return name;
-  }
-
   const loginFacebook = () => {
     alert("Feature currently not supported");
   }
 
-  const loginGuest = async () => {
-    let name = randomName();
-    let displayName = "Guest";
-    let result = await FileSystem.getInfoAsync(constants.imageFile);
-    if (result.exists) {
-      props.addAppUser({name: name, displayName: displayName, self: true, image: constants.imageFile});
-    } else {
-      props.addAppUser({name: name, displayName: displayName, self: true});
-    }
+  const loginGuest = () => {
+    props.reset();
+    let randomId = randomGuestId();
+    console.log("Creating app User as %s with %s", "Guest", randomId);
+    props.addAppUser({name: randomId, displayName: "Guest", self: true});
     props.navigation.navigate('Home');
   }
-
-  React.useEffect(()=>{
-    props.reset(); //Reset game
-  })
 
   return (
     <View style={appStyles.container}>
