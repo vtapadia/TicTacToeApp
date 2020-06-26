@@ -12,6 +12,7 @@ import * as bot from "../service/autoPlayBot";
 import * as gameService from "./../service/gameService";
 import { LinearGradient } from 'expo-linear-gradient';
 import { MyAwesomeButton, ButtonTypes, SizeTypes } from '../component/MyAwesomeButtons';
+import { Avatar } from 'react-native-elements';
 
 const mapState = (state: RootState) => ({
   isFinished: state.gameReducer.game.status==Status.FINISHED,
@@ -148,13 +149,35 @@ function Game (props: Props) {
       <LinearGradient style={appStyles.backgroundGradient} colors={appColors.gradient}>
         <View style={styles.headerContainer}>
           <View style={styles.playerContainer}>
-            <Image source={require('./../assets/img/robot-1.png')} style={styles.imagePlayer}></Image>
+            {props.playerX?.image ? 
+              <Avatar size="medium" rounded 
+                source={{ uri: props.playerX?.image }}
+                activeOpacity={0.7}
+                containerStyle={styles.headerAvtar}
+              /> : 
+              <Avatar size="medium" rounded 
+                icon={{name: 'user', type: 'font-awesome'}} 
+                activeOpacity={0.7}
+                containerStyle={styles.headerAvtar}
+              />
+              }
             <Text style={styles.playerText}>{props.playerNameX}</Text>
             <X></X>
             <Text style={styles.playerText}>Won: {props.winCountX}</Text>
           </View>
           <View style={styles.playerContainer}>
-            <Image source={require('./../assets/img/robot-1.png')} style={styles.imagePlayer}></Image>
+            {props.playerO?.image ? 
+              <Avatar size="medium" rounded 
+                source={{ uri: props.playerO?.image }}
+                activeOpacity={0.7}
+                containerStyle={styles.headerAvtar}
+              /> : 
+              <Avatar size="medium" rounded 
+                icon={{name: 'user', type: 'font-awesome'}} 
+                activeOpacity={0.7}
+                containerStyle={styles.headerAvtar}
+              />
+              }
             <Text style={styles.playerText}>{props.playerNameO}</Text>
             <O></O>
             <Text style={styles.playerText}>Won: {props.winCountO}</Text>
@@ -270,6 +293,10 @@ export const styles = StyleSheet.create({
     borderColor: 'rgb(142,84,108)',
     borderWidth: 2,
     borderRadius: 10
+  },
+  headerAvtar: {
+    // alignSelf: 'flex-end', 
+    backgroundColor: appColors.defaultTextColor
   },
   cropped: {
     overflow: 'hidden',

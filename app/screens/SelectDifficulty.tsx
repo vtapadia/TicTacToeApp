@@ -11,6 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MyAwesomeButton, ButtonTypes, SizeTypes } from '../component/MyAwesomeButtons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Avatar } from 'react-native-elements';
+import { Asset } from 'expo-asset';
 
 const mapState = (state: RootState) => ({
   appUser: state.gameReducer.appUser,
@@ -46,15 +47,18 @@ function SelectDifficulty(props: Props) {
     switch(level) {
       case DifficultyLevel.EASY:
         displayName = 'Easy';
+        image = Asset.fromModule(require('./../assets/img/robot-1.png')).uri
         break;
       case DifficultyLevel.MEDIUM:
         displayName = 'Medium';
+        image = Asset.fromModule(require('./../assets/img/robot-2.png')).uri
         break;
       case DifficultyLevel.HARD:
         displayName = 'Hard';
+        image = Asset.fromModule(require('./../assets/img/robot-3.png')).uri
         break;
     }
-    let computer:Player = {name: "Computer", displayName: displayName, self: false};
+    let computer:Player = {name: "Computer", displayName: displayName, self: false, image: image};
     props.addPlayer(computer, Mark.O);
     props.setGameState(Status.READY);
     props.navigation.navigate('Game');
