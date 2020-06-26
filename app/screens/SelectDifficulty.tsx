@@ -10,6 +10,7 @@ import { Mark, Status } from '../store/types/gameTypes';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MyAwesomeButton, ButtonTypes, SizeTypes } from '../component/MyAwesomeButtons';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { Avatar } from 'react-native-elements';
 
 const mapState = (state: RootState) => ({
   appUser: state.gameReducer.appUser,
@@ -31,13 +32,9 @@ type DispatchProps = typeof mapDispatch
 
 type Props = StateProps & DispatchProps & SelectDifficultyProps
 
-class SelectDifficulty extends Component<Props> {
-  constructor(props: Props) {
-    super(props);
-    this.selected = this.selected.bind(this);
-  }
+function SelectDifficulty(props: Props) {
 
-  selected(level: DifficultyLevel, props: Props) {
+  const selected = (level: DifficultyLevel) => {
     props.offlineReset();
     if (props.appUser) {
       props.addPlayer(props.appUser, Mark.X);
@@ -63,38 +60,77 @@ class SelectDifficulty extends Component<Props> {
     props.navigation.navigate('Game');
   }
 
-  render() {
-    return (
-      <View style={appStyles.container}>
-        <LinearGradient style={appStyles.backgroundGradient} colors={appColors.gradient}>
-          <View style={{flex: 0.5, flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', alignContent: 'space-between'}}>
-            <Icon.Button name='chevron-left' underlayColor='transparent' onPress={this.props.navigation.goBack} backgroundColor='transparent' size={40} style={{paddingLeft: 10}} color={appColors.defaultTextColor}></Icon.Button>
-            {/* <Text style={cStyles.header}> Select Level </Text> */}
-            <Icon.Button name='user-circle' underlayColor='transparent' onPress={() => this.props.navigation.navigate("Profile")} backgroundColor='transparent' size={40} color={appColors.defaultTextColor} style={{paddingRight: 10, alignSelf: 'flex-end'}}></Icon.Button>
+  return (
+    <View style={appStyles.container}>
+      <LinearGradient style={appStyles.backgroundGradient} colors={appColors.gradient}>
+        <View style={styles.header}>
+          <View style={styles.headerProfile}>
+            {props.appUser?.image ? 
+            <Avatar size="medium" rounded 
+                source={{ uri: props.appUser?.image }}
+                onPress={() => props.navigation.navigate("Profile")}
+                activeOpacity={0.7}
+                containerStyle={styles.headerAvtar}
+              /> : 
+              <Avatar size="medium" rounded 
+                icon={{name: 'user', type: 'font-awesome'}} 
+                onPress={() => props.navigation.navigate("Profile")}
+                activeOpacity={0.7}
+                containerStyle={styles.headerAvtar}
+              />
+              }
           </View>
-          <View style={{flex: 2, alignItems: 'center', justifyContent: 'flex-start', paddingTop: 10}}>
-            <Image source={require('./../assets/img/questions.png')} style={cStyles.topImage}></Image>
-          </View>
-          <View style={{flex: 3, justifyContent: 'space-evenly', alignItems: 'center'}}>
-            <MyAwesomeButton onPress={() => this.selected(DifficultyLevel.EASY, this.props)} type={ButtonTypes.primary} size={SizeTypes.large}>
-              Easy
-            </MyAwesomeButton>
-            <MyAwesomeButton onPress={() => this.selected(DifficultyLevel.MEDIUM, this.props)} type={ButtonTypes.primary} size={SizeTypes.large}>
-              Medium
-            </MyAwesomeButton>
-            <MyAwesomeButton onPress={() => this.selected(DifficultyLevel.HARD, this.props)} type={ButtonTypes.primary} size={SizeTypes.large}>
-              Difficult
-            </MyAwesomeButton>
-          </View>
-        </LinearGradient>
-      </View>
-    );
-  }
+          {props.navigation.canGoBack() && <Icon.Button name='chevron-left' underlayColor='transparent' onPress={props.navigation.goBack} backgroundColor='transparent' size={38} style={styles.headerBack} color={appColors.defaultTextColor}></Icon.Button>}
+        </View>
+        <View style={{flex: 2, alignItems: 'center', justifyContent: 'flex-start', paddingTop: 10}}>
+          <Image source={require('./../assets/img/questions.png')} style={cStyles.topImage}></Image>
+        </View>
+        <View style={{flex: 3, justifyContent: 'space-evenly', alignItems: 'center'}}>
+          <MyAwesomeButton onPress={() => selected(DifficultyLevel.EASY)} type={ButtonTypes.primary} size={SizeTypes.large}>
+            Easy
+          </MyAwesomeButton>
+          <MyAwesomeButton onPress={() => selected(DifficultyLevel.MEDIUM)} type={ButtonTypes.primary} size={SizeTypes.large}>
+            Medium
+          </MyAwesomeButton>
+          <MyAwesomeButton onPress={() => selected(DifficultyLevel.HARD)} type={ButtonTypes.primary} size={SizeTypes.large}>
+            Difficult
+          </MyAwesomeButton>
+        </View>
+      </LinearGradient>
+    </View>
+  );
 }
 
 const SelectDifficultyContainer = connect(mapState, mapDispatch)(SelectDifficulty);
 
 export default SelectDifficultyContainer;
+
+export const styles = StyleSheet.create({
+  header: {
+    flex: 0.5, 
+    flexDirection: 'row-reverse', 
+    alignItems: 'flex-start', 
+    justifyContent: 'space-between', 
+    // alignContent: 'space-between', 
+    // backgroundColor: 'red'
+  },
+  headerBack: {
+    // flex: 1,
+    paddingLeft: 10, 
+    alignSelf: 'flex-end',
+    // backgroundColor: 'green'
+  },
+  headerProfile: {
+    flex: 1,
+    paddingRight: 10, 
+    alignSelf: 'flex-start', 
+    // backgroundColor: 'green'
+  },
+  headerAvtar: {
+    alignSelf: 'flex-end', 
+    backgroundColor: appColors.defaultTextColor
+  },
+});
 
 export const cStyles = StyleSheet.create({
   header: {
