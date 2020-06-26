@@ -25,6 +25,8 @@ const mapState = (state: RootState) => ({
   winner: state.gameReducer.game.winner,
   playerNameX: state.gameReducer.game.players.X?.displayName || state.gameReducer.game.players.X?.name,
   playerNameO: state.gameReducer.game.players.O?.displayName || state.gameReducer.game.players.O?.name,
+  playerX: state.gameReducer.game.players.X,
+  playerO: state.gameReducer.game.players.O,
   winCountX: state.gameReducer.game.winCount.X,
   winCountO: state.gameReducer.game.winCount.O,
   level: state.gameReducer.botLevel
@@ -41,29 +43,22 @@ type DispatchProps = typeof mapDispatch
 
 type Props = StateProps & DispatchProps & GameProps
 
-declare type GameState = {
-  count: number
-}
+function Game (props: Props) {
 
-class Game extends Component<Props, GameState> {
-  constructor(props:Props) {
-    super(props);
-    // console.log("Game state at start", props.game);
-    this.state = {count: 0};
-    this.handleSelected = this.handleSelected.bind(this);
-    this.replayGame = this.replayGame.bind(this);
-    this.playComputer = this.playComputer.bind(this);
-  }
+  const [count, setCount] = React.useState(0);
 
-  componentWillUnmount() {
-    console.log("Component is unmounting");
-    if (this.props.gameId) {
-      gameService.unsubscribe(this.props.gameId);
-      this.props.setGameId(undefined);
+  React.useEffect(()=> {
+    console.log("Component is re-rendering");
+    return () => {
+      console.log("Component is unmounting");
+      if (props.gameId) {
+        gameService.unsubscribe(props.gameId);
+        props.setGameId(undefined);
+      }
     }
-  }
+  },[]);
 
-  playComputer(props: Props) {
+  const playComputer = (props: Props) => {
     let point = bot.playComputer(props.game.board, props.level)
     if (point) {
       // console.log("Playing the computer move at [%d, %d]", point.row, point.col);
@@ -71,11 +66,11 @@ class Game extends Component<Props, GameState> {
     }
   }
 
-  msg() {
+  const displayMsg = () => {
     let msg = "";
-    if (this.props.isFinished) {
-      if (this.props.winner) {
-        if (this.props.winner == this.props.myMark) {
+    if (props.isFinished) {
+      if (props.winner) {
+        if (props.winner == props.myMark) {
           msg = "Congratulations !!"
         } else {
           msg = "Sorry !!"
@@ -84,7 +79,7 @@ class Game extends Component<Props, GameState> {
         msg = "Its a Draw"
       }
     } else {
-      if (this.props.turn == this.props.myMark) {
+      if (props.turn == props.myMark) {
         msg = "Your Turn"
       } else {
         msg = "Waiting..."
@@ -93,7 +88,7 @@ class Game extends Component<Props, GameState> {
     return msg;
   }
 
-  handleSelected(props: Props, point: Point) {
+  const handleSelected = (point: Point) => {
     if (props.mode == GameMode.NETWORK) {
       if (props.gameId && props.myMark && props.appUser) {
         gameService.moveByPlayer(props.gameId, 
@@ -108,29 +103,29 @@ class Game extends Component<Props, GameState> {
           });
       }
     } else {
-      let nextCount = this.state.count;
+      let nextCount = count;
       props.move(point);
       nextCount++;
       if (props.mode == GameMode.OFFLINE) {
         if (nextCount<9) {
-          this.playComputer(props);
+          playComputer(props);
           nextCount++;
         }
       }
-      this.setState({ count: nextCount});
+      setCount(nextCount);
     }
     // console.log("called handled with %d %d, count set to %d", point.row, point.col, nextCount);
   }
 
-  replayGame(props: Props) {
+  const replayGame = () => {
     if (props.mode==GameMode.OFFLINE) {
       let startedBy = props.startedBy;
       props.replay();
-      this.setState({ count: 0});
+      setCount(0);
         if (startedBy == Mark.X) {
         //Last time it was X who started the game, so this time, it is computer
-        this.playComputer(props);
-        this.setState({ count: 1});
+        playComputer(props);
+        setCount(1);
       }
     } else {
       //Network mode, submit replay request to server.
@@ -140,91 +135,90 @@ class Game extends Component<Props, GameState> {
     }
   }
 
-  render() {
-    return (
-      <View style={appStyles.container}>
-        <LinearGradient style={appStyles.backgroundGradient} colors={appColors.gradient}>
-          <View style={styles.headerContainer}>
-            <View style={styles.playerContainer}>
-              <Image source={require('./../assets/img/robot-1.png')} style={styles.imagePlayer}></Image>
-              <Text style={styles.playerText}>{this.props.playerNameX}</Text>
-              <X></X>
-              <Text style={styles.playerText}>Won: {this.props.winCountX}</Text>
+  const isDisabled = (point: Point) => {
+    return props.isFinished || props.myMark != props.turn || (props.game.board[point.row][point.col]) ? true:false;
+  }
+
+  const currentMark = (point: Point) => {
+    return props.game.board[point.row][point.col];
+  }
+
+  return (
+    <View style={appStyles.container}>
+      <LinearGradient style={appStyles.backgroundGradient} colors={appColors.gradient}>
+        <View style={styles.headerContainer}>
+          <View style={styles.playerContainer}>
+            <Image source={require('./../assets/img/robot-1.png')} style={styles.imagePlayer}></Image>
+            <Text style={styles.playerText}>{props.playerNameX}</Text>
+            <X></X>
+            <Text style={styles.playerText}>Won: {props.winCountX}</Text>
+          </View>
+          <View style={styles.playerContainer}>
+            <Image source={require('./../assets/img/robot-1.png')} style={styles.imagePlayer}></Image>
+            <Text style={styles.playerText}>{props.playerNameO}</Text>
+            <O></O>
+            <Text style={styles.playerText}>Won: {props.winCountO}</Text>
+          </View>
+        </View>
+        <View style={styles.msgView}>
+          <Text style={styles.msgText}>{displayMsg()}</Text>
+        </View>
+        <View style={{flex: 3, alignItems: 'center'}}>
+          <View style={styles.board}>
+            <View style={styles.boardRow}>
+              <Square row={0} col={0} onSelect={handleSelected} mark={currentMark} disabled={isDisabled}></Square>
+              <Square row={0} col={1} onSelect={handleSelected} mark={currentMark} disabled={isDisabled}></Square>
+              <Square row={0} col={2} onSelect={handleSelected} mark={currentMark} disabled={isDisabled}></Square>
             </View>
-            <View style={styles.playerContainer}>
-              <Image source={require('./../assets/img/robot-1.png')} style={styles.imagePlayer}></Image>
-              <Text style={styles.playerText}>{this.props.playerNameO}</Text>
-              <O></O>
-              <Text style={styles.playerText}>Won: {this.props.winCountO}</Text>
+            <View style={styles.boardRow}>
+              <Square row={1} col={0} onSelect={handleSelected} mark={currentMark} disabled={isDisabled}></Square>
+              <Square row={1} col={1} onSelect={handleSelected} mark={currentMark} disabled={isDisabled}></Square>
+              <Square row={1} col={2} onSelect={handleSelected} mark={currentMark} disabled={isDisabled}></Square>
             </View>
-            {/* <Text>{this.props.game.message}</Text> */}
-          </View>
-          <View style={styles.msgView}>
-            <Text style={styles.msgText}>{this.msg()}</Text>
-          </View>
-          <View style={{flex: 3, alignItems: 'center'}}>
-            <View style={styles.board}>
-              <View style={styles.boardRow}>
-                <Square row={0} col={0} props={this.props} onSelect={this.handleSelected}></Square>
-                <Square row={0} col={1} props={this.props} onSelect={this.handleSelected}></Square>
-                <Square row={0} col={2} props={this.props} onSelect={this.handleSelected}></Square>
-              </View>
-              <View style={styles.boardRow}>
-                <Square row={1} col={0} props={this.props} onSelect={this.handleSelected}></Square>
-                <Square row={1} col={1} props={this.props} onSelect={this.handleSelected}></Square>
-                <Square row={1} col={2} props={this.props} onSelect={this.handleSelected}></Square>
-              </View>
-              <View style={styles.boardRow}>
-                <Square row={2} col={0} props={this.props} onSelect={this.handleSelected}></Square>
-                <Square row={2} col={1} props={this.props} onSelect={this.handleSelected}></Square>
-                <Square row={2} col={2} props={this.props} onSelect={this.handleSelected}></Square>
-              </View>
+            <View style={styles.boardRow}>
+              <Square row={2} col={0} onSelect={handleSelected} mark={currentMark} disabled={isDisabled}></Square>
+              <Square row={2} col={1} onSelect={handleSelected} mark={currentMark} disabled={isDisabled}></Square>
+              <Square row={2} col={2} onSelect={handleSelected} mark={currentMark} disabled={isDisabled}></Square>
             </View>
           </View>
-          <View style={{flex:1, alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
-            {this.props.isFinished ? 
-            <MyAwesomeButton onPress={() => this.replayGame(this.props)} size={SizeTypes.medium} type={ButtonTypes.facebook}>
-              REPLAY
-            </MyAwesomeButton>
-          // <Icon.Button
-          //       name="replay"
-          //       backgroundColor="#3b5998"
-          //       size={30}
-          //       onPress={() => this.replayGame(this.props)}>
-          //     <Text style={styles.buttonText}> REPLAY </Text>
-          //   </Icon.Button> 
-            : null}
-          </View>
-        </LinearGradient>
-      </View>
-    );
-  };
+        </View>
+        <View style={{flex:1, alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
+          {props.isFinished ? 
+          <MyAwesomeButton onPress={() => replayGame()} size={SizeTypes.medium} type={ButtonTypes.facebook}>
+            REPLAY
+          </MyAwesomeButton>
+          : null}
+        </View>
+      </LinearGradient>
+    </View>
+  );
 }
 
 declare type SquareProp = {
   row: number,
   col: number,
-  props: Props,
-  onSelect: (props: Props, point: Point) => void
+  mark: (point: Point) => Mark | undefined,
+  disabled: (point: Point) => boolean
+  onSelect: (point: Point) => void
 };
 
 export function Square(squareProps: SquareProp) {
+  let point:Point= {row: squareProps.row, col: squareProps.col};
 
   function selected() {
-    let point:Point= {row: squareProps.row, col: squareProps.col};
-    squareProps.onSelect(squareProps.props, point);
+    squareProps.onSelect(point);
   }
 
-  function disabled() {
-    return squareProps.props.isFinished || squareProps.props.myMark != squareProps.props.turn || (squareProps.props.game.board[squareProps.row][squareProps.col])?true:false;
+  function disabled():boolean {
+    return squareProps.disabled(point);
   }
 
   return (
     <TouchableHighlight style={styles.square} disabled={disabled()}
      onPress={selected}>
       <View style={{padding: 10, flex: 1}}>
-        {squareProps.props.game.board[squareProps.row][squareProps.col]==Mark.X ? <X /> : null}
-        {squareProps.props.game.board[squareProps.row][squareProps.col]==Mark.O ? <O /> : null}
+        {squareProps.mark(point)==Mark.X ? <X /> : null}
+        {squareProps.mark(point)==Mark.O ? <O /> : null}
       </View>
     </TouchableHighlight>
   );
