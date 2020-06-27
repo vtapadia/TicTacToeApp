@@ -12,6 +12,10 @@ The APP is continuously deployed using the expo platform and can be downloaded v
 
 Enjoy :)
 
+### Demo
+![Tic Tac Toe App Demo](demo/TicTacToe-sample1.gif)
+
+
 ### Continuous Integration
 The App use travis-ci for continuous build and deploy to expo server.
 
