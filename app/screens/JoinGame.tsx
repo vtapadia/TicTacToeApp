@@ -70,10 +70,10 @@ function JoinGame(props:Props) {
               onChangeText={text => onChangeText(text)} />
             <View style={styles.btnContainer}>
               {props.isReady ? 
-                <MyAwesomeButton onPress={playGame} size={SizeTypes.large} type={ButtonTypes.primary}>
+                <MyAwesomeButton onPress={playGame} size={SizeTypes.large} type={ButtonTypes.anchor}>
                   Lets Play
                 </MyAwesomeButton>
-              : <MyAwesomeButton onPress={joinGame} size={SizeTypes.large} type={ButtonTypes.secondary}>
+              : <MyAwesomeButton onPress={joinGame} size={SizeTypes.large} type={ButtonTypes.primary}>
                 Join Game
                 </MyAwesomeButton>
               }

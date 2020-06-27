@@ -92,14 +92,16 @@ class InviteFriend extends Component<Props, State> {
           </View>
           <View style={iStyles.viewMessage}>
             <ActivityIndicator animating={this.state.progress} size="large" color="#0000ff" />
-            <Text style={iStyles.textMessage}>Share this code with your friends and ask them to join</Text>
+            <Text style={iStyles.textMessage}>
+              Share this code with your friends and wait for them to join.
+            </Text>
           </View>
           <View style={iStyles.viewShare}>
             {this.props.isReady ?
-              <MyAwesomeButton onPress={this.gameReady} size={SizeTypes.large} type={ButtonTypes.primary}>
+              <MyAwesomeButton onPress={this.gameReady} size={SizeTypes.large} type={ButtonTypes.anchor}>
                 Lets Play
               </MyAwesomeButton>
-            : <MyAwesomeButton onPress={this.share} size={SizeTypes.large} type={ButtonTypes.secondary}>
+            : <MyAwesomeButton onPress={this.share} size={SizeTypes.large} type={ButtonTypes.primary}>
                 Share with Friends
               </MyAwesomeButton>
             }
@@ -118,23 +120,29 @@ export const iStyles = StyleSheet.create({
   viewCode: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'flex-end'
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   textCode: {
     fontSize: 20,
     fontWeight: 'bold',
+    color: appColors.defaultTextColor
   },
   textCodeNumber: {
     fontSize: 20,
     fontWeight: 'bold',
+    color: appColors.defaultTextColor
   },
   viewMessage: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   textMessage: {
-    color: 'darkgrey',
+    color: appColors.defaultTextColor,
     fontSize: 20,
-    padding: 30
+    padding: 30,
+    textAlign: "center"
   },
   viewShare: {
     flex: 3,
