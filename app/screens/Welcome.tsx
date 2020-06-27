@@ -27,6 +27,7 @@ function Welcome(props: Props) {
     alert("Feature currently not supported");
   }
 
+  
   const loginGuest = () => {
     props.reset();
     let randomId = randomGuestId();

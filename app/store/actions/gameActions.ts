@@ -8,6 +8,12 @@ export function addAppUser(player: Player):AppUserAction {
   };
 }
 
+export function removeAppUser():AppUserAction {
+  return {
+    type: APP_USER
+  };
+}
+
 export function setDifficultyLevel(level: DifficultyLevel):SelectDifficultyAction {
   return {
     type: SELECT_DIFFICULTY,

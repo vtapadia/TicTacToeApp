@@ -68,7 +68,7 @@ export interface ReplayAction {
 
 export interface AppUserAction {
   type: typeof APP_USER
-  appUser: Player
+  appUser?: Player
 }
 
 export interface SelectDifficultyAction {

@@ -59,7 +59,7 @@ export default function App() {
     <Provider store={appStore}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName={homeScreen} screenOptions={{headerShown: false, headerTintColor: appColors.defaultTextColor, headerStyle: {backgroundColor: 'rgba(241,225,153,1)'}}}>
-          {isRegistered || <Stack.Screen name="Welcome" component={Welcome} options={{headerShown: false}}/>}
+          <Stack.Screen name="Welcome" component={Welcome} options={{headerShown: false}}/>
           <Stack.Screen name="Profile" component={ProfileContainer}/>
           <Stack.Screen name="Home" component={HomeContainer}/>
           <Stack.Screen name="InviteFriend" component={InviteFriendContainer}  options={{headerShown: true}}/>

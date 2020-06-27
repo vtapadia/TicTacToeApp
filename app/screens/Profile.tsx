@@ -5,7 +5,7 @@ import { RootState } from '../store/reducers/appReducer';
 import { connect } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MyAwesomeButton, ButtonTypes, SizeTypes } from '../component/MyAwesomeButtons';
-import {addAppUser} from "../store/actions/gameActions";
+import {addAppUser, removeAppUser} from "../store/actions/gameActions";
 import * as ImagePicker from 'expo-image-picker';
 import { Avatar, Input, Divider } from 'react-native-elements';
 import { ProfileProps, Player } from '../config/types';
@@ -20,7 +20,8 @@ const mapState = (state: RootState) => ({
 })
 
 const mapDispatch = {
-  addAppUser
+  addAppUser,
+  removeAppUser
 }
 
 type StateProps = ReturnType<typeof mapState>
@@ -158,6 +159,30 @@ function Profile(props: Props) {
     setModalVisible(!modalVisible);
   }
 
+  const resetProfile = async () => {
+
+    Alert.alert(
+      "Confirm Reset",
+      "This will delete the user profile, with image",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ],
+      { cancelable: false }
+    );
+    
+    let result = await FileSystem.getInfoAsync(constants.imageFile)
+    if (result.exists) {
+      await FileSystem.deleteAsync(result.uri);
+    }
+    props.removeAppUser();
+    props.navigation.navigate("Welcome");
+  }
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : "height"} style={appStyles.container}>
@@ -190,6 +215,9 @@ function Profile(props: Props) {
               >{value}</Input>
               <MyAwesomeButton onPress={saveProfile} size={SizeTypes.large} type={ButtonTypes.primary}>
                 Save
+              </MyAwesomeButton>
+              <MyAwesomeButton onPress={resetProfile} size={SizeTypes.large} type={ButtonTypes.secondary}>
+                Reset Profile
               </MyAwesomeButton>
             </View>
           </View>
