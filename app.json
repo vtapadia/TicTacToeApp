@@ -10,7 +10,7 @@
     "version": "1.0.0",
     "githubUrl": "https://github.com/vtapadia/TicTacToeApp",
     "orientation": "portrait",
-    "icon": "./app/assets/icon.png",
+    "icon": "./app/assets/img/app-icon.png",
     "splash": {
       "image": "./app/assets/img/Tic_tac_toe_welcome.png",
       "resizeMode": "contain",
@@ -23,7 +23,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false
     }
   }
 }
