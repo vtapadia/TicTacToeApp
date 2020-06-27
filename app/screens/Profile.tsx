@@ -182,6 +182,7 @@ function Profile(props: Props) {
     if (result.exists) {
       await FileSystem.deleteAsync(result.uri);
     }
+    await AsyncStorage.removeItem(constants.asyncStoreAppUserName);
     props.removeAppUser();
     props.navigation.dispatch(
       CommonActions.reset({
