@@ -159,8 +159,7 @@ function Profile(props: Props) {
     setModalVisible(!modalVisible);
   }
 
-  const resetProfile = async () => {
-
+  const resetProfileConfirmation = () => {
     Alert.alert(
       "Confirm Reset",
       "This will delete the user profile, with image",
@@ -170,11 +169,14 @@ function Profile(props: Props) {
           onPress: () => console.log("Cancel Pressed"),
           style: "cancel"
         },
-        { text: "OK", onPress: () => console.log("OK Pressed") }
+        { text: "OK", onPress: resetProfile }
       ],
       { cancelable: false }
     );
-    
+  }
+
+  const resetProfile = async () => {
+
     let result = await FileSystem.getInfoAsync(constants.imageFile)
     if (result.exists) {
       await FileSystem.deleteAsync(result.uri);
@@ -216,7 +218,7 @@ function Profile(props: Props) {
               <MyAwesomeButton onPress={saveProfile} size={SizeTypes.large} type={ButtonTypes.primary}>
                 Save
               </MyAwesomeButton>
-              <MyAwesomeButton onPress={resetProfile} size={SizeTypes.large} type={ButtonTypes.secondary}>
+              <MyAwesomeButton onPress={resetProfileConfirmation} size={SizeTypes.large} type={ButtonTypes.secondary}>
                 Reset Profile
               </MyAwesomeButton>
             </View>
