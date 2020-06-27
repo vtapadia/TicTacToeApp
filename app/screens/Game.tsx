@@ -207,7 +207,7 @@ function Game (props: Props) {
         </View>
         <View style={{flex:1, alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
           {props.isFinished ? 
-          <MyAwesomeButton onPress={() => replayGame()} size={SizeTypes.medium} type={ButtonTypes.facebook}>
+          <MyAwesomeButton onPress={() => replayGame()} size={SizeTypes.medium} type={ButtonTypes.anchor}>
             REPLAY
           </MyAwesomeButton>
           : null}
@@ -296,7 +296,8 @@ export const styles = StyleSheet.create({
   },
   headerAvtar: {
     // alignSelf: 'flex-end', 
-    backgroundColor: appColors.defaultTextColor
+    // backgroundColor: appColors.defaultTextColor
+    backgroundColor: 'saddlebrown'
   },
   cropped: {
     overflow: 'hidden',

@@ -9,18 +9,65 @@ const COMMON = {
   raiseLevel: 5
 };
 
+export const TWITTER = {
+  backgroundColor: "#00aced",
+  backgroundDarker: "#0096cf"
+};
+
+export const MESSENGER = {
+  backgroundColor: "#3186f6",
+  backgroundDarker: "#2566bc"
+};
+
 export const FACEBOOK = {
   backgroundColor: "#4868ad",
   backgroundDarker: "#325194"
 };
 
+export const GITHUB = {
+  backgroundColor: "#2c3036",
+  backgroundDarker: "#060708"
+};
+
+//Blue
+export const LINKEDIN = {
+  backgroundColor: "#0077b5",
+  backgroundDarker: "#005885"
+};
+
+//Green
+export const READY_GREEN = {
+  backgroundColor: "#25d366",
+  backgroundDarker: "#14a54b"
+};
+
+//Orange 
+export const REDDIT = {
+  backgroundColor: "#fc461e",
+  backgroundDarker: "#d52802"
+};
+
+//Dark Reddish button
+export const PINTEREST = {
+  backgroundColor: "#bd091c",
+  backgroundDarker: "#980313"
+};
+
+//Light Reddish button
+export const YOUTUBE = {
+  backgroundColor: "#cc181e",
+  backgroundDarker: "#ab0d12"
+};
+
 export enum ButtonTypes {
   primary="primary",
   secondary="secondary",
-  // anchor="anchor",
+  anchor="anchor",
   disabled="disabled",
   // primaryFlat="primaryFlat",
-  facebook="facebook"
+  facebook="facebook",
+  ready="ready",
+  pinterest="pinterest"
 }
 
 
@@ -39,15 +86,13 @@ const BUTTONS:{[key in ButtonTypes]: any} = {
     backgroundProgress: "#242f41",
     textColor: "#FFFFFF"
   },
-  // [ButtonTypes.anchor]: {
-  //   ...COMMON,
-  //   backgroundColor: "#95d44a",
-  //   backgroundDarker: "#489d2b",
-  //   textColor: "#34711f",
-  //   backgroundProgress: "#489d2b",
-  //   borderWidth: 2,
-  //   borderColor: "#5bbd3a"
-  // },
+  [ButtonTypes.anchor]: {
+    ...COMMON,
+    backgroundColor: "#af2831",
+    backgroundDarker: "#8b1e25",
+    backgroundProgress: "#8b1e25",
+    textColor: "#FFFFFF"
+  },
   [ButtonTypes.disabled]: {
     ...COMMON,
     backgroundColor: "#DFDFDF",
@@ -64,6 +109,14 @@ const BUTTONS:{[key in ButtonTypes]: any} = {
   [ButtonTypes.facebook]: {
     ...COMMON,
     ...FACEBOOK
+  },
+  [ButtonTypes.ready]: {
+    ...COMMON,
+    ...READY_GREEN
+  },
+  [ButtonTypes.pinterest]: {
+    ...COMMON,
+    ...PINTEREST
   },
 };
 

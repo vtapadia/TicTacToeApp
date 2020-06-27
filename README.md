@@ -28,6 +28,9 @@ https://github.com/rcaferati/react-native-really-awesome-button
 Defined my Custom buttons and theme and used that to define global buttons.
 Demo site to test buttons: https://caferati.me/demo/react-awesome-button/morty-theme
 
+### Colors and Themes
+Referred to https://uxplanet.org/the-secret-of-great-gradient-2f2c49ef3968 where one understand how to choose colors.
+
 ### NPM Commands
 To Get all the globall listed packages
 ```bash
