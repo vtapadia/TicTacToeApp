@@ -14,6 +14,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as Permissions from 'expo-permissions';
 import * as FileSystem from 'expo-file-system';
+import { CommonActions } from '@react-navigation/native';
 
 const mapState = (state: RootState) => ({
   appUser: state.gameReducer.appUser,
@@ -182,7 +183,12 @@ function Profile(props: Props) {
       await FileSystem.deleteAsync(result.uri);
     }
     props.removeAppUser();
-    props.navigation.navigate("Welcome");
+    props.navigation.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [{name: 'Welcome'}]
+      })
+    )
   }
 
   return (
