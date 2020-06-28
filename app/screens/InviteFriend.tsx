@@ -3,7 +3,7 @@ import {View, Share, Text, TouchableHighlight, StyleSheet, ActivityIndicator} fr
 import {appStyles, appColors} from "../config/styles";
 import { RootState } from '../store/reducers/appReducer';
 import { InviteFriendProps } from '../config/types';
-import { setGameId, move, addPlayer, setGameState, replay} from '../store/actions/gameActions';
+import { setGameId, unsetGameId, move, addPlayer, setGameState, replay} from '../store/actions/gameActions';
 import { connect } from 'react-redux';
 import { Status } from '../store/types/gameTypes';
 import * as gameService from "./../service/gameService";
@@ -12,6 +12,7 @@ import { MyAwesomeButton, ButtonTypes, SizeTypes } from '../component/MyAwesomeB
 
 const mapState = (state: RootState) => ({
   game: state.gameReducer.game,
+  gameId: state.gameReducer.gameId,
   appUser: state.gameReducer.appUser,
   isReady: state.gameReducer.game.status == Status.READY,
   turn: state.gameReducer.game.turn,
@@ -20,6 +21,7 @@ const mapState = (state: RootState) => ({
 
 const mapDispatch = {
   setGameId,
+  unsetGameId,
   move,
   addPlayer,
   replay,
@@ -30,25 +32,25 @@ type StateProps = ReturnType<typeof mapState>
 type DispatchProps = typeof mapDispatch
 
 type Props = StateProps & DispatchProps & InviteFriendProps
-type State = {
-  gameId: string | undefined,
-  progress: boolean
-}
 
-class InviteFriend extends Component<Props, State> {
-  constructor(props:Props) {
-    super(props);
-    this.state = {gameId: undefined, progress: true};
-  }
+function InviteFriend(props:Props) {
 
-  componentDidMount() {
-    if (this.props.appUser)
-    gameService.createGame(this.props.appUser).then((gameId) => {
-      this.props.setGameId(gameId);
-      this.setState({gameId: gameId, progress: false});
-      gameService.subscribe(gameId, this.props).then(() => {
-        if (this.props.appUser) {
-          gameService.joinBoard(gameId, this.props.appUser).then(m => {
+  React.useEffect(() => {
+    if (props.appUser) {
+      gameService.createGame(props.appUser).then((gameId) => {
+        props.setGameId(gameId);
+      })
+    }
+    return () => {
+      props.unsetGameId();
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (props.gameId) {
+      gameService.subscribe(props.gameId, props).then(() => {
+        if (props.appUser && props.gameId) {
+           gameService.joinBoard(props.gameId, props.appUser).then(m => {
             console.log("User joined with mark ", m);
           }).catch(e => {
             console.log("Failed to join the game ", e);
@@ -57,16 +59,17 @@ class InviteFriend extends Component<Props, State> {
       }).catch(e => {
         console.log("Unable to subscribe");
       })
-    }).catch(r=> {
-      alert(r);
-      this.setState({gameId: undefined, progress: true});
-      this.props.navigation.navigate("Home");
-    })
-  }
+    }
+    return () => {
+      if (props.gameId) {
+        gameService.unsubscribe(props.gameId);
+      }
+    }
+  },[props.gameId]);
 
-  share = async () => {
-    if (this.state.gameId) {
-      let message = "Join me for a Game of Tic Tac Toe with Code " + this.state.gameId;
+  const share = async () => {
+    if (props.gameId) {
+      let message = "Join me for a Game of Tic Tac Toe with Code " + props.gameId;
       const result = await Share.share({title:"Share Tic Tac Toe", message: message});
       if (result.action == Share.sharedAction) {
         if (result.activityType) {
@@ -78,38 +81,36 @@ class InviteFriend extends Component<Props, State> {
     }
   }
 
-  gameReady = () => {
-    this.props.navigation.navigate("Game");
+  const gameReady = () => {
+    props.navigation.navigate("Game");
   }
 
-  render() {
-    return (
-      <View style={appStyles.container}>
-        <LinearGradient style={appStyles.backgroundGradient} colors={appColors.gradient}>
-          <View style={iStyles.viewCode}>
-            <Text style={iStyles.textCode}>Code: </Text>
-            <Text style={iStyles.textCodeNumber}>{this.state.gameId}</Text>
-          </View>
-          <View style={iStyles.viewMessage}>
-            <ActivityIndicator animating={this.state.progress} size="large" color="#0000ff" />
-            <Text style={iStyles.textMessage}>
-              Share this code with your friends and wait for them to join.
-            </Text>
-          </View>
-          <View style={iStyles.viewShare}>
-            {this.props.isReady ?
-              <MyAwesomeButton onPress={this.gameReady} size={SizeTypes.large} type={ButtonTypes.anchor}>
-                Lets Play
-              </MyAwesomeButton>
-            : <MyAwesomeButton onPress={this.share} size={SizeTypes.large} type={ButtonTypes.primary}>
-                Share with Friends
-              </MyAwesomeButton>
-            }
-          </View>
-        </LinearGradient>
-      </View>
-    );
-  }
+  return (
+    <View style={appStyles.container}>
+      <LinearGradient style={appStyles.backgroundGradient} colors={appColors.gradient}>
+        <View style={iStyles.viewCode}>
+          <Text style={iStyles.textCode}>Code: </Text>
+          <Text style={iStyles.textCodeNumber}>{props.gameId}</Text>
+        </View>
+        <View style={iStyles.viewMessage}>
+          <ActivityIndicator animating={!props.gameId} size="large" color="#0000ff" />
+          <Text style={iStyles.textMessage}>
+            Share this code with your friends and wait for them to join.
+          </Text>
+        </View>
+        <View style={iStyles.viewShare}>
+          {props.isReady ?
+            <MyAwesomeButton onPress={gameReady} size={SizeTypes.large} type={ButtonTypes.anchor}>
+              Lets Play
+            </MyAwesomeButton>
+          : <MyAwesomeButton onPress={share} size={SizeTypes.large} type={ButtonTypes.primary}>
+              Share with Friends
+            </MyAwesomeButton>
+          }
+        </View>
+      </LinearGradient>
+    </View>
+  );
 }
 
 const InviteFriendContainer = connect(mapState, mapDispatch)(InviteFriend)

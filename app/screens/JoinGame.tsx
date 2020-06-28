@@ -1,9 +1,9 @@
 import React from 'react';
-import {View, Text, TextInput, TouchableHighlight, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard} from "react-native";
+import {View, Text, TextInput, TouchableHighlight, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Alert} from "react-native";
 import { RootState } from '../store/reducers/appReducer';
 import { JoinGameProps, GameMode } from '../config/types';
 import { connect } from 'react-redux';
-import {move, addPlayer, replay, setGameState, setGameId} from "../store/actions/gameActions";
+import {move, addPlayer, replay, setGameState, setGameId, unsetGameId} from "../store/actions/gameActions";
 import * as gameService from "./../service/gameService";
 import { StyleSheet} from 'react-native';
 import { Status } from '../store/types/gameTypes';
@@ -13,6 +13,7 @@ import { MyAwesomeButton, ButtonTypes, SizeTypes } from '../component/MyAwesomeB
 
 const mapState = (state: RootState) => ({
   game: state.gameReducer.game,
+  gameId: state.gameReducer.gameId,
   appUser: state.gameReducer.appUser,
   isReady: state.gameReducer.game.status==Status.READY,
   turn: state.gameReducer.game.turn,
@@ -24,6 +25,7 @@ const mapDispatch = {
   addPlayer,
   setGameState,
   setGameId,
+  unsetGameId,
   replay
 }
 
@@ -34,22 +36,49 @@ type Props = StateProps & DispatchProps & JoinGameProps
 
 function JoinGame(props:Props) {
   const [value, onChangeText] = React.useState("");
+  const [inProgress, setInProgress] = React.useState(false);
+
+  //Unsubscribe at the unload of this component.
+  React.useEffect(() => {
+    return () => {
+      console.log("JoinGame Component unloading");
+      if (props.gameId) {
+        console.log("Unmounting of JoinGame triggering unsubscribe if game exists");
+        props.unsetGameId();
+        gameService.unsubscribe(props.gameId);
+      }
+    }
+  },[]);
 
   const joinGame = () => {
-    gameService.subscribe(value, props, subscribedSuccess).then(() => {
-      console.log("Game join request submitted");
-    }).catch((e) => {
-      console.log("Fail to subscribe." + e);
-      alert("Please try again");
-    })
-    
+    setInProgress(true);
+    joinGameAsync();
   }
 
-  const subscribedSuccess = () => {
-    props.setGameId(value);
-    console.log("Game join confirmed");
-    if (props.appUser) {
-      gameService.joinBoard(value, props.appUser);
+  const joinGameAsync = async () => {
+    try {
+      //Check if game is present.
+      let gameResponse = await gameService.getGame(value);
+      console.log("Game Response Received ", gameResponse);
+      if (props.gameId) {
+        //Un subscribe to any existing game.
+        console.log("Unsubscribing from old game ", props.gameId);
+        await gameService.unsubscribe(props.gameId);
+      }
+      //Subscribe to the game events.
+      await gameService.subscribe(value, props);
+      //Set gameId to state.
+      props.setGameId(value);
+      console.log("Game subscribed.");
+      if (props.appUser) {
+        let result = await gameService.joinBoard(value, props.appUser);
+        console.log("User joined with %s ", result);
+      }
+    } catch (e) {
+      console.log("Error: ", e);
+      Alert.alert("Failure", "Game Join Failed. Check game code and try again.");
+    } finally {
+      setInProgress(false);
     }
   }
 
@@ -73,7 +102,7 @@ function JoinGame(props:Props) {
                 <MyAwesomeButton onPress={playGame} size={SizeTypes.large} type={ButtonTypes.anchor}>
                   Lets Play
                 </MyAwesomeButton>
-              : <MyAwesomeButton onPress={joinGame} size={SizeTypes.large} type={ButtonTypes.primary}>
+              : <MyAwesomeButton disabled={inProgress} onPress={joinGame} size={SizeTypes.large} type={ButtonTypes.primary}>
                 Join Game
                 </MyAwesomeButton>
               }
