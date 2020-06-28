@@ -36,10 +36,13 @@ export async function createGame(player: Player):Promise<string> {
   let message = "Unknown Error. Please try again";
   try {
     let response = await backend.post<CreateGameResponse>("/api/game", {userName: player.name});
-    let gameResponse = response.parsedBody;
-    if (gameResponse) {
+    if (response.status == 200 && response.parsedBody) {
+      let gameResponse = response.parsedBody;
       console.log("Game created %s", gameResponse.gameId);
       return Promise.resolve(gameResponse.gameId);
+    } else {
+      console.log("Failed with following response: ", response);
+      message = "Error: failed to create game.";
     }
   } catch (error) {
     console.log("Failed to connect: ", error);
@@ -52,15 +55,15 @@ export async function getGame(gameId:string):Promise<GameResponse> {
   try {
     let response = await backend.get<GameResponse>("/api/game/" + gameId);
     let gameResponse = response.parsedBody;
-    if (gameResponse) {
+    if (response.status == 200 && gameResponse) {
       return Promise.resolve(gameResponse);
     } else {
-      console.log("Something failed with parsing");
+      console.log("Failed to get the game with id %s, response: ", gameId);
     }
   } catch (error) {
     console.log("Failed to connect: ", error);
   }
-  return Promise.reject("Failed to find the message");
+  return Promise.reject("Failed to find the game");
 }
 
 export async function subscribe(gameId:string, dispatcher: Readonly<DispatchType>,
