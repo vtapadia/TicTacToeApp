@@ -13,6 +13,8 @@ The APP is continuously deployed using the expo platform and can be downloaded v
 Enjoy :)
 
 ### Demo
+![Welcome Screen](demo/Welcome.png) ![Home Screen](demo/Home.png)
+
 ![Tic Tac Toe App Demo](demo/TicTacToe-sample1.gif)
 
 
