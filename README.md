@@ -13,8 +13,14 @@ The APP is continuously deployed using the expo platform and can be downloaded v
 Enjoy :)
 
 ### Demo
-![Welcome Screen](demo/Welcome.png) ![Home Screen](demo/Home.png)
 
+The Game supports single player with 3 levels of difficulty.
+![Welcome Screen](demo/Welcome.png) ![Home Screen](demo/Home.png) ![Single Player Select Level Screen](demo/SelectLevel.png) ![Game Screen](demo/Game.png)
+
+The app also supports Network play with friends.
+![Invite a Friend](demo/NetworkInvite.png) ![Join a Game](demo/NetworkJoin.png)
+
+A Sample game play ..
 ![Tic Tac Toe App Demo](demo/TicTacToe-sample1.gif)
 
 
