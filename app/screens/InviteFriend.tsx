@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, Share, Text, TouchableHighlight, StyleSheet, ActivityIndicator} from "react-native";
+import {View, Share, Text, TouchableHighlight, StyleSheet, ActivityIndicator, Alert} from "react-native";
 import {appStyles, appColors} from "../config/styles";
 import { RootState } from '../store/reducers/appReducer';
 import { InviteFriendProps } from '../config/types';
@@ -39,6 +39,9 @@ function InviteFriend(props:Props) {
     if (props.appUser) {
       gameService.createGame(props.appUser).then((gameId) => {
         props.setGameId(gameId);
+      }).catch(reason => {
+        Alert.alert("Sorry", "Something wrong with network game creation. Please try after some time.");
+        props.navigation.navigate("Home");
       })
     }
     return () => {
