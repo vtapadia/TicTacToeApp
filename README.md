@@ -15,7 +15,8 @@ Enjoy :)
 ### Demo
 
 The Game supports single player with 3 levels of difficulty.
-![Welcome Screen](demo/Welcome.png) ![Home Screen](demo/Home.png) ![Single Player Select Level Screen](demo/SelectLevel.png) ![Game Screen](demo/Game.png)
+
+<img src="https://github.com/vtapadia/TicTacToeApp/blob/master/demo/Welcome.png" alt="Welcome Screen" width="200"></img> <img src="https://github.com/vtapadia/TicTacToeApp/blob/master/demo/Home.png" alt="Home Screen" width="200"></img> <img src="https://github.com/vtapadia/TicTacToeApp/blob/master/demo/SelectLevel.png" alt="Single Player Select Level Screen" width="200"></img> <img src="https://github.com/vtapadia/TicTacToeApp/blob/master/demo/Game.png" alt="Game Screen" width="200"></img>
 
 The app also supports Network play with friends.
 ![Invite a Friend](demo/NetworkInvite.png) ![Join a Game](demo/NetworkJoin.png)
