@@ -19,10 +19,11 @@ The Game supports single player with 3 levels of difficulty.
 <img src="https://github.com/vtapadia/TicTacToeApp/blob/master/demo/Welcome.png" alt="Welcome Screen" width="200"></img> <img src="https://github.com/vtapadia/TicTacToeApp/blob/master/demo/Home.png" alt="Home Screen" width="200"></img> <img src="https://github.com/vtapadia/TicTacToeApp/blob/master/demo/SelectLevel.png" alt="Single Player Select Level Screen" width="200"></img> <img src="https://github.com/vtapadia/TicTacToeApp/blob/master/demo/Game.png" alt="Game Screen" width="200"></img>
 
 The app also supports Network play with friends.
-![Invite a Friend](demo/NetworkInvite.png) ![Join a Game](demo/NetworkJoin.png)
+<img src="https://github.com/vtapadia/TicTacToeApp/blob/master/demo/NetworkInvite.png" alt="Invite Friend" width="200"></img> <img src="https://github.com/vtapadia/TicTacToeApp/blob/master/demo/NetworkJoin.png" alt="Join a Game" width="200"></img>
+
 
 A Sample game play ..
-![Tic Tac Toe App Demo](demo/TicTacToe-sample1.gif)
+<img src="https://github.com/vtapadia/TicTacToeApp/blob/master/demo/TicTacToe-sample1.png" alt="Tic Tac Toe App Demo" width="200"></img>
 
 
 ### Continuous Integration
